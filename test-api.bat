@@ -3,7 +3,7 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 echo =========================================
-echo AgentFlow Studio 功能测试
+echo LOOM-PRO API 烟雾测试
 echo =========================================
 echo.
 

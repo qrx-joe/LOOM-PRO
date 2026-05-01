@@ -86,6 +86,7 @@ export class KnowledgeController {
     @Body('chunkSize') chunkSize?: string,
     @Body('overlap') overlap?: string,
     @Body('knowledgeBaseId') knowledgeBaseId?: string,
+    @Body('strategy') strategy?: 'fixed' | 'semantic' | 'recursive',
   ) {
     console.log('[Upload] Received request:', {
       hasFile: !!file,
@@ -95,6 +96,7 @@ export class KnowledgeController {
       chunkSize,
       overlap,
       knowledgeBaseId,
+      strategy,
     });
     if (!file) {
       console.error('[Upload] No file received! Check multipart form data.');
@@ -105,6 +107,7 @@ export class KnowledgeController {
         chunkSize: chunkSize ? Number(chunkSize) : undefined,
         overlap: overlap ? Number(overlap) : undefined,
         knowledgeBaseId,
+        strategy,
       });
       console.log('[Upload] Success:', result.id);
       return result;

@@ -156,7 +156,12 @@ export class KnowledgeService {
 
   async uploadDocument(
     file: Express.Multer.File,
-    options: { chunkSize?: number; overlap?: number; knowledgeBaseId?: string } = {},
+    options: {
+      chunkSize?: number;
+      overlap?: number;
+      knowledgeBaseId?: string;
+      strategy?: 'fixed' | 'semantic' | 'recursive';
+    } = {},
   ) {
     const startTime = Date.now();
     const filename = this.normalizeFilename(file.originalname);
@@ -193,6 +198,7 @@ export class KnowledgeService {
         metadata: {
           chunkSize: options.chunkSize && options.chunkSize > 0 ? options.chunkSize : 500,
           overlap: options.overlap && options.overlap >= 0 ? options.overlap : 50,
+          strategy: options.strategy ?? 'recursive',
           format: parsed.metadata.format,
           ...parsed.metadata,
         },
@@ -206,6 +212,7 @@ export class KnowledgeService {
       const splitter = new RecursiveCharacterTextSplitter({
         chunkSize,
         chunkOverlap,
+        strategy: options.strategy,
       });
       const chunks = splitter.splitText(parsed.content);
 

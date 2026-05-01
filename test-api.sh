@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# AgentFlow Studio 功能测试脚本
+# LOOM-PRO API 烟雾测试脚本
 
 BASE_URL="http://localhost:3000/api"
 
 echo "========================================="
-echo "AgentFlow Studio 功能测试"
+echo "LOOM-PRO API 烟雾测试"
 echo "========================================="
 echo ""
 
