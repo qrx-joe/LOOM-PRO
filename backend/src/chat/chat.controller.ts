@@ -35,7 +35,7 @@ export class ChatController {
   @Post('messages/stream')
   async streamMessage(
     @Body() payload: { sessionId: string; content: string },
-    @Res() res: Response,
+    @Res() res: any,
   ) {
     // SSE 基本响应头
     res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
@@ -56,10 +56,6 @@ export class ChatController {
         res.write(`data: ${line}\n`);
       }
       res.write('\n');
-      // 强制刷新缓冲区（通过写入空字符串触发）
-      if (typeof (res as any).flush === 'function') {
-        (res as any).flush();
-      }
     };
 
     // 发送初始注释，确保连接尽快建立

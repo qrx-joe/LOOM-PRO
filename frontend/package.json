@@ -1,7 +1,7 @@
 {
-  "name": "agentflow-frontend",
+  "name": "loompro-frontend",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -34,6 +34,7 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^9.33.0",
+    "resolve": "^1.22.12",
     "rollup-plugin-visualizer": "^5.12.0",
     "terser": "^5.31.6",
     "typescript": "^5.5.4",

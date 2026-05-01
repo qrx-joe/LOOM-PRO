@@ -1,7 +1,7 @@
 {
-  "name": "agentflow-studio",
+  "name": "loom-pro",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "prepare": "husky",
     "format": "prettier --write .",

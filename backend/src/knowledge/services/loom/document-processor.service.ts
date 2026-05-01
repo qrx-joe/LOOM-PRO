@@ -59,8 +59,9 @@ export class DocumentProcessorService {
           );
       }
     } catch (error) {
+      const err = error as Error;
       this.logger.error(
-        `Failed to process document ${fileName}: ${error.message}`,
+        `Failed to process document ${fileName}: ${err.message}`,
       );
       throw error;
     }
@@ -115,8 +116,9 @@ export class DocumentProcessorService {
         },
       };
     } catch (error) {
-      this.logger.error(`Failed to parse PDF: ${error.message}`);
-      throw new Error(`PDF parsing failed: ${error.message}`);
+      const err = error as Error;
+      this.logger.error(`Failed to parse PDF: ${err.message}`);
+      throw new Error(`PDF parsing failed: ${err.message}`);
     }
   }
 

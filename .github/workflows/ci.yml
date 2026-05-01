@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: ['main', 'master']
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4.4.0
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 18
+
+      - name: Install backend deps
+        run: pnpm -C backend install
+
+      - name: Install frontend deps
+        run: pnpm -C frontend install
+
+      - name: Install root deps
+        run: pnpm install
+
+      - name: Prettier check
+        run: pnpm run format:check
+
+      - name: Lint backend
+        run: pnpm -C backend lint
+
+      - name: Lint frontend
+        run: pnpm -C frontend lint
+
+      - name: Build backend
+        run: pnpm -C backend build
+
+      - name: Backend jest test
+        run: pnpm -C backend test
+
+      - name: Build frontend
+        run: pnpm -C frontend build

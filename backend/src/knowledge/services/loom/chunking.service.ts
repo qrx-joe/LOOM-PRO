@@ -1,9 +1,21 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  ChunkingConfig,
-  ChunkResult,
-  DEFAULT_CHUNKING_CONFIG,
-} from '../interfaces';
+
+export interface ChunkingConfig {
+  strategy: 'fixed' | 'semantic' | 'recursive';
+  chunkSize: number;
+  chunkOverlap: number;
+}
+
+export const DEFAULT_CHUNKING_CONFIG: ChunkingConfig = {
+  strategy: 'recursive',
+  chunkSize: 500,
+  chunkOverlap: 50,
+};
+
+export interface ChunkResult {
+  content: string;
+  metadata: { startIndex: number; endIndex: number };
+}
 
 @Injectable()
 export class ChunkingService {
@@ -19,9 +31,8 @@ export class ChunkingService {
       case 'semantic':
         return this.semanticChunk(text, config.chunkSize, config.chunkOverlap);
       case 'recursive':
-        return this.recursiveChunk(text, config.chunkSize, config.chunkOverlap);
       default:
-        return this.semanticChunk(text, config.chunkSize, config.chunkOverlap);
+        return this.recursiveChunk(text, config.chunkSize, config.chunkOverlap);
     }
   }
 
@@ -51,7 +62,6 @@ export class ChunkingService {
     chunkSize: number,
     overlap: number,
   ): ChunkResult[] {
-    // 按段落分割，保留语义完整性
     const paragraphs = text.split(/\n\n+/).filter((p) => p.trim().length > 0);
     const chunks: ChunkResult[] = [];
     let currentChunk = '';
@@ -73,7 +83,6 @@ export class ChunkingService {
             },
           });
 
-          // 处理重叠：保留上一块的末尾部分
           if (overlap > 0 && currentChunk.length > overlap) {
             const overlapText = currentChunk.slice(-overlap);
             currentChunk = overlapText + '\n\n' + para;
@@ -83,7 +92,6 @@ export class ChunkingService {
             currentStart = paraStart;
           }
         } else {
-          // 单个段落超过chunkSize，需要进一步分割
           const subChunks = this.splitLongParagraph(para, chunkSize, overlap);
           for (const sub of subChunks) {
             const subStart = text.indexOf(sub.content, paraStart) || paraStart;
@@ -145,7 +153,7 @@ export class ChunkingService {
     ];
 
     const splitBySeparator = (t: string, sep: string): string[] => {
-      if (sep === '') return [t];
+      if (sep === '') return t.split('');
       return t
         .split(sep)
         .filter((s) => s.trim().length > 0)
@@ -164,7 +172,6 @@ export class ChunkingService {
 
       const separator = separators[sepIndex];
       if (!separator) {
-        // 无法再分割，直接按固定大小切分
         return this.fixedChunk(t, chunkSize, overlap);
       }
 
@@ -189,7 +196,6 @@ export class ChunkingService {
           }
 
           if (part.length > chunkSize) {
-            // 需要更细粒度的分割
             const subChunks = chunkRecursive(part, sepIndex + 1);
             chunks.push(
               ...subChunks.map((c) => ({
@@ -228,7 +234,6 @@ export class ChunkingService {
     chunkSize: number,
     _overlap: number,
   ): ChunkResult[] {
-    // 按句子分割长段落
     const sentences = para.split(/(?<=[。！？.!?])/);
     const chunks: ChunkResult[] = [];
     let current = '';

@@ -1,7 +1,7 @@
 {
-  "name": "agentflow-backend",
-  "version": "0.0.1",
-  "description": "AgentFlow Studio Backend",
+  "name": "loompro-backend",
+  "version": "1.0.0",
+  "description": "LOOM-PRO Backend - AI Workflow Orchestration Platform",
   "author": "Day0 Team",
   "private": true,
   "license": "MIT",
