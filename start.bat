@@ -27,10 +27,10 @@ echo.
 
 echo ========================================
 echo LOOM-PRO 已启动！
-echo 前端: http://localhost:8080
+echo 前端: http://localhost:5173
 echo 后端: http://localhost:3000
 echo ========================================
 echo.
 echo 按任意键打开浏览器...
 pause >nul
-start http://localhost:8080
+start http://localhost:5173
