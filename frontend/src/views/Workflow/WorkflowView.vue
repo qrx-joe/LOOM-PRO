@@ -19,8 +19,6 @@ import WorkflowCanvasPanel from '@/components/workflow/panels/WorkflowCanvasPane
 import { useWorkflowStore } from '@/stores/workflow';
 import { useWorkflowDragDrop } from '@/composables/workflow/useWorkflowDragDrop';
 import { useWorkflowEdgeHandlers } from '@/composables/workflow/useWorkflowEdgeHandlers';
-import { useWorkflowCanvas } from '@/composables/workflow/useWorkflowCanvas';
-// import { useWorkflowExecutions } from '@/composables/workflow/useWorkflowExecutions'
 
 // Node Types
 import BranchEdge from '@/components/workflow/BranchEdge.vue';
@@ -34,9 +32,6 @@ import HttpNode from '@/components/nodes/HttpNode.vue';
 
 const route = useRoute();
 const workflowStore = useWorkflowStore();
-
-// Undo/Redo history
-const { canUndo, canRedo, initCanvasHistory, undoChange, redoChange } = useWorkflowCanvas();
 
 // Load workflow based on route ID
 onMounted(async () => {
@@ -56,7 +51,7 @@ onMounted(async () => {
     }
   }
   // 初始化历史记录
-  initCanvasHistory();
+  workflowStore.initHistory();
 });
 
 // 监听节点和边的变化，自动保存历史
@@ -258,15 +253,15 @@ const handleDebugRun = async (testData: any) => {
             :snapshot-options="[]"
             :selected-snapshot-id="''"
             :apply-snapshot-meta="false"
-            :can-undo="canUndo"
-            :can-redo="canRedo"
+            :can-undo="workflowStore.canUndo"
+            :can-redo="workflowStore.canRedo"
             :on-drag-over="onDragOver"
             :on-drop="onDrop"
             @node-click="onNodeClick"
             @edge-click="onEdgeClick"
             @pane-click="onPaneClick"
-            @undo="undoChange"
-            @redo="redoChange"
+            @undo="workflowStore.undo"
+            @redo="workflowStore.redo"
           />
           <!-- Note: WorkflowCanvasPanel currently has a Toolbar inside. 
                   In Phase 2 we should strip it or make it hideable via props. 

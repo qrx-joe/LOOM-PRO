@@ -32,6 +32,7 @@ const form = reactive({
   hybrid: false,
   chunkSize: 500,
   overlap: 50,
+  strategy: 'recursive' as 'fixed' | 'semantic' | 'recursive',
   variableKey: '',
   expectedValue: '',
   trueTarget: '',
@@ -57,6 +58,7 @@ watch(
     form.hybrid = Boolean(node.data?.hybrid);
     form.chunkSize = node.data?.chunkSize ?? 500;
     form.overlap = node.data?.overlap ?? 50;
+    form.strategy = node.data?.strategy ?? 'recursive';
     form.variableKey = node.data?.variableKey || '';
     form.expectedValue = node.data?.expectedValue || '';
     form.trueTarget = node.data?.trueTarget || '';
@@ -113,6 +115,7 @@ const handleSave = () => {
     hybrid: form.hybrid,
     chunkSize: form.chunkSize,
     overlap: form.overlap,
+    strategy: form.strategy,
     variableKey: form.variableKey,
     expectedValue: form.expectedValue,
     trueTarget: form.trueTarget,
@@ -180,6 +183,13 @@ const handleSave = () => {
         </el-form-item>
         <el-form-item label="重叠">
           <el-input-number v-model="form.overlap" :min="0" :max="500" :step="10" />
+        </el-form-item>
+        <el-form-item label="分块策略">
+          <el-select v-model="form.strategy" style="width: 100%">
+            <el-option label="递归（中文优先）" value="recursive" />
+            <el-option label="语义（按段落）" value="semantic" />
+            <el-option label="固定长度" value="fixed" />
+          </el-select>
         </el-form-item>
       </template>
       <template v-if="node?.type === 'condition'">

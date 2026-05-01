@@ -2,6 +2,11 @@ import { defineStore } from 'pinia';
 import type { WorkflowNode, WorkflowEdge, Workflow, WorkflowExecution } from '@/types';
 import { workflowApi } from '@/api';
 
+interface HistoryState {
+  nodes: WorkflowNode[];
+  edges: WorkflowEdge[];
+}
+
 // 工作流状态管理：负责画布数据、保存与执行
 export const useWorkflowStore = defineStore('workflow', {
   state: () => ({
@@ -17,13 +22,74 @@ export const useWorkflowStore = defineStore('workflow', {
     executionLogs: [] as string[],
     executions: [] as WorkflowExecution[],
     lastExecutionResponse: null as any,
+    // Undo/Redo history (直接内嵌，消除桥接层)
+    history: [] as HistoryState[],
+    historyIndex: -1,
+    maxHistory: 50,
   }),
+
+  getters: {
+    canUndo: (state) => state.historyIndex > 0,
+    canRedo: (state) => state.historyIndex < state.history.length - 1,
+  },
 
   actions: {
     // 设置画布数据
     setCanvas(nodes: WorkflowNode[], edges: WorkflowEdge[]) {
       this.nodes = nodes;
       this.edges = edges;
+    },
+
+    // 初始化历史记录
+    initHistory() {
+      this.history = [
+        {
+          nodes: JSON.parse(JSON.stringify(this.nodes)),
+          edges: JSON.parse(JSON.stringify(this.edges)),
+        },
+      ];
+      this.historyIndex = 0;
+    },
+
+    // 保存当前状态到历史
+    saveHistory() {
+      // 截断 redo 分支
+      this.history = this.history.slice(0, this.historyIndex + 1);
+      this.history.push({
+        nodes: JSON.parse(JSON.stringify(this.nodes)),
+        edges: JSON.parse(JSON.stringify(this.edges)),
+      });
+      if (this.history.length > this.maxHistory) {
+        this.history.shift();
+      } else {
+        this.historyIndex++;
+      }
+    },
+
+    // 撤销
+    undo() {
+      if (this.historyIndex <= 0) return null;
+      this.historyIndex--;
+      const state = this.history[this.historyIndex];
+      this.nodes = JSON.parse(JSON.stringify(state.nodes));
+      this.edges = JSON.parse(JSON.stringify(state.edges));
+      return state;
+    },
+
+    // 重做
+    redo() {
+      if (this.historyIndex >= this.history.length - 1) return null;
+      this.historyIndex++;
+      const state = this.history[this.historyIndex];
+      this.nodes = JSON.parse(JSON.stringify(state.nodes));
+      this.edges = JSON.parse(JSON.stringify(state.edges));
+      return state;
+    },
+
+    // 清空历史
+    clearHistory() {
+      this.history = [];
+      this.historyIndex = -1;
     },
 
     // 追加执行日志，方便前端展示
