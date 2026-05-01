@@ -1,133 +1,116 @@
-# AgentFlow Studio
+# LOOM-PRO
 
-轻量级类 Coze 智能体平台，支持可视化拖拽工作流编排、知识库构建与 RAG 检索，以及智能问答 Agent。
+> **AI 工作流编排平台 · 知识库 · 智能问答 · SSE 流式输出**
+> 基于 AgentFlow Studio 骨架，融合 LOOM 织机精华模块的 plus 版本。
 
-[![ci](https://github.com/qrx-joe/AgentFlow-Studio/actions/workflows/ci.yml/badge.svg)](https://github.com/qrx-joe/AgentFlow-Studio/actions/workflows/ci.yml)
+## 缘起
 
-## 演示截图
+LOOM-PRO 由两个项目合并而来：
 
-![AgentFlow Studio 工作台](./docs/assets/demo-screenshot.png)
+| 来源              | 贡献                                                          |
+| ----------------- | ------------------------------------------------------------- |
+| AgentFlow Studio  | 整体架构骨架（engine/services/dto 分层）、工作流执行引擎      |
+| LOOM 织机         | 撤销重做（Undo/Redo）、Markdown 文档处理、混合检索、工业靛蓝主题 |
 
 ## 技术栈
 
-| 端   | 技术                                                   |
-| ---- | ------------------------------------------------------ |
-| 前端 | Vue 3.4+、Pinia、Vue Flow、Element Plus、Vite 5        |
-| 后端 | NestJS 10、TypeORM、PostgreSQL 15+、Redis              |
-| AI   | OpenAI API（可配置 base URL）、text-embedding 向量模型 |
+| 端   | 技术                                                            |
+| ---- | --------------------------------------------------------------- |
+| 前端 | Vue 3.4 · Pinia · Vue Flow · Element Plus · Vite 5              |
+| 后端 | NestJS 10 · TypeORM · PostgreSQL 15 · Redis · JWT               |
+| AI   | OpenAI 兼容 API（可配置 base URL）· text-embedding 向量模型     |
 
-## 功能特性
+## 核心特性
 
-- **工作流编排**：可视化拖拽画布，灵活编排 AI 工作流
-- **知识库 RAG**：文档上传、分块、嵌入、向量检索
-- **智能问答 Agent**：连接工作流与大语言模型
-- **SSE 流式输出**：实时流式对话体验
+- **可视化工作流**：拖拽编排 + Undo/Redo（最多 50 步历史）
+- **知识库 RAG**：支持 PDF / DOCX / Markdown，3 种切块策略（fixed / semantic / recursive），中文语义分隔符
+- **混合检索**：向量 + 关键词 + 重排
+- **SSE 流式输出**：实时对话体验
+- **工业靛蓝设计语言**：来自 LOOM 织机的视觉系统
 
 ## 快速启动
 
-### 前端开发
+### 一键启动（Windows）
 
-```bash
-cd frontend
-pnpm install
-pnpm dev
-# 访问 http://localhost:5173
+```bat
+start.bat
 ```
 
-### 后端开发
+自动启动 Docker（PostgreSQL + Redis）、后端和前端开发服务器。
+
+### 手动启动
 
 ```bash
-cd backend
-pnpm install
-pnpm start:dev
-# API 服务 http://localhost:3000
+# 1. 启动数据库
+docker-compose up -d postgres redis
+
+# 2. 后端（端口 3000）
+cd backend && pnpm install && pnpm start:dev
+
+# 3. 前端（端口 8080）
+cd frontend && pnpm install && pnpm dev
 ```
 
-### Docker 部署（生产环境）
+### Docker 全栈部署
 
 ```bash
 docker-compose up -d
-# PostgreSQL: 5432, Redis: 6379, Backend: 3000, Frontend: 8080
+# Backend → 3000  Frontend → 8080  PG → 5432  Redis → 6379
 ```
 
 ## 环境变量
 
-### Backend (.env)
+后端 `backend/.env`：
 
-| 变量              | 说明                | 默认值                                                         |
-| ----------------- | ------------------- | -------------------------------------------------------------- |
-| `DATABASE_URL`    | PostgreSQL 连接地址 | `postgresql://agentflow:agentflow123@localhost:5432/agentflow` |
-| `REDIS_HOST`      | Redis 主机          | `localhost`                                                    |
-| `REDIS_PORT`      | Redis 端口          | `6379`                                                         |
-| `OPENAI_API_KEY`  | OpenAI API Key      | -                                                              |
-| `OPENAI_BASE_URL` | OpenAI API 地址     | `https://api.openai.com/v1`                                    |
+| 变量              | 默认值                                                  |
+| ----------------- | ------------------------------------------------------- |
+| `DATABASE_URL`    | `postgresql://loompro:loompro123@localhost:5432/loompro` |
+| `REDIS_HOST`      | `localhost`                                             |
+| `REDIS_PORT`      | `6379`                                                  |
+| `OPENAI_API_KEY`  | -                                                       |
+| `OPENAI_BASE_URL` | `https://api.openai.com/v1`                             |
+| `JWT_SECRET`      | -                                                       |
 
 ## 项目结构
 
 ```
-.
-├── backend/                 # NestJS 后端
+LOOM-PRO/
+├── backend/                       # NestJS 10
 │   └── src/
-│       ├── workflow/       # 工作流 CRUD 和执行引擎
-│       ├── knowledge/       # 知识库、向量嵌入、RAG 检索
-│       ├── chat/           # 聊天会话和消息处理
-│       └── agent/          # Agent 编排服务
-├── frontend/               # Vue 3 前端
+│       ├── workflow/             # 工作流：CRUD + 执行引擎
+│       ├── knowledge/
+│       │   ├── services/loom/    # LOOM 精华：chunking / document-processor
+│       │   └── utils/text-splitter.ts  # 中文友好的递归切分
+│       ├── chat/                 # 会话 + SSE 流式
+│       ├── agent/                # Agent 编排
+│       └── common/middleware/    # 日志中间件
+├── frontend/                      # Vue 3.4
 │   └── src/
-│       ├── views/         # 页面组件
-│       ├── components/    # 可复用组件
-│       ├── stores/        # Pinia 状态管理
-│       └── api/           # API 客户端
-├── docker-compose.yml      # Docker 部署配置
-└── docs/                   # 项目文档
+│       ├── views/Workflow/       # 工作流主视图
+│       ├── components/workflow/  # 节点工具栏（含 Undo/Redo 按钮）
+│       ├── composables/workflow/
+│       │   ├── useWorkflowHistory.ts   # 撤销重做（来自 LOOM）
+│       │   ├── useWorkflowValidation.ts
+│       │   └── useWorkflowCanvas.ts    # 桥接 store + history
+│       ├── stores/               # Pinia
+│       └── styles/variables.css  # 工业靛蓝主题变量
+├── docker-compose.yml             # 全栈编排
+├── .github/workflows/ci.yml       # CI：lint + build + test
+└── start.bat                      # Windows 一键启动
 ```
 
-## 代码质量与自动化
+## 代码质量
 
-项目已配置完整的代码检查和自动化流水线：
-
-### 本地提交前检查（Husky）
-
-- **pre-commit**：lint-staged 自动对 staged 文件执行 `prettier --write` + `eslint --fix`
-- **commit-msg**：`commitlint` 强制提交信息符合 [Conventional Commits](https://www.conventionalcommits.org/) 规范
-
-允许的 `type`：`feat`、`fix`、`docs`、`style`、`refactor`、`perf`、`test`、`chore`、`ci`、`build`、`revert`
-
-示例：
+- **pre-commit**：`lint-staged` → `prettier --write` + `eslint --fix`
+- **commit-msg**：[Conventional Commits](https://www.conventionalcommits.org/)
+- **CI**：GitHub Actions 在 push / PR 时执行 format check + lint + build + jest
 
 ```bash
-git commit -m "feat: 添加工作流执行日志面板"
-```
-
-### CI 流水线（GitHub Actions）
-
-每次 Push / PR 自动执行：
-
-1. `pnpm run format:check` — Prettier 格式检查
-2. `pnpm -C backend lint` / `pnpm -C frontend lint` — ESLint 检查
-3. `pnpm -C backend build` — 后端构建
-4. `pnpm -C backend test` — 后端 Jest 单元测试
-5. `pnpm -C backend test:workflow` — 工作流引擎测试
-6. `pnpm -C frontend build:ci` — 前端构建
-
-### 常用命令
-
-```bash
-# 格式化全部代码
-pnpm run format
-
-# 仅检查格式
-pnpm run format:check
-
-# 后端测试
-pnpm -C backend test
-
-# 工作流引擎测试
-pnpm -C backend test:workflow
-
-# 修复 ESLint 问题
-pnpm -C backend lint
-pnpm -C frontend lint
+pnpm run format          # 格式化全部
+pnpm run format:check    # 检查格式
+pnpm -C backend test     # 后端测试
+pnpm -C backend lint     # 后端 lint
+pnpm -C frontend lint    # 前端 lint
 ```
 
 ## 许可证
