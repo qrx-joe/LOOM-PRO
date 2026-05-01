@@ -1,0 +1,9 @@
+
+AgentFlow Studio is a powerful AI workflow orchestration platform.
+It allows users to visually design agents using a node-based interface.
+Key features include:
+1. Visual Workflow Editor: Drag and drop nodes to build logic.
+2. Knowledge Base: RAG support for document Q&A.
+3. Multi-Model Support: Integrate with various LLMs (GPT, DeepSeek).
+4. Real-time Execution: Watch your agent run step-by-step.
+5. Deployment: One-click publish to API or Chat Interface.

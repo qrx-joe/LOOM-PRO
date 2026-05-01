@@ -1,0 +1,27 @@
+{
+  "name": "agentflow-studio",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.8.3"
+  },
+  "lint-staged": {
+    "frontend/**/*.{vue,js,jsx,cjs,mjs,ts,tsx,cts,mts}": [
+      "prettier --write",
+      "pnpm -C frontend exec eslint --fix"
+    ],
+    "backend/**/*.ts": [
+      "prettier --write",
+      "pnpm -C backend exec eslint --fix"
+    ]
+  }
+}
