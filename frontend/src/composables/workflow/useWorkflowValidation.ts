@@ -1,8 +1,27 @@
-import { isStartNode, isEndNode, isAINode, isKnowledgeNode, isHttpNode } from '../utils/nodeTypes'
-
 export interface ValidationResult {
   valid: boolean
   errors: string[]
+}
+
+// 节点类型判断辅助函数
+function isStartNode(node: any): boolean {
+  return node?.type === 'trigger'
+}
+
+function isEndNode(node: any): boolean {
+  return node?.type === 'end'
+}
+
+function isAINode(node: any): boolean {
+  return node?.type === 'llm'
+}
+
+function isKnowledgeNode(node: any): boolean {
+  return node?.type === 'knowledge'
+}
+
+function isHttpNode(node: any): boolean {
+  return node?.type === 'http'
 }
 
 /**
@@ -61,10 +80,10 @@ export function useWorkflowValidation() {
    */
   function validateIsolatedNodes(nodes: any[], edges: any[]): string[] {
     const errors: string[] = []
-    const sourceIds = new Set<string>(edges.map(e => e.source))
-    const targetIds = new Set<string>(edges.map(e => e.target))
+    const sourceIds = new Set<string>(edges.map((e: any) => e.source))
+    const targetIds = new Set<string>(edges.map((e: any) => e.target))
 
-    const isolatedNodes = nodes.filter(n => {
+    const isolatedNodes = nodes.filter((n: any) => {
       const hasSource = sourceIds.has(n.id)
       const hasTarget = targetIds.has(n.id)
 
@@ -81,7 +100,7 @@ export function useWorkflowValidation() {
     })
 
     if (isolatedNodes.length > 0) {
-      const nodeNames = isolatedNodes.map(n => n.label || n.type).join('、')
+      const nodeNames = isolatedNodes.map((n: any) => n.label || n.type).join('、')
       errors.push(`孤立节点: ${nodeNames}`)
     }
 
@@ -95,7 +114,7 @@ export function useWorkflowValidation() {
     const errors: string[] = []
     const aiNodes = nodes.filter(isAINode)
 
-    aiNodes.forEach(node => {
+    aiNodes.forEach((node: any) => {
       if (!node.data?.prompt) {
         errors.push(`节点"${node.label}"缺少 Prompt 配置`)
       }
@@ -111,7 +130,7 @@ export function useWorkflowValidation() {
     const errors: string[] = []
     const knowledgeNodes = nodes.filter(isKnowledgeNode)
 
-    knowledgeNodes.forEach(node => {
+    knowledgeNodes.forEach((node: any) => {
       if (!node.data?.kbId) {
         errors.push(`节点"${node.label}"未选择知识库`)
       }
@@ -127,7 +146,7 @@ export function useWorkflowValidation() {
     const errors: string[] = []
     const httpNodes = nodes.filter(isHttpNode)
 
-    httpNodes.forEach(node => {
+    httpNodes.forEach((node: any) => {
       if (!node.data?.url || node.data.url.trim() === '') {
         errors.push(`节点"${node.label}"未配置请求 URL`)
       }

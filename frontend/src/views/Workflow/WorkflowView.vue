@@ -36,7 +36,7 @@ const route = useRoute();
 const workflowStore = useWorkflowStore();
 
 // Undo/Redo history
-const { canUndo, canRedo, initCanvasHistory, commitChange, undoChange, redoChange } = useWorkflowCanvas();
+const { canUndo, canRedo, initCanvasHistory, undoChange, redoChange } = useWorkflowCanvas();
 
 // Load workflow based on route ID
 onMounted(async () => {
@@ -60,14 +60,16 @@ onMounted(async () => {
 });
 
 // 监听节点和边的变化，自动保存历史
-const stopNodesWatch = workflowStore.$subscribe(
-  (mutation, state) => {
-    if (mutation.type === 'direct' && (state.nodes || state.edges)) {
-      commitChange();
-    }
-  },
-  { detached: false }
-);
+// 注意：自动保存历史可能导致过于频繁的状态保存，暂时注释掉
+// 如果需要自动保存，可以取消注释并优化
+// workflowStore.$subscribe(
+//   (mutation, state) => {
+//     if (mutation.type === 'direct' && (state.nodes || state.edges)) {
+//       commitChange();
+//     }
+//   },
+//   { detached: false }
+// );
 const FLOW_ID = 'workflow-canvas';
 const vueFlow = useVueFlow(FLOW_ID);
 const { onConnect, addEdges, project } = vueFlow;
