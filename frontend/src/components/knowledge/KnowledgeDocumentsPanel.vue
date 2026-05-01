@@ -8,11 +8,13 @@ const props = defineProps<{
   uploading: boolean;
   chunkSize: number;
   overlap: number;
+  strategy: 'fixed' | 'semantic' | 'recursive';
 }>();
 
 const emit = defineEmits<{
   (e: 'update:chunkSize', value: number): void;
   (e: 'update:overlap', value: number): void;
+  (e: 'update:strategy', value: 'fixed' | 'semantic' | 'recursive'): void;
   (e: 'upload', file: any): void;
   (e: 'openDoc', doc: any): void;
   (e: 'removeDoc', id: string): void;
@@ -150,6 +152,22 @@ const getFileIcon = (fileType?: string) => {
 
     <!-- 设置面板 -->
     <div v-if="showSettings" class="settings-panel">
+      <div class="setting-item">
+        <label class="setting-label">分块策略</label>
+        <el-select
+          :model-value="props.strategy"
+          size="small"
+          style="width: 140px"
+          @update:model-value="
+            (value: 'fixed' | 'semantic' | 'recursive') => emit('update:strategy', value)
+          "
+        >
+          <el-option label="递归（中文优先）" value="recursive" />
+          <el-option label="语义（按段落）" value="semantic" />
+          <el-option label="固定长度" value="fixed" />
+        </el-select>
+        <span class="setting-hint">recursive 适合中文混排</span>
+      </div>
       <div class="setting-item">
         <label class="setting-label">分块大小</label>
         <el-input-number

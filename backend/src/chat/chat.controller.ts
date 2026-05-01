@@ -35,7 +35,7 @@ export class ChatController {
   @Post('messages/stream')
   async streamMessage(
     @Body() payload: { sessionId: string; content: string },
-    @Res() res: any,
+    @Res() res: Response,
   ) {
     // SSE 基本响应头
     res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');

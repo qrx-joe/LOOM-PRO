@@ -8,6 +8,7 @@ export interface ChunkSettings {
   chunkSize: number;
   overlap: number;
   separators?: string[];
+  strategy?: 'fixed' | 'semantic' | 'recursive';
 }
 
 // 检索设置
@@ -158,7 +159,11 @@ export const useKnowledgeStore = defineStore('knowledge', {
     async uploadDocument(
       file: File,
       knowledgeBaseId: string,
-      options?: { chunkSize?: number; overlap?: number },
+      options?: {
+        chunkSize?: number;
+        overlap?: number;
+        strategy?: 'fixed' | 'semantic' | 'recursive';
+      },
     ) {
       this.uploading = true;
       try {

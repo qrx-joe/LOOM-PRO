@@ -37,6 +37,7 @@ const keywordMode = ref<'bm25' | 'tsrank' | 'trgm'>('bm25');
 // 分块参数
 const chunkSize = ref(500);
 const overlap = ref(50);
+const chunkStrategy = ref<'fixed' | 'semantic' | 'recursive'>('recursive');
 
 // 文档抽屉
 const showDocDrawer = ref(false);
@@ -80,6 +81,7 @@ onMounted(async () => {
       if (kbData?.settings?.chunk) {
         chunkSize.value = kbData.settings.chunk.chunkSize || 500;
         overlap.value = kbData.settings.chunk.overlap || 50;
+        chunkStrategy.value = kbData.settings.chunk.strategy || 'recursive';
       }
     } finally {
       loading.value = false;
@@ -97,6 +99,7 @@ const handleUpload = async (file: File) => {
     await knowledgeStore.uploadDocument(file, kb.value.id, {
       chunkSize: chunkSize.value,
       overlap: overlap.value,
+      strategy: chunkStrategy.value,
     });
     ElMessage.success('上传成功');
   } catch (e: any) {
@@ -199,6 +202,7 @@ const handleSaveSettings = async () => {
     if (settingsForm.value.chunk) {
       chunkSize.value = settingsForm.value.chunk.chunkSize;
       overlap.value = settingsForm.value.chunk.overlap;
+      chunkStrategy.value = settingsForm.value.chunk.strategy || 'recursive';
     }
   } catch (e) {
     ElMessage.error('保存失败');
@@ -296,6 +300,7 @@ const formatNumber = (num: number) => {
         <KnowledgeDocumentsPanel
           v-model:chunk-size="chunkSize"
           v-model:overlap="overlap"
+          v-model:strategy="chunkStrategy"
           :documents="knowledgeStore.documents"
           :loading="knowledgeStore.loading"
           :uploading="knowledgeStore.uploading"
@@ -394,6 +399,15 @@ const formatNumber = (num: number) => {
       <el-form v-if="settingsForm" label-position="top">
         <h4 class="settings-section-title">分块设置</h4>
         <el-row :gutter="16">
+          <el-col :span="24">
+            <el-form-item label="分块策略">
+              <el-select v-model="settingsForm.chunk.strategy" style="width: 100%">
+                <el-option label="递归（中文优先，推荐）" value="recursive" />
+                <el-option label="语义（按段落保留语义）" value="semantic" />
+                <el-option label="固定长度" value="fixed" />
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="分块大小">
               <el-input-number

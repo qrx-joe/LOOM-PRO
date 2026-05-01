@@ -29,7 +29,12 @@ export const knowledgeApi = {
     request.get('/knowledge/documents', { params: knowledgeBaseId ? { knowledgeBaseId } : {} }),
   upload: (
     file: File,
-    options?: { chunkSize?: number; overlap?: number; knowledgeBaseId?: string },
+    options?: {
+      chunkSize?: number;
+      overlap?: number;
+      knowledgeBaseId?: string;
+      strategy?: 'fixed' | 'semantic' | 'recursive';
+    },
   ) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -41,6 +46,9 @@ export const knowledgeApi = {
     }
     if (options?.knowledgeBaseId) {
       formData.append('knowledgeBaseId', options.knowledgeBaseId);
+    }
+    if (options?.strategy) {
+      formData.append('strategy', options.strategy);
     }
     // 上传大文件需要更长超时（5分钟）
     return request.post('/knowledge/upload', formData, { timeout: 300000 });
