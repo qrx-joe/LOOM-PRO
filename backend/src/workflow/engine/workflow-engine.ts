@@ -494,7 +494,7 @@ export class WorkflowEngine {
       return template;
     }
 
-    return template.replace(/\{\{([\w.\[\]]+)\}\}/g, (match, key) => {
+    return template.replace(/\{\{([\w.[\]]+)\}\}/g, (match, key) => {
       const value = this.resolveVariable(key, variables);
       if (value === undefined || value === null) {
         // 保留原样，不替换

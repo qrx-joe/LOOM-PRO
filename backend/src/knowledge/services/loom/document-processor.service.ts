@@ -41,7 +41,7 @@ export class DocumentProcessorService {
       );
     }
 
-    const _format = this.getFormatFromMime(detectedMimeType);
+    const format = this.getFormatFromMime(detectedMimeType);
 
     try {
       switch (detectedMimeType) {
