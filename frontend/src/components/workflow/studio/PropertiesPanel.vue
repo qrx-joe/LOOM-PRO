@@ -26,10 +26,14 @@ const currentNodeConfig = computed(() => {
 
 const isTrigger = computed(() => props.node?.type === 'trigger');
 
-// 根据字段类型获取当前值
+// 根据字段类型获取当前值（含向后兼容处理）
 const getFieldValue = (field: NodeField) => {
   const data = props.node?.data || {};
-  const value = data[field.key];
+  let value = data[field.key];
+  // 兼容旧工作流：timeout 字段已重命名为 timeoutMs
+  if (value === undefined && field.key === 'timeoutMs' && data.timeout !== undefined) {
+    value = data.timeout;
+  }
   return value !== undefined ? value : field.defaultValue;
 };
 
@@ -302,6 +306,15 @@ const toggleSection = (section: string) => {
                       </el-form-item>
                     </template>
                   </template>
+                </template>
+                <template v-else>
+                  <el-alert type="warning" :closable="false" show-icon>
+                    <template #default>
+                      <div class="tip-content">
+                        未知节点类型 "{{ node.type }}"，未找到对应的配置 schema。
+                      </div>
+                    </template>
+                  </el-alert>
                 </template>
               </el-form>
             </div>

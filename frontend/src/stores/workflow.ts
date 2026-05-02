@@ -59,16 +59,20 @@ export const useWorkflowStore = defineStore('workflow', {
     // 保存当前状态到历史
     saveHistory() {
       if (this._skipNextHistory) return;
-      // 截断 redo 分支
-      this.history = this.history.slice(0, this.historyIndex + 1);
-      this.history.push({
-        nodes: JSON.parse(JSON.stringify(this.nodes)),
-        edges: JSON.parse(JSON.stringify(this.edges)),
-      });
-      if (this.history.length > this.maxHistory) {
-        this.history.shift();
-      } else {
-        this.historyIndex++;
+      try {
+        // 截断 redo 分支
+        this.history = this.history.slice(0, this.historyIndex + 1);
+        this.history.push({
+          nodes: JSON.parse(JSON.stringify(this.nodes)),
+          edges: JSON.parse(JSON.stringify(this.edges)),
+        });
+        if (this.history.length > this.maxHistory) {
+          this.history.shift();
+        } else {
+          this.historyIndex++;
+        }
+      } catch (e) {
+        console.error('[History] Failed to save history state:', e);
       }
     },
 
@@ -76,24 +80,36 @@ export const useWorkflowStore = defineStore('workflow', {
     undo() {
       if (this.historyIndex <= 0) return null;
       this._skipNextHistory = true;
-      this.historyIndex--;
-      const state = this.history[this.historyIndex];
-      this.nodes = JSON.parse(JSON.stringify(state.nodes));
-      this.edges = JSON.parse(JSON.stringify(state.edges));
-      this._skipNextHistory = false;
-      return state;
+      try {
+        this.historyIndex--;
+        const state = this.history[this.historyIndex];
+        this.nodes = JSON.parse(JSON.stringify(state.nodes));
+        this.edges = JSON.parse(JSON.stringify(state.edges));
+        return state;
+      } catch (e) {
+        console.error('[History] Undo failed:', e);
+        return null;
+      } finally {
+        this._skipNextHistory = false;
+      }
     },
 
     // 重做
     redo() {
       if (this.historyIndex >= this.history.length - 1) return null;
       this._skipNextHistory = true;
-      this.historyIndex++;
-      const state = this.history[this.historyIndex];
-      this.nodes = JSON.parse(JSON.stringify(state.nodes));
-      this.edges = JSON.parse(JSON.stringify(state.edges));
-      this._skipNextHistory = false;
-      return state;
+      try {
+        this.historyIndex++;
+        const state = this.history[this.historyIndex];
+        this.nodes = JSON.parse(JSON.stringify(state.nodes));
+        this.edges = JSON.parse(JSON.stringify(state.edges));
+        return state;
+      } catch (e) {
+        console.error('[History] Redo failed:', e);
+        return null;
+      } finally {
+        this._skipNextHistory = false;
+      }
     },
 
     // ========== 结构性变更（自动保存历史）==========
