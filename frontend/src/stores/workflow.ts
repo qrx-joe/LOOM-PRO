@@ -31,6 +31,8 @@ export const useWorkflowStore = defineStore('workflow', {
     maxHistory: 50,
     // 标记是否正在恢复历史状态（undo/redo），避免循环保存
     _skipNextHistory: false,
+    // 历史系统损坏标记（saveHistory 深克隆失败时设置）
+    _historyCorrupted: false,
   }),
 
   getters: {
@@ -55,17 +57,19 @@ export const useWorkflowStore = defineStore('workflow', {
           },
         ];
         this.historyIndex = 0;
+        this._historyCorrupted = false;
       } catch (e) {
         console.error('[History] Failed to initialize history:', e);
         // 降级：创建空历史，保证 undo/redo 系统不崩
         this.history = [{ nodes: [], edges: [] }];
         this.historyIndex = 0;
+        this._historyCorrupted = true;
       }
     },
 
-    // 保存当前状态到历史
-    saveHistory() {
-      if (this._skipNextHistory) return;
+    // 保存当前状态到历史，返回是否成功
+    saveHistory(): boolean {
+      if (this._skipNextHistory) return true;
       try {
         // 截断 redo 分支
         this.history = this.history.slice(0, this.historyIndex + 1);
@@ -78,13 +82,20 @@ export const useWorkflowStore = defineStore('workflow', {
         } else {
           this.historyIndex++;
         }
+        return true;
       } catch (e) {
         console.error('[History] Failed to save history state:', e);
+        this._historyCorrupted = true;
+        return false;
       }
     },
 
     // 撤销
     undo() {
+      if (this._historyCorrupted) {
+        console.error('[History] History is corrupted, undo disabled. Please save workflow manually.');
+        return null;
+      }
       if (this.historyIndex <= 0) return null;
       this._skipNextHistory = true;
       try {
@@ -103,6 +114,10 @@ export const useWorkflowStore = defineStore('workflow', {
 
     // 重做
     redo() {
+      if (this._historyCorrupted) {
+        console.error('[History] History is corrupted, redo disabled. Please save workflow manually.');
+        return null;
+      }
       if (this.historyIndex >= this.history.length - 1) return null;
       this._skipNextHistory = true;
       try {
@@ -122,8 +137,12 @@ export const useWorkflowStore = defineStore('workflow', {
     // ========== 结构性变更（自动保存历史）==========
 
     addNodes(newNodes: WorkflowNode[]) {
-      this.nodes.push(...newNodes);
-      this.saveHistory();
+      const existingIds = new Set(this.nodes.map((n) => n.id));
+      const nodesToAdd = newNodes.filter((n) => !existingIds.has(n.id));
+      if (nodesToAdd.length > 0) {
+        this.nodes.push(...nodesToAdd);
+        this.saveHistory();
+      }
     },
 
     removeNode(id: string) {
@@ -172,6 +191,10 @@ export const useWorkflowStore = defineStore('workflow', {
         labelBgStyle?: any;
       },
     ) {
+      if (this.edges.some((e) => e.id === edge.id)) {
+        console.warn(`[WorkflowStore] Edge ${edge.id} already exists, skipping.`);
+        return;
+      }
       // 同步 condition 节点的 edge 追踪信息
       const sourceNode = this.nodes.find((n) => n.id === edge.source);
       if (sourceNode?.type === 'condition' && edge.branchType) {
