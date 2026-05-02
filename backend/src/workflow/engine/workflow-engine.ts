@@ -134,6 +134,7 @@ export class WorkflowEngine {
 
       case 'knowledge': {
         // 调用知识库检索
+        // dataset 字段对应后端 knowledgeBaseId，与前端 node-config-schema.ts 对齐
         const result = await this.knowledgeService.search(
           context.input,
           node.data?.topK || 3,
@@ -141,6 +142,7 @@ export class WorkflowEngine {
             scoreThreshold: node.data?.scoreThreshold,
             hybrid: node.data?.hybrid,
             rerank: node.data?.rerank,
+            knowledgeBaseId: node.data?.dataset || undefined,
           },
           signal,
         );
@@ -151,8 +153,9 @@ export class WorkflowEngine {
 
       case 'llm': {
         // 调用大模型，支持变量模板替换
+        // 字段名 systemPrompt 与前端 node-config-schema.ts 对齐
         const llmPrompt = this.replaceVariables(
-          node.data?.prompt || '你是一个智能助手',
+          node.data?.systemPrompt || '你是一个智能助手',
           context.variables,
         );
         // 支持指定输入源，默认为原始输入，也可引用上游节点输出

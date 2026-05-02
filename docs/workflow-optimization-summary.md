@@ -4,9 +4,9 @@
 
 ## 📊 实施概览
 
-**实施时间**: 2026-02-12
-**完成任务**: 6/6
-**完成率**: 100%
+**实施时间**: 2026-02-12（初稿）/ 2026-05-02（修订）
+**完成任务**: 4/6（其余 2 项见下文"待完成"）
+**完成率**: ~67%（仅 Phase 1 已实现部分）
 
 ---
 
@@ -157,9 +157,13 @@
 
 ---
 
-### 6. 实现变量系统基础功能 ✓
+### 6. 实现变量系统基础功能（已废弃实现）
 
-**文件**: `frontend/src/stores/variable.ts`
+~~**文件**: `frontend/src/stores/variable.ts`~~
+
+⚠️ 该文件仅定义了 store 结构，无任何调用方，属于**空壳代码**，已于 2026-05-02 删除。
+
+变量系统需重新按设计文档落地，见下方"待完成"章节。
 
 **核心功能**:
 
@@ -243,11 +247,21 @@ frontend/src/
 │           ├── ComponentLibrary.vue         # 优化组件库
 │           ├── PropertiesPanel.vue          # 增强属性面板
 │           └── StudioHeader.vue             # 增强工具栏
+├── composables/workflow/
+│   ├── useWorkflowEdgeHandlers.ts           # 保留
+│   ├── useWorkflowDragDrop.ts               # 保留
+│   ├── useWorkflowHistory.ts                # ❌ 已删除（死代码）
+│   └── useWorkflowValidation.ts             # ❌ 已删除（死代码）
 ├── stores/
-│   └── variable.ts                          # 新增变量系统
+│   ├── variable.ts                          # ❌ 已删除（空壳代码）
+│   └── plugins/
+│       └── history.ts                       # 历史系统（含竞态修复）
 └── views/
     └── Workflow/
         └── WorkflowView.vue                 # 优化主布局
+
+backend/src/workflow/engine/
+└── workflow-engine.ts                       # P0 修复：systemPrompt / knowledgeBaseId
 
 docs/
 └── workflow-optimization-design.md          # 设计文档
@@ -297,37 +311,30 @@ npm run start:dev
 
 ---
 
-## 🎯 后续优化建议
+## 🔄 待完成（Phase 1 遗留）
 
-### Phase 2: 高级功能 (2-3周)
+以下功能在设计文档中规划为 Phase 1，但尚未真正落地：
+
+### 1. 变量系统 ✗
+- `stores/variable.ts` 已删除（空壳代码）
+- 需重新实现：变量定义、引用解析、变量映射 UI
+
+### 2. 自动保存（2s 防抖）✗
+- 当前 `saveWorkflow` 仅为手动触发
+- 需实现：画布空闲时 2s 防抖自动保存、状态显示
+
+### 3. 快捷键支持 ✗
+- Ctrl+S: 保存 / Ctrl+Z: 撤销 / Ctrl+Y: 重做 / Delete: 删除
+- 需在 WorkflowView.vue 绑定 keydown 事件
+
+## 🚀 后续优化建议
+
+### Phase 2: 变量系统与自动保存 (1-2周)
 
 1. **变量映射组件**
    - 可视化变量选择器
    - 变量引用自动补全
    - 变量预览和验证
-
-2. **版本管理**
-   - 版本列表和对比
-   - 版本恢复
-   - 版本标签
-
-3. **更多节点类型**
-   - 数据转换节点
-   - 循环节点
-   - 并行节点
-   - 延迟节点
-
-4. **实时执行状态**
-   - WebSocket 连接
-   - 节点状态可视化
-   - 实时日志推送
-
-### Phase 3: 性能优化 (1-2周)
-
-1. **大规模工作流支持**
-   - 虚拟滚动
-   - 节点懒加载
-   - 渲染优化
 
 2. **自动保存**
    - 防抖保存
@@ -339,6 +346,31 @@ npm run start:dev
    - Ctrl+Z: 撤销
    - Ctrl+Y: 重做
    - Delete: 删除节点
+
+### Phase 3: 高级功能 (2-3周)
+
+1. **版本管理**
+   - 版本列表和对比
+   - 版本恢复
+   - 版本标签
+
+2. **更多节点类型**
+   - 数据转换节点
+   - 循环节点
+   - 并行节点
+   - 延迟节点
+
+3. **实时执行状态**
+   - WebSocket 连接
+   - 节点状态可视化
+   - 实时日志推送
+
+### Phase 4: 性能优化 (1-2周)
+
+1. **大规模工作流支持**
+   - 虚拟滚动
+   - 节点懒加载
+   - 渲染优化
 
 ---
 
@@ -364,8 +396,12 @@ npm run start:dev
 - ✅ 功能丰富的属性面板
 - ✅ 完善的调试功能
 - ✅ 新增 HTTP 请求节点
-- ✅ 基础变量系统
+- ⚠️ 基础变量系统（空壳，已删除，待重新实现）
 - ✅ 优化的视觉设计
+- ✅ 修复 P0: LLM systemPrompt 字段契约、dataset → knowledgeBaseId 映射
+- ✅ 修复 P1: undo/redo 防抖竞态、知识节点装饰性 strategy 字段
+- ✅ 清理死代码: useWorkflowHistory.ts、useWorkflowValidation.ts、variable.ts
+- ✅ 校准 checklist 与 summary 文档
 
 **用户体验提升**:
 
@@ -373,5 +409,7 @@ npm run start:dev
 - 更便捷的操作流程
 - 更强大的调试能力
 - 更丰富的节点类型
+
+> ⚠️ 注意：2026-02-12 初稿声称完成率 100% 为误报。变量系统、自动保存、快捷键三项为空壳代码，已于 2026-05-02 修正。
 
 现在可以刷新浏览器，体验全新的工作台界面！🎊

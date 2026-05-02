@@ -121,6 +121,11 @@ export function createHistoryPlugin(options: HistoryPluginOptions) {
         return null;
       } finally {
         this._skipNextHistory = false;
+        // 清除所有待执行的防抖保存，防止撤销后延迟触发覆盖历史
+        Object.keys(debounceTimers).forEach((name) => {
+          clearTimeout(debounceTimers[name]);
+          delete debounceTimers[name];
+        });
       }
     };
 
@@ -146,6 +151,11 @@ export function createHistoryPlugin(options: HistoryPluginOptions) {
         return null;
       } finally {
         this._skipNextHistory = false;
+        // 清除所有待执行的防抖保存，防止重做后延迟触发覆盖历史
+        Object.keys(debounceTimers).forEach((name) => {
+          clearTimeout(debounceTimers[name]);
+          delete debounceTimers[name];
+        });
       }
     };
 
@@ -153,6 +163,11 @@ export function createHistoryPlugin(options: HistoryPluginOptions) {
       this.history = [];
       this.historyIndex = -1;
       this._historyCorrupted = false;
+      // 清除所有待执行的防抖保存
+      Object.keys(debounceTimers).forEach((name) => {
+        clearTimeout(debounceTimers[name]);
+        delete debounceTimers[name];
+      });
     };
 
     // 监听 action 自动保存历史（仅当 state 实际变化时）

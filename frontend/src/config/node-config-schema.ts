@@ -40,13 +40,6 @@ const HTTP_METHOD_OPTIONS: FieldOption[] = [
   { label: 'DELETE', value: 'DELETE' },
 ];
 
-// 分块策略选项
-const STRATEGY_OPTIONS: FieldOption[] = [
-  { label: '递归（中文优先）', value: 'recursive' },
-  { label: '语义（按段落）', value: 'semantic' },
-  { label: '固定长度', value: 'fixed' },
-];
-
 // 错误处理策略选项
 const ON_ERROR_OPTIONS: FieldOption[] = [
   { label: '失败终止', value: 'fail' },
@@ -80,7 +73,6 @@ export const NODE_TYPE_CONFIGS: Record<string, NodeTypeConfig> = {
       { key: 'scoreThreshold', label: '相似度阈值', type: 'slider', defaultValue: 0.7, min: 0, max: 1, step: 0.05 },
       { key: 'hybrid', label: '混合检索', type: 'switch', defaultValue: false },
       { key: 'rerank', label: '重排序', type: 'switch', defaultValue: false },
-      { key: 'strategy', label: '分块策略', type: 'select', defaultValue: 'recursive', options: STRATEGY_OPTIONS },
       ...COMMON_EXEC_FIELDS,
     ],
   },
