@@ -15,7 +15,7 @@ import { RouterView } from 'vue-router';
 
 body {
   font-family: 'Noto Sans SC', 'HarmonyOS Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background-color: #f5f7fa;
+  background-color: var(--color-border-light);
 }
 
 #app {

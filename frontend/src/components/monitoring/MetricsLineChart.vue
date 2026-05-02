@@ -44,8 +44,8 @@ const points = computed(() => {
 
 <style scoped>
 .chart {
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 10px;
   display: grid;
   gap: 6px;
@@ -57,14 +57,14 @@ const points = computed(() => {
 }
 
 .svg {
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-  border-radius: 8px;
+  background: linear-gradient(180deg, var(--color-border-light) 0%, var(--color-surface) 100%);
+  border-radius: var(--radius-sm);
 }
 
 .labels {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #64748b;
+  color: var(--color-medium);
 }
 </style>

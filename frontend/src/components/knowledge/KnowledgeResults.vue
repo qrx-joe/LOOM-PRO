@@ -79,7 +79,7 @@ const highlightKeywords = (text: string) => {
 
 .stats {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-medium);
   margin-bottom: 8px;
 }
 
@@ -104,7 +104,7 @@ const highlightKeywords = (text: string) => {
 
 .score-fill {
   height: 100%;
-  background: linear-gradient(90deg, #38bdf8 0%, #16a34a 100%);
+  background: linear-gradient(90deg, var(--color-info) 0%, var(--color-success) 100%);
 }
 
 .hit {

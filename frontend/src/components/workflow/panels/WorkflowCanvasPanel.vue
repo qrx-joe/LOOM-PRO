@@ -136,9 +136,9 @@ const emit = defineEmits<{
 
 .canvas {
   flex: 1;
-  background: #ffffff;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-md);
 }
 </style>

@@ -147,7 +147,7 @@ const emit = defineEmits<{
 
 .chunk-item.focused {
   border-color: var(--color-info);
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  box-shadow: 0 0 0 3px var(--color-info-bg);
 }
 
 .chunk-title {

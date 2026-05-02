@@ -152,7 +152,7 @@ defineEmits([
   border-radius: var(--radius-full);
   z-index: 10;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--color-surface);
 }
 
 .tool-group {
@@ -164,7 +164,7 @@ defineEmits([
 .divider {
   width: 1px;
   height: 24px;
-  background: var(--color-neutral-200);
+  background: var(--color-border);
   margin: 0 8px;
 }
 
@@ -178,7 +178,7 @@ defineEmits([
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  color: var(--color-neutral-600);
+  color: var(--color-medium);
 }
 
 .mr-1 {
