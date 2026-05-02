@@ -331,10 +331,10 @@ describe('useWorkflowStore', () => {
       store.addEdge({ id: 'e2', source: 'n1', target: 'n3', type: 'default', branchType: 'False' });
 
       const node = store.nodes.find((n) => n.id === 'n1');
-      expect(node?.data.trueEdgeId).toBe('e1');
-      expect(node?.data.trueTarget).toBe('n2');
-      expect(node?.data.falseEdgeId).toBe('e2');
-      expect(node?.data.falseTarget).toBe('n3');
+      expect(node?.data?.trueEdgeId).toBe('e1');
+      expect(node?.data?.trueTarget).toBe('n2');
+      expect(node?.data?.falseEdgeId).toBe('e2');
+      expect(node?.data?.falseTarget).toBe('n3');
     });
   });
 
@@ -371,7 +371,7 @@ describe('useWorkflowStore', () => {
 
       store.updateNodeData('n1', { model: 'gpt-3.5' });
 
-      expect(store.nodes[0].data.model).toBe('gpt-3.5');
+      expect(store.nodes[0]?.data?.model).toBe('gpt-3.5');
     });
 
     it('不存在的节点应静默跳过', () => {
