@@ -2,14 +2,6 @@ import { defineStore } from 'pinia';
 import type { WorkflowNode, WorkflowEdge, Workflow, WorkflowExecution } from '@/types';
 import { workflowApi } from '@/api';
 
-// 模块级防抖 timer（配置更新使用）
-let configHistoryTimer: ReturnType<typeof setTimeout> | null = null;
-
-interface HistoryState {
-  nodes: WorkflowNode[];
-  edges: WorkflowEdge[];
-}
-
 // 工作流状态管理：负责画布数据、保存与执行
 export const useWorkflowStore = defineStore('workflow', {
   state: () => ({
@@ -26,7 +18,7 @@ export const useWorkflowStore = defineStore('workflow', {
     executions: [] as WorkflowExecution[],
     lastExecutionResponse: null as any,
     // Undo/Redo history (直接内嵌，消除桥接层)
-    history: [] as HistoryState[],
+    history: [] as any[],
     historyIndex: -1,
     maxHistory: 50,
     // 标记是否正在恢复历史状态（undo/redo），避免循环保存
@@ -45,104 +37,37 @@ export const useWorkflowStore = defineStore('workflow', {
     setCanvas(nodes: WorkflowNode[], edges: WorkflowEdge[]) {
       this.nodes = nodes;
       this.edges = edges;
-      this.initHistory();
+      this.$historyInit();
     },
 
-    // 初始化历史记录
+    // 初始化历史记录（委托给 Pinia Plugin）
     initHistory() {
-      try {
-        this.history = [
-          {
-            nodes: JSON.parse(JSON.stringify(this.nodes)),
-            edges: JSON.parse(JSON.stringify(this.edges)),
-          },
-        ];
-        this.historyIndex = 0;
-        this._historyCorrupted = false;
-      } catch (e) {
-        console.error('[History] Failed to initialize history:', e);
-        // 降级：创建空历史，保证 undo/redo 系统不崩
-        this.history = [{ nodes: [], edges: [] }];
-        this.historyIndex = 0;
-        this._historyCorrupted = true;
-      }
+      this.$historyInit();
     },
 
-    // 保存当前状态到历史，返回是否成功
+    // 保存当前状态到历史（委托给 Pinia Plugin）
     saveHistory(): boolean {
-      if (this._skipNextHistory) return true;
-      try {
-        // 截断 redo 分支
-        this.history = this.history.slice(0, this.historyIndex + 1);
-        this.history.push({
-          nodes: JSON.parse(JSON.stringify(this.nodes)),
-          edges: JSON.parse(JSON.stringify(this.edges)),
-        });
-        if (this.history.length > this.maxHistory) {
-          this.history.shift();
-        } else {
-          this.historyIndex++;
-        }
-        return true;
-      } catch (e) {
-        console.error('[History] Failed to save history state:', e);
-        this._historyCorrupted = true;
-        return false;
-      }
+      return this.$historySave();
     },
 
-    // 撤销
+    // 撤销（委托给 Pinia Plugin）
     undo() {
-      if (this._historyCorrupted) {
-        console.error('[History] History is corrupted, undo disabled. Please save workflow manually.');
-        return null;
-      }
-      if (this.historyIndex <= 0) return null;
-      this._skipNextHistory = true;
-      try {
-        this.historyIndex--;
-        const state = this.history[this.historyIndex];
-        this.nodes = JSON.parse(JSON.stringify(state.nodes));
-        this.edges = JSON.parse(JSON.stringify(state.edges));
-        return state;
-      } catch (e) {
-        console.error('[History] Undo failed:', e);
-        return null;
-      } finally {
-        this._skipNextHistory = false;
-      }
+      return this.$historyUndo();
     },
 
-    // 重做
+    // 重做（委托给 Pinia Plugin）
     redo() {
-      if (this._historyCorrupted) {
-        console.error('[History] History is corrupted, redo disabled. Please save workflow manually.');
-        return null;
-      }
-      if (this.historyIndex >= this.history.length - 1) return null;
-      this._skipNextHistory = true;
-      try {
-        this.historyIndex++;
-        const state = this.history[this.historyIndex];
-        this.nodes = JSON.parse(JSON.stringify(state.nodes));
-        this.edges = JSON.parse(JSON.stringify(state.edges));
-        return state;
-      } catch (e) {
-        console.error('[History] Redo failed:', e);
-        return null;
-      } finally {
-        this._skipNextHistory = false;
-      }
+      return this.$historyRedo();
     },
 
-    // ========== 结构性变更（自动保存历史）==========
+    // ========== 结构性变更（由 Pinia Plugin 自动追踪 saveHistory）==========
 
     addNodes(newNodes: WorkflowNode[]) {
       const existingIds = new Set(this.nodes.map((n) => n.id));
       const nodesToAdd = newNodes.filter((n) => !existingIds.has(n.id));
       if (nodesToAdd.length > 0) {
         this.nodes.push(...nodesToAdd);
-        this.saveHistory();
+        // saveHistory 由 Pinia Plugin 的 $onAction 自动追踪
       }
     },
 
@@ -151,7 +76,7 @@ export const useWorkflowStore = defineStore('workflow', {
       if (index !== -1) {
         this.nodes.splice(index, 1);
         this.edges = this.edges.filter((e) => e.source !== id && e.target !== id);
-        this.saveHistory();
+        // saveHistory 由 Pinia Plugin 的 $onAction 自动追踪
       }
     },
 
@@ -159,7 +84,7 @@ export const useWorkflowStore = defineStore('workflow', {
       const index = this.edges.findIndex((e) => e.id === id);
       if (index !== -1) {
         this.edges.splice(index, 1);
-        this.saveHistory();
+        // saveHistory 由 Pinia Plugin 的 $onAction 自动追踪
       }
     },
 
@@ -167,9 +92,7 @@ export const useWorkflowStore = defineStore('workflow', {
       const node = this.nodes.find((n) => n.id === id);
       if (node) {
         node.data = { ...node.data, ...data };
-        // 配置更新防抖保存历史
-        if (configHistoryTimer) clearTimeout(configHistoryTimer);
-        configHistoryTimer = setTimeout(() => this.saveHistory(), 500);
+        // saveHistory 由 Pinia Plugin 的 debounceActions 自动防抖追踪
       }
     },
 
@@ -177,9 +100,7 @@ export const useWorkflowStore = defineStore('workflow', {
       const edge = this.edges.find((e) => e.id === id);
       if (edge) {
         Object.assign(edge, data);
-        // 配置更新防抖保存历史
-        if (configHistoryTimer) clearTimeout(configHistoryTimer);
-        configHistoryTimer = setTimeout(() => this.saveHistory(), 500);
+        // saveHistory 由 Pinia Plugin 的 debounceActions 自动防抖追踪
       }
     },
 
@@ -206,14 +127,12 @@ export const useWorkflowStore = defineStore('workflow', {
         }
       }
       this.edges.push(edge);
-      this.saveHistory();
+      // saveHistory 由 Pinia Plugin 的 $onAction 自动追踪
     },
 
-    // 清空历史
+    // 清空历史（委托给 Pinia Plugin）
     clearHistory() {
-      this.history = [];
-      this.historyIndex = -1;
-      this._historyCorrupted = false;
+      this.$historyClear();
     },
 
     // 追加执行日志，方便前端展示

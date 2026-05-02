@@ -4,6 +4,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 import App from './App.vue';
 import router from './router';
+import { createHistoryPlugin } from './stores/plugins/history';
 
 import './styles/variables.css'; // 全局 Design Tokens
 import './styles/index.css'; // 全局样式 (可能会被逐渐移除或重构)
@@ -15,7 +16,18 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
 
-app.use(createPinia());
+const pinia = createPinia();
+// Pinia 2.x 中 plugin 需通过 _p 数组注册
+(pinia as any)._p.push(
+  createHistoryPlugin({
+    storeId: 'workflow',
+    stateKeys: ['nodes', 'edges'],
+    maxHistory: 50,
+    trackActions: ['addNodes', 'removeNode', 'removeEdge', 'addEdge'],
+    debounceActions: { updateNodeData: 500, updateEdgeData: 500 },
+  }),
+);
+app.use(pinia);
 app.use(router);
 
 // 仅在显式启用时使用 Mock（避免覆盖真实后端）
