@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue';
 import { ElCollapseTransition } from 'element-plus';
-import { Setting, Delete, InfoFilled, ArrowRight, Connection } from '@element-plus/icons-vue';
+import { Setting, Delete, ArrowRight, Connection } from '@element-plus/icons-vue';
 import { useKnowledgeStore } from '@/stores/knowledge';
 import { NODE_TYPE_CONFIGS, type NodeField } from '@/config/node-config-schema';
 
@@ -25,6 +25,7 @@ const currentNodeConfig = computed(() => {
 });
 
 const isTrigger = computed(() => props.node?.type === 'trigger');
+const isEnd = computed(() => props.node?.type === 'end');
 
 // 根据字段类型获取当前值（含向后兼容处理）
 const getFieldValue = (field: NodeField) => {
