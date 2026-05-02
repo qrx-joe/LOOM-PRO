@@ -3,6 +3,7 @@ import {
   ExecutionResult,
   WorkflowDefinition,
   WorkflowNode,
+  WorkflowEdge,
   PerformanceMetrics,
 } from '../types';
 
@@ -30,7 +31,7 @@ import { WorkflowError } from '../types/error.types';
 // 工作流执行引擎：负责解析节点并执行
 export class WorkflowEngine {
   private nodes: Map<string, WorkflowNode>;
-  private edges: Array<{ source: string; target: string }>;
+  private edges: WorkflowEdge[];
   private metrics: PerformanceMetrics[] = [];
 
   constructor(
@@ -91,6 +92,11 @@ export class WorkflowEngine {
         }
 
         if (currentNode.type === 'end') {
+          // end 节点可以指定输出变量，否则返回所有变量
+          const outputKey = currentNode.data?.outputKey as string | undefined;
+          if (outputKey) {
+            context.variables = { [outputKey]: context.variables[outputKey] };
+          }
           break;
         }
 
@@ -485,8 +491,8 @@ export class WorkflowEngine {
       return template;
     }
 
-    return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
-      const value = variables[key];
+    return template.replace(/\{\{([\w.\[\]]+)\}\}/g, (match, key) => {
+      const value = this.resolveVariable(key, variables);
       if (value === undefined || value === null) {
         // 保留原样，不替换
         return match;
@@ -501,6 +507,39 @@ export class WorkflowEngine {
       }
       return String(value);
     });
+  }
+
+  /**
+   * 解析变量：支持直接 key 和嵌套路径（如 node1.output、arr[0].name）
+   */
+  private resolveVariable(key: string, variables: Record<string, any>): any {
+    // 先尝试完整 key 匹配（兼容简单变量名和带点的 key）
+    if (key in variables) {
+      return variables[key];
+    }
+
+    // 尝试路径解析：node1.output → variables['node1']['output']
+    try {
+      const parts = key.split('.');
+      let current = variables;
+      for (const part of parts) {
+        // 支持数组索引：arr[0] → arr, 0
+        const arrayMatch = part.match(/^(.+)\[(\d+)\]$/);
+        if (arrayMatch) {
+          const arr = current[arrayMatch[1]];
+          if (!Array.isArray(arr)) return undefined;
+          current = arr[parseInt(arrayMatch[2], 10)];
+        } else {
+          current = current[part];
+        }
+        if (current === undefined || current === null) {
+          return undefined;
+        }
+      }
+      return current;
+    } catch {
+      return undefined;
+    }
   }
 
   // 选择下一个节点：普通节点取第一条边，条件节点分流
@@ -524,21 +563,25 @@ export class WorkflowEngine {
     const edgeIdKey = isTrue ? 'trueEdgeId' : 'falseEdgeId';
     const configuredEdgeId = currentNode.data?.[edgeIdKey];
     if (configuredEdgeId) {
-      const edge = outgoing.find((item: any) => item.id === configuredEdgeId);
+      const edge = outgoing.find((item) => item.id === configuredEdgeId);
       if (edge?.target) return edge.target;
     }
 
     // 根据分支标签选择（True/False 标签）
     const branchLabel = isTrue ? 'True' : 'False';
     const labeled = outgoing.find(
-      (edge: any) => edge.branchType === branchLabel || edge.label === branchLabel,
+      (edge) => edge.branchType === branchLabel || edge.label === branchLabel,
     );
     if (labeled?.target) {
       return labeled.target;
     }
 
-    // 默认取第一条边，条件为假时尝试第二条
-    return isTrue ? outgoing[0]?.target : outgoing[1]?.target || outgoing[0]?.target;
+    // 条件为真时默认取第一条边，为假时尝试第二条；都没有则返回 undefined
+    if (isTrue) {
+      return outgoing[0]?.target;
+    }
+    // 条件为假时优先找 false 分支，没有则返回 undefined（不默认走 true 分支）
+    return outgoing[1]?.target;
   }
 
   // 条件判断：支持变量对比与输入真值判断
@@ -549,6 +592,10 @@ export class WorkflowEngine {
     if (variableKey) {
       const actual = context.variables[variableKey];
       if (expectedValue !== undefined && expectedValue !== null) {
+        // 明确处理 undefined/null，避免 String(undefined) === 'undefined' 的陷阱
+        if (actual === undefined || actual === null) {
+          return false;
+        }
         return String(actual) === String(expectedValue);
       }
       return Boolean(actual);
