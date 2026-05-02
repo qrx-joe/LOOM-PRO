@@ -786,7 +786,7 @@ const handleQuickPrompt = (text: string) => {
 }
 .markdown-body :deep(.source-highlight) {
   background: rgba(253, 224, 71, 0.4);
-  border-bottom: 2px solid #eab308;
+  border-bottom: 2px solid var(--color-warning);
 }
 
 .streaming-status {
