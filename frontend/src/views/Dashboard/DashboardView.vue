@@ -444,30 +444,34 @@ const handleOpen = (id: string) => {
 }
 
 .page-title {
-  font-size: 26px; /* Slightly larger for impact */
-  font-weight: 700;
-  color: #0f172a; /* Slate-900 */
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
   margin: 0 0 6px 0;
   letter-spacing: -0.5px;
 }
 
 .page-subtitle {
-  font-size: 14px;
-  color: #64748b; /* Slate-500 */
+  font-size: var(--font-size-base);
+  color: var(--color-medium);
   margin: 0;
 }
 
 .create-btn {
   padding: 10px 20px;
-  font-weight: 500;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(71, 85, 105, 0.15); /* Changed from rgba(59, 130, 246, 0.15) to slate-700 */
-  transition: all 0.2s;
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .create-btn:hover {
-  box-shadow: 0 4px 6px rgba(71, 85, 105, 0.25); /* Changed from rgba(59, 130, 246, 0.25) to slate-700 */
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .filter-section {
@@ -481,38 +485,33 @@ const handleOpen = (id: string) => {
 
 .tabs {
   display: flex;
-  gap: 8px; /* Button style tabs instead of underline */
-  background: #f1f5f9;
+  gap: 8px;
+  background: var(--color-border-light);
   padding: 4px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
 }
 
 .tab-btn {
   border: none;
   background: transparent;
-  font-size: 13px;
-  font-weight: 500;
-  color: #64748b;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-medium);
   cursor: pointer;
-  padding: 6px 16px;
-  border-radius: 6px;
-  transition: all 0.2s;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
 }
 
 .tab-btn:hover {
-  color: #0f172a;
+  color: var(--color-dark);
 }
 
 .tab-btn.active {
-  background: #ffffff;
-  color: #0f172a;
-  font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-/* Remove old underline style for cleaner look */
-.tab-btn.active::after {
-  display: none;
+  background: var(--color-surface);
+  color: var(--color-dark);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-sm);
 }
 
 .search-input {
@@ -557,13 +556,13 @@ const handleOpen = (id: string) => {
 .app-icon {
   width: 52px;
   height: 52px;
-  border-radius: 14px;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: 22px;
-  transition: transform 0.2s;
+  transition: transform var(--transition-fast);
 }
 
 .app-card:hover .app-icon {
@@ -621,15 +620,15 @@ const handleOpen = (id: string) => {
 
 .app-name {
   font-size: 17px;
-  font-weight: 600;
-  color: #0f172a;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-dark);
   margin: 0 0 8px 0;
   line-height: 1.4;
 }
 
 .app-desc {
-  font-size: 14px;
-  color: #64748b;
+  font-size: var(--font-size-base);
+  color: var(--color-medium);
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -642,7 +641,7 @@ const handleOpen = (id: string) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px dashed #e2e8f0;
+  border-top: 1px dashed var(--color-border);
   padding-top: 16px;
   margin-top: auto;
 }
@@ -651,21 +650,21 @@ const handleOpen = (id: string) => {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  color: #94a3b8;
-  font-weight: 500;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
+  font-weight: var(--font-weight-medium);
 }
 
 .enter-btn {
-  font-size: 13px;
-  color: #0f172a;
-  background: #f1f5f9;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-surface);
+  background: var(--color-primary);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
   opacity: 0;
   transform: translateX(10px);
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .app-card:hover .enter-btn {
@@ -674,7 +673,7 @@ const handleOpen = (id: string) => {
 }
 
 .enter-btn:hover {
-  background: #e2e8f0;
+  background: var(--color-primary-hover);
 }
 
 .empty-state {
@@ -687,8 +686,8 @@ const handleOpen = (id: string) => {
 
 /* 新建应用卡片 */
 .create-card {
-  border: 2px dashed #e2e8f0;
-  background: #fafbfc;
+  border: 2px dashed var(--color-border);
+  background: var(--color-border-light);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -698,36 +697,36 @@ const handleOpen = (id: string) => {
 }
 
 .create-card:hover {
-  border-color: var(--el-color-primary);
-  background: #f8fafc;
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .create-icon-box {
   width: 64px;
   height: 64px;
-  border-radius: 16px;
-  background: #f1f5f9;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94a3b8;
-  transition: all 0.2s;
+  color: var(--color-medium);
+  transition: all var(--transition-fast);
 }
 
 .create-card:hover .create-icon-box {
-  background: var(--el-color-primary-light-9);
-  color: var(--el-color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .create-text {
-  font-size: 15px;
-  font-weight: 600;
-  color: #475569;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-dark);
 }
 
 .create-hint {
-  font-size: 12px;
-  color: #94a3b8;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
 /* 颜色选择器 */
@@ -794,48 +793,37 @@ const handleOpen = (id: string) => {
 .delete-icon {
   width: 72px;
   height: 72px;
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: var(--color-error-bg);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
-  color: #ef4444;
+  color: var(--color-error);
 }
 
 .delete-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-dark);
   margin: 0 0 12px;
 }
 
 .delete-desc {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--font-size-base);
+  color: var(--color-medium);
   margin: 0;
   line-height: 1.5;
 }
 
-.delete-footer {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
 .delete-footer .el-button {
   min-width: 120px;
-  border-radius: 8px;
-  font-weight: 500;
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-medium);
 }
 
 .delete-footer .el-button--default {
-  border-color: #e5e7eb;
-  color: #374151;
-}
-
-.delete-footer .el-button--default:hover {
-  border-color: #d1d5db;
-  background: #f9fafb;
+  border-color: var(--color-border);
+  color: var(--color-dark);
 }
 </style>

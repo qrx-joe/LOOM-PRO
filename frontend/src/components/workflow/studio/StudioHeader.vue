@@ -298,21 +298,21 @@ const currentColor = computed(() => props.workflowColor || '#475569');
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  color: #606266;
-  transition: all 0.2s;
+  color: var(--color-medium);
+  transition: all var(--transition-fast);
 }
 
 .back-btn:hover {
-  background: #f5f7fa;
-  color: #303133;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 .divider {
   width: 1px;
   height: 20px;
-  background: #e4e7ed;
+  background: var(--color-border);
 }
 
 .workflow-info {
@@ -390,42 +390,48 @@ const currentColor = computed(() => props.workflowColor || '#475569');
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 1px solid #dcdfe6;
-  background: #ffffff;
-  color: #606266;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-medium);
 }
 
 .icon-btn:hover {
-  background: #f5f7fa;
-  border-color: #c0c4cc;
-  color: #303133;
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .action-btn {
   padding: 8px 16px;
-  border: 1px solid #dcdfe6;
-  background: #ffffff;
-  color: #606266;
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-medium);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  transition: all 0.2s;
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
 }
 
 .action-btn:hover {
-  background: #f5f7fa;
-  border-color: var(--color-primary-600);
-  background: var(--color-primary-900);
-  color: white;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 .publish-btn {
   padding: 8px 20px;
-  font-weight: 600;
-  font-size: 13px;
-  border-radius: 6px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.publish-btn:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .btn-text {

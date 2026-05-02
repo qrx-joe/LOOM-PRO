@@ -17,9 +17,9 @@ const edgePathData = computed(() => {
 });
 
 const strokeColor = computed(() => {
-  if (props.selected) return '#0f172a'; // Brand Slate when selected
+  if (props.selected) return 'var(--color-primary)';
   const stroke = (props.style as any)?.stroke;
-  return typeof stroke === 'string' ? stroke : '#cbd5e1'; // Slate-300 default
+  return typeof stroke === 'string' ? stroke : 'var(--color-border)';
 });
 
 const strokeWidth = computed(() => (props.selected ? 3 : 2));
@@ -77,13 +77,13 @@ const strokeWidth = computed(() => (props.selected ? 3 : 2));
           position: 'absolute',
           transform: `translate(-50%, -50%) translate(${edgePathData[1]}px, ${edgePathData[2]}px)`,
           padding: '2px 8px',
-          borderRadius: '12px',
+          borderRadius: 'var(--radius-md)',
           fontSize: '11px',
           fontWeight: 500,
-          background: '#ffffff',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-          color: '#64748b',
+          background: 'var(--color-surface)',
+          border: '1px solid var(--color-border)',
+          boxShadow: 'var(--shadow-sm)',
+          color: 'var(--color-medium)',
           zIndex: 10,
         }"
       >
@@ -96,10 +96,9 @@ const strokeWidth = computed(() => (props.selected ? 3 : 2));
 <style scoped>
 .branch-edge {
   fill: none;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
-/* Particle Flow Animation */
 @keyframes flowParticle {
   from {
     stroke-dashoffset: 24;
@@ -110,20 +109,19 @@ const strokeWidth = computed(() => (props.selected ? 3 : 2));
 }
 
 .flow {
-  /* Create a dot pattern */
   stroke-dasharray: 4 4;
   animation: flowParticle 0.8s linear infinite;
 }
 
 .edge-label {
-  pointer-events: all; /* Allow clicking label if needed */
-  transition: all 0.2s;
+  pointer-events: all;
+  transition: all var(--transition-fast);
 }
 
 .edge-group.selected .edge-label {
-  border-color: var(--color-primary-900);
-  color: var(--color-primary-900);
-  box-shadow: 0 0 0 1px var(--color-primary-900);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
 }
 
 .interaction-path {
