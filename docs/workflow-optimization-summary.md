@@ -337,6 +337,12 @@ npm run start:dev
 - `WorkflowView.vue`：新增 keydown 监听（Ctrl+S/Z/Y/Delete/Backspace）
 - Ctrl+S: 保存 / Ctrl+Z: 撤销 / Ctrl+Y / Ctrl+Shift+Z: 重做 / Delete: 删除选中节点/边
 
+### 4. 属性面板变量选择器 ✅（2026-05-02 新增）
+- `PropertiesPanel.vue`：集成 variableStore，text/textarea 字段新增 fx 变量引用按钮
+- 点击弹出变量选择器（输入变量/系统变量/节点输出三级分类）
+- 选择后自动插入 `{{var}}` 引用到当前光标位置
+- 支持键盘搜索和分类筛选
+
 ## 🚀 后续优化建议
 
 ### Phase 2: 变量映射 UI (1-2周)
@@ -405,6 +411,7 @@ npm run start:dev
 - ✅ 修复 P1: undo/redo 防抖竞态、知识节点装饰性 strategy 字段
 - ✅ 清理死代码: useWorkflowHistory.ts、useWorkflowValidation.ts、variable.ts
 - ✅ 校准 checklist 与 summary 文档
+- ✅ 属性面板变量选择器（fx 按钮、变量插值）
 
 **用户体验提升**:
 

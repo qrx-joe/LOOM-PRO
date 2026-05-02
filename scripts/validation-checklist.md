@@ -32,11 +32,18 @@
 - [x] `isFieldVisible` 对 `visibleWhen` 抛异常做了降级处理（默认显示）
 - [x] 未知节点类型时显示警告提示，而非空白面板
 - [x] dataset 字段从 knowledgeStore 动态拉取选项
+- [x] text/textarea 字段显示变量引用按钮，支持变量插值
 
 ### 3.3 Text Splitter
 - [x] 构造函数校验 chunkOverlap < chunkSize，否则抛明确错误
 - [x] semanticChunk 的 overlap 计算使用 Math.max(0, ...) 防止负索引
 - [x] 三种策略（fixed/semantic/recursive）的 splitText 入口均正常工作
+
+### 3.4 属性面板变量选择器
+- [x] text/textarea 字段渲染 fx 变量引用按钮
+- [x] 点击弹出变量选择器，分类展示输入变量/系统变量/节点输出
+- [x] 选择后插入 `{{var}}` 到当前光标位置
+- [x] variableStore 正确收集和解析变量引用
 
 ## 四、边界情况与兜底策略（Edge Cases & Fallbacks）
 
