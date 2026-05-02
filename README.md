@@ -23,6 +23,8 @@ LOOM-PRO 由两个项目合并而来：
 ## 核心特性
 
 - **可视化工作流**：拖拽编排 + Undo/Redo（最多 50 步历史）
+- **变量系统**：输入变量/系统变量/节点输出，属性面板 fx 按钮插入 `{{var}}` 引用
+- **2s 防抖自动保存**：编辑后自动持久化，顶部状态栏实时反馈
 - **知识库 RAG**：支持 PDF / DOCX / Markdown，3 种切块策略（fixed / semantic / recursive），中文语义分隔符
 - **混合检索**：向量 + 关键词 + 重排
 - **SSE 流式输出**：实时对话体验
@@ -88,11 +90,13 @@ LOOM-PRO/
 │   └── src/
 │       ├── views/Workflow/       # 工作流主视图
 │       ├── components/workflow/  # 节点工具栏（含 Undo/Redo 按钮）
-│       ├── composables/workflow/
-│       │   ├── useWorkflowHistory.ts   # 撤销重做历史记录管理
-│       │   └── useWorkflowValidation.ts
-│       ├── stores/               # Pinia
-│       └── styles/variables.css  # 工业靛蓝主题变量
+│       ├── stores/
+│       │   ├── workflow.ts       # 工作流状态（含 2s 防抖自动保存）
+│       │   ├── variable.ts       # 变量系统（引用解析/类型推断）
+│       │   └── plugins/
+│       │       └── history.ts    # Undo/Redo 历史插件（最多 50 步）
+│       └── config/
+│           └── node-config-schema.ts  # 节点配置 Schema 驱动
 ├── docker-compose.yml             # 全栈编排
 ├── .github/workflows/ci.yml       # CI：lint + build + test
 └── start.bat                      # Windows 一键启动
