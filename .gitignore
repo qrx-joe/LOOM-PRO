@@ -13,4 +13,4 @@ frontend/node_modules/
 *.key
 *.pem
 credentials.json
-secrets/
+secrets/.claude/

@@ -36,8 +36,8 @@ export const useWorkflowStore = defineStore('workflow', {
   }),
 
   getters: {
-    canUndo: (state) => state.historyIndex > 0,
-    canRedo: (state) => state.historyIndex < state.history.length - 1,
+    canUndo: (state) => !state._historyCorrupted && state.historyIndex > 0,
+    canRedo: (state) => !state._historyCorrupted && state.historyIndex < state.history.length - 1,
   },
 
   actions: {
@@ -45,6 +45,7 @@ export const useWorkflowStore = defineStore('workflow', {
     setCanvas(nodes: WorkflowNode[], edges: WorkflowEdge[]) {
       this.nodes = nodes;
       this.edges = edges;
+      this.initHistory();
     },
 
     // 初始化历史记录
@@ -212,6 +213,7 @@ export const useWorkflowStore = defineStore('workflow', {
     clearHistory() {
       this.history = [];
       this.historyIndex = -1;
+      this._historyCorrupted = false;
     },
 
     // 追加执行日志，方便前端展示
@@ -243,6 +245,7 @@ export const useWorkflowStore = defineStore('workflow', {
 
         this.workflowId = response.id;
         this.workflowStatus = response.status || 'draft';
+        this._historyCorrupted = false;
         return response;
       } finally {
         this.saving = false;
@@ -264,6 +267,7 @@ export const useWorkflowStore = defineStore('workflow', {
       this.workflowStatus = response.status || 'draft';
       this.nodes = response.nodes || [];
       this.edges = response.edges || [];
+      this.initHistory();
       return response;
     },
 
@@ -355,6 +359,7 @@ export const useWorkflowStore = defineStore('workflow', {
         ];
         this.workflowName = '新建 AI 应用';
         this.addLog('已加载 "Hello World" 模板');
+        this.initHistory();
       }
     },
   },
