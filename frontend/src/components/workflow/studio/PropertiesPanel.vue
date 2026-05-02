@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
-import { ElCollapseTransition } from 'element-plus';
+import { computed, ref, onMounted, watch } from 'vue';
+import { ElCollapseTransition, ElPopover } from 'element-plus';
 import { Setting, Delete, ArrowRight, Connection } from '@element-plus/icons-vue';
 import { useKnowledgeStore } from '@/stores/knowledge';
+import { useVariableStore } from '@/stores/variable';
+import { useWorkflowStore } from '@/stores/workflow';
 import { NODE_TYPE_CONFIGS, type NodeField } from '@/config/node-config-schema';
 
 const props = defineProps<{
@@ -13,10 +15,21 @@ const props = defineProps<{
 const emit = defineEmits(['update', 'delete', 'update-edge', 'delete-edge']);
 
 const knowledgeStore = useKnowledgeStore();
+const variableStore = useVariableStore();
+const workflowStore = useWorkflowStore();
 
 onMounted(() => {
   knowledgeStore.fetchKnowledgeBases();
 });
+
+// 工作流节点变化时重新收集变量
+watch(
+  () => workflowStore.nodes,
+  (nodes) => {
+    variableStore.collectFromNodes(nodes);
+  },
+  { immediate: true, deep: true },
+);
 
 // Schema-driven 节点配置
 const currentNodeConfig = computed(() => {
@@ -70,6 +83,31 @@ const toggleSection = (section: string) => {
     expandedSections.value[section] = !expandedSections.value[section];
   }
 };
+
+// ========== 变量选择器 ==========
+const variablePopoverVisible = ref<Record<string, boolean>>({});
+
+const insertVariableRef = (fieldKey: string, ref: string) => {
+  const current = props.node?.data?.[fieldKey] || '';
+  const newValue = current + `{{${ref}}}`;
+  emit('update', props.node.id, { [fieldKey]: newValue });
+  variablePopoverVisible.value[fieldKey] = false;
+};
+
+const variableGroups = computed(() => [
+  {
+    label: '输入变量',
+    options: variableStore.inputVariables,
+  },
+  {
+    label: '系统变量',
+    options: variableStore.systemVariables,
+  },
+  {
+    label: '节点输出',
+    options: variableStore.nodeVariables,
+  },
+]);
 </script>
 
 <template>
@@ -254,21 +292,93 @@ const toggleSection = (section: string) => {
                   <template v-for="field in currentNodeConfig.fields" :key="field.key">
                     <template v-if="isFieldVisible(field)">
                       <el-form-item :label="field.label">
-                        <el-input
-                          v-if="field.type === 'text'"
-                          :model-value="getFieldValue(field)"
-                          :placeholder="field.placeholder"
-                          @input="$emit('update', node.id, { [field.key]: $event })"
-                        />
-                        <el-input
-                          v-else-if="field.type === 'textarea'"
-                          type="textarea"
-                          :rows="field.rows || 3"
-                          :model-value="getFieldValue(field)"
-                          :placeholder="field.placeholder"
-                          :class="field.key === 'code' ? 'code-editor' : ''"
-                          @input="$emit('update', node.id, { [field.key]: $event })"
-                        />
+                        <!-- text 字段：带变量引用按钮 -->
+                        <div v-if="field.type === 'text'" class="input-with-var">
+                          <el-input
+                            :model-value="getFieldValue(field)"
+                            :placeholder="field.placeholder"
+                            @input="$emit('update', node.id, { [field.key]: $event })"
+                          />
+                          <el-popover
+                            :visible="variablePopoverVisible[field.key]"
+                            placement="bottom-start"
+                            :width="240"
+                            trigger="click"
+                            @update:visible="variablePopoverVisible[field.key] = $event"
+                          >
+                            <template #reference>
+                              <el-button class="var-btn" title="插入变量引用">fx</el-button>
+                            </template>
+                            <div class="var-selector">
+                              <div
+                                v-for="group in variableGroups"
+                                :key="group.label"
+                                class="var-group"
+                              >
+                                <div class="var-group-label">{{ group.label }}</div>
+                                <div
+                                  v-for="v in group.options"
+                                  :key="v.id"
+                                  class="var-option"
+                                  @click="insertVariableRef(field.key, v.id)"
+                                >
+                                  {{ v.name }}
+                                </div>
+                                <div
+                                  v-if="group.options.length === 0"
+                                  class="var-empty"
+                                >
+                                  暂无可用变量
+                                </div>
+                              </div>
+                            </div>
+                          </el-popover>
+                        </div>
+                        <!-- textarea 字段：带变量引用按钮 -->
+                        <div v-else-if="field.type === 'textarea'" class="input-with-var">
+                          <el-input
+                            type="textarea"
+                            :rows="field.rows || 3"
+                            :model-value="getFieldValue(field)"
+                            :placeholder="field.placeholder"
+                            :class="field.key === 'code' ? 'code-editor' : ''"
+                            @input="$emit('update', node.id, { [field.key]: $event })"
+                          />
+                          <el-popover
+                            :visible="variablePopoverVisible[field.key]"
+                            placement="bottom-start"
+                            :width="240"
+                            trigger="click"
+                            @update:visible="variablePopoverVisible[field.key] = $event"
+                          >
+                            <template #reference>
+                              <el-button class="var-btn" title="插入变量引用">fx</el-button>
+                            </template>
+                            <div class="var-selector">
+                              <div
+                                v-for="group in variableGroups"
+                                :key="group.label"
+                                class="var-group"
+                              >
+                                <div class="var-group-label">{{ group.label }}</div>
+                                <div
+                                  v-for="v in group.options"
+                                  :key="v.id"
+                                  class="var-option"
+                                  @click="insertVariableRef(field.key, v.id)"
+                                >
+                                  {{ v.name }}
+                                </div>
+                                <div
+                                  v-if="group.options.length === 0"
+                                  class="var-empty"
+                                >
+                                  暂无可用变量
+                                </div>
+                              </div>
+                            </div>
+                          </el-popover>
+                        </div>
                         <el-input-number
                           v-else-if="field.type === 'number'"
                           :model-value="getFieldValue(field)"
@@ -757,6 +867,83 @@ const toggleSection = (section: string) => {
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #f0f0f0;
+}
+
+/* 变量选择器 */
+.input-with-var {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.input-with-var :deep(.el-input),
+.input-with-var :deep(.el-textarea) {
+  flex: 1;
+}
+
+.var-btn {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  color: #64748b;
+  border-color: #e2e8f0;
+  background: #f8fafc;
+  letter-spacing: 0;
+}
+
+.var-btn:hover {
+  color: #0ea5e9;
+  border-color: #0ea5e9;
+  background: #f0f9ff;
+}
+
+.var-selector {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.var-group {
+  margin-bottom: 8px;
+}
+
+.var-group:last-child {
+  margin-bottom: 0;
+}
+
+.var-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 0 6px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 4px;
+}
+
+.var-option {
+  padding: 6px 8px;
+  font-size: 12px;
+  color: #475569;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.var-option:hover {
+  background: #f1f5f9;
+  color: #0ea5e9;
+}
+
+.var-empty {
+  font-size: 11px;
+  color: #cbd5e1;
+  padding: 4px 0;
+  font-style: italic;
 }
 
 .info-row:last-child {
