@@ -168,7 +168,7 @@ export const useVariableStore = defineStore('variable', () => {
     if (!template || typeof template !== 'string') {
       return template;
     }
-    return template.replace(/\{\{([\w.\[\]]+)\}\}/g, (match, key) => {
+    return template.replace(/\{\{([\w.[\]]+)\}\}/g, (match, key) => {
       const value = resolveVariable(key, context);
       if (value === undefined || value === null) {
         return match; // 找不到时保留原样

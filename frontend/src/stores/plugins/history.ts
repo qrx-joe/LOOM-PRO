@@ -18,15 +18,9 @@ export interface HistoryPluginOptions {
 }
 
 declare module 'pinia' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface PiniaCustomProperties<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Id extends string = string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     S extends StateTree = StateTree,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     G = _GettersTree<S>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     A = _ActionsTree,
   > {
     /** 初始化历史记录 */
