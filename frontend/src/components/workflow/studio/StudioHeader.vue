@@ -17,8 +17,24 @@ import {
 import { ElMessage } from 'element-plus';
 
 const router = useRouter();
-const lastSaved = ref('刚刚');
+
+// 保存状态（由父组件 workflowStore.saving 同步）
 const saving = ref(false);
+const lastSavedAt = ref<Date | null>(null);
+
+const lastSaved = computed(() => {
+  if (!lastSavedAt.value) return '未保存';
+  const diff = Date.now() - lastSavedAt.value.getTime();
+  if (diff < 5000) return '刚刚';
+  if (diff < 60000) return `${Math.floor(diff / 1000)}秒前`;
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
+  return lastSavedAt.value.toLocaleTimeString();
+});
+
+// 暴露给父组件更新
+const setSaving = (v: boolean) => { saving.value = v; };
+const setLastSavedAt = (d: Date | null) => { lastSavedAt.value = d; };
+defineExpose({ setSaving, setLastSavedAt });
 
 // 颜色列表
 const colors = [
@@ -67,7 +83,7 @@ const handleSave = async () => {
   saving.value = true;
   try {
     emit('save');
-    lastSaved.value = '刚刚';
+    // save 成功由父组件通过 setLastSavedAt 同步状态
     ElMessage.success('保存成功');
   } catch (error) {
     ElMessage.error('保存失败');
@@ -109,7 +125,7 @@ const handleSaveEdit = () => {
 
 const saveStatusText = computed(() => {
   if (saving.value) return '保存中...';
-  if (props.autoSave) return `自动保存于 ${lastSaved.value}`;
+  if (props.autoSave && lastSaved.value !== '刚刚') return `自动保存于 ${lastSaved.value}`;
   return `上次保存于 ${lastSaved.value}`;
 });
 

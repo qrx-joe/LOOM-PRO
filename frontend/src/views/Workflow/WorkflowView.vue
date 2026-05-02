@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useVueFlow } from '@vue-flow/core';
 import '@vue-flow/core/dist/style.css';
@@ -52,6 +52,58 @@ onMounted(async () => {
   }
   // 初始化历史记录
   workflowStore.initHistory();
+  // 启用 2s 防抖自动保存
+  workflowStore.enableAutoSave();
+});
+
+// 页面关闭前同步保存
+onBeforeUnmount(() => {
+  workflowStore.flushAutoSave();
+});
+
+// ========== 键盘快捷键 ==========
+const handleKeydown = (e: KeyboardEvent) => {
+  const ctrl = e.ctrlKey || e.metaKey;
+
+  // Ctrl+S: 保存
+  if (ctrl && e.key === 's') {
+    e.preventDefault();
+    handleSave();
+    return;
+  }
+
+  // Ctrl+Z: 撤销
+  if (ctrl && e.key === 'z' && !e.shiftKey) {
+    e.preventDefault();
+    workflowStore.undo();
+    return;
+  }
+
+  // Ctrl+Y / Ctrl+Shift+Z: 重做
+  if (ctrl && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+    e.preventDefault();
+    workflowStore.redo();
+    return;
+  }
+
+  // Delete / Backspace: 删除选中节点/边
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    // 忽略聚焦在 input/textarea 中的删除
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (selectedNodeId.value) {
+      handleDeleteNode(selectedNodeId.value);
+    } else if (selectedEdgeId.value) {
+      handleDeleteEdge(selectedEdgeId.value);
+    }
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeydown);
 });
 
 // 监听节点和边的变化，自动保存历史
@@ -190,14 +242,31 @@ const handleDebugRun = async (testData: any) => {
   const input = testData?.input ?? 'Test Input';
   await handleRun(input);
 };
+
+// StudioHeader 引用，用于同步保存状态
+const studioHeaderRef = ref<{ setSaving: (v: boolean) => void; setLastSavedAt: (d: Date) => void } | null>(null);
+
+// 监听 store saving 状态，同步到 Header
+watch(
+  () => workflowStore.saving,
+  (val) => studioHeaderRef.value?.setSaving(val),
+);
+
+// 监听最后保存时间，同步到 Header
+watch(
+  () => workflowStore.getLastAutoSaveAt(),
+  (val) => { if (val) studioHeaderRef.value?.setLastSavedAt(val); },
+);
 </script>
 
 <template>
   <div class="studio-layout">
     <StudioHeader
+      ref="studioHeaderRef"
       :workflow-name="workflowStore.workflowName"
       :workflow-description="workflowStore.workflowDescription"
       :workflow-color="workflowStore.workflowColor"
+      :auto-save="true"
       @run="handleShowDebug"
       @publish="handlePublish"
       @save="handleSave"

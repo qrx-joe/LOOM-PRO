@@ -88,3 +88,26 @@ export interface Session {
   createdAt?: string;
   updatedAt?: string;
 }
+
+// ========== 变量系统 ==========
+
+export type VariableType = 'string' | 'number' | 'boolean' | 'array' | 'object';
+
+export type VariableSourceType = 'input' | 'node' | 'system' | 'constant';
+
+/** 工作流变量 */
+export interface Variable {
+  id: string;            // 唯一标识（input / node-{id} / system-{name} / constant-{name}）
+  name: string;          // 显示名称
+  type: VariableType;
+  source: VariableSourceType;
+  nodeId?: string;       // 来源节点（source=node 时）
+  path?: string;         // JSONPath 路径（可选，如 output.results[0]）
+  description?: string;
+  defaultValue?: any;
+}
+
+export interface VariableBinding {
+  fieldKey: string;       // 配置字段名（如 prompt、url、body）
+  variableRef: string;    // 变量引用（如 {{input}}、{{node-1.output}}）
+}

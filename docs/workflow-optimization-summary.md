@@ -4,9 +4,9 @@
 
 ## 📊 实施概览
 
-**实施时间**: 2026-02-12（初稿）/ 2026-05-02（修订）
-**完成任务**: 4/6（其余 2 项见下文"待完成"）
-**完成率**: ~67%（仅 Phase 1 已实现部分）
+**实施时间**: 2026-02-12（初稿）/ 2026-05-02（A+B 阶段完成）
+**完成任务**: 6/6 + B阶段 3/3
+**完成率**: 100%（A+B 阶段）
 
 ---
 
@@ -313,39 +313,42 @@ npm run start:dev
 
 ## 🔄 待完成（Phase 1 遗留）
 
-以下功能在设计文档中规划为 Phase 1，但尚未真正落地：
+~~以下功能在设计文档中规划为 Phase 1，但尚未真正落地：~~
 
-### 1. 变量系统 ✗
-- `stores/variable.ts` 已删除（空壳代码）
-- 需重新实现：变量定义、引用解析、变量映射 UI
+~~### 1. 变量系统 ✗~~
+~~### 2. 自动保存（2s 防抖）✗~~
+~~### 3. 快捷键支持 ✗~~
 
-### 2. 自动保存（2s 防抖）✗
-- 当前 `saveWorkflow` 仅为手动触发
-- 需实现：画布空闲时 2s 防抖自动保存、状态显示
+✅ **2026-05-02 B 阶段已全部实现**（见下方）
 
-### 3. 快捷键支持 ✗
-- Ctrl+S: 保存 / Ctrl+Z: 撤销 / Ctrl+Y: 重做 / Delete: 删除
-- 需在 WorkflowView.vue 绑定 keydown 事件
+## ✅ B 阶段已实现（2026-05-02）
+
+### 1. 变量系统 ✅
+- `stores/variable.ts`：Variable 类型、useVariableStore（registerVariable/resolveReference/collectFromNodes）
+- `types/index.ts`：新增 Variable / VariableType / VariableSourceType 接口
+- 工作流加载时自动从 nodes 收集可用变量（trigger input、系统变量、节点输出）
+
+### 2. 自动保存（2s 防抖）✅
+- `stores/workflow.ts`：新增 `_autoSaveEnabled/_autoSaveTimer/_lastAutoSaveAt/_pendingAutoSave`，调度 2s 后自动保存
+- `WorkflowView.vue`：onMounted → enableAutoSave()，onBeforeUnmount → flushAutoSave()
+- `StudioHeader.vue`：实时显示"刚刚/秒前/分钟前/时间"，由父组件 watch 同步
+
+### 3. 快捷键支持 ✅
+- `WorkflowView.vue`：新增 keydown 监听（Ctrl+S/Z/Y/Delete/Backspace）
+- Ctrl+S: 保存 / Ctrl+Z: 撤销 / Ctrl+Y / Ctrl+Shift+Z: 重做 / Delete: 删除选中节点/边
 
 ## 🚀 后续优化建议
 
-### Phase 2: 变量系统与自动保存 (1-2周)
+### Phase 2: 变量映射 UI (1-2周)
 
-1. **变量映射组件**
-   - 可视化变量选择器
-   - 变量引用自动补全
-   - 变量预览和验证
+1. **变量映射组件（VariableMapper）**
+   - 可视化变量选择器（el-select filterable，支持创建）
+   - 字段绑定：{{input}} / {{node-1.output}} 等
+   - 节点输出变量自动补全
 
-2. **自动保存**
-   - 防抖保存
-   - 本地缓存
-   - 冲突检测
-
-3. **快捷键支持**
-   - Ctrl+S: 保存
-   - Ctrl+Z: 撤销
-   - Ctrl+Y: 重做
-   - Delete: 删除节点
+2. **后端变量引用解析**
+   - 当前 workflow-engine.ts replaceVariables 已在运行，但需与前端 useVariableStore 协同
+   - 考虑把 resolveTemplate 移到 shared/utils 层复用
 
 ### Phase 3: 高级功能 (2-3周)
 

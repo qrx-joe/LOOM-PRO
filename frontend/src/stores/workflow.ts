@@ -25,6 +25,11 @@ export const useWorkflowStore = defineStore('workflow', {
     _skipNextHistory: false,
     // 历史系统损坏标记（saveHistory 深克隆失败时设置）
     _historyCorrupted: false,
+    // 自动保存
+    _autoSaveEnabled: false,
+    _autoSaveTimer: null as ReturnType<typeof setTimeout> | null,
+    _lastAutoSaveAt: null as Date | null,
+    _pendingAutoSave: false,
   }),
 
   getters: {
@@ -67,6 +72,7 @@ export const useWorkflowStore = defineStore('workflow', {
       const nodesToAdd = newNodes.filter((n) => !existingIds.has(n.id));
       if (nodesToAdd.length > 0) {
         this.nodes.push(...nodesToAdd);
+        this._scheduleAutoSave();
         // saveHistory 由 Pinia Plugin 的 $onAction 自动追踪
       }
     },
@@ -76,6 +82,7 @@ export const useWorkflowStore = defineStore('workflow', {
       if (index !== -1) {
         this.nodes.splice(index, 1);
         this.edges = this.edges.filter((e) => e.source !== id && e.target !== id);
+        this._scheduleAutoSave();
         // saveHistory 由 Pinia Plugin 的 $onAction 自动追踪
       }
     },
@@ -84,6 +91,7 @@ export const useWorkflowStore = defineStore('workflow', {
       const index = this.edges.findIndex((e) => e.id === id);
       if (index !== -1) {
         this.edges.splice(index, 1);
+        this._scheduleAutoSave();
         // saveHistory 由 Pinia Plugin 的 $onAction 自动追踪
       }
     },
@@ -92,6 +100,7 @@ export const useWorkflowStore = defineStore('workflow', {
       const node = this.nodes.find((n) => n.id === id);
       if (node) {
         node.data = { ...node.data, ...data };
+        this._scheduleAutoSave();
         // saveHistory 由 Pinia Plugin 的 debounceActions 自动防抖追踪
       }
     },
@@ -100,6 +109,7 @@ export const useWorkflowStore = defineStore('workflow', {
       const edge = this.edges.find((e) => e.id === id);
       if (edge) {
         Object.assign(edge, data);
+        this._scheduleAutoSave();
         // saveHistory 由 Pinia Plugin 的 debounceActions 自动防抖追踪
       }
     },
@@ -165,10 +175,60 @@ export const useWorkflowStore = defineStore('workflow', {
         this.workflowId = response.id;
         this.workflowStatus = response.status || 'draft';
         this._historyCorrupted = false;
+        if (this._pendingAutoSave) {
+          this._lastAutoSaveAt = new Date();
+          this._pendingAutoSave = false;
+        }
         return response;
       } finally {
         this.saving = false;
       }
+    },
+
+    // 启用自动保存（2s 防抖）
+    enableAutoSave() {
+      this._autoSaveEnabled = true;
+      this._scheduleAutoSave();
+    },
+
+    // 禁用自动保存
+    disableAutoSave() {
+      this._autoSaveEnabled = false;
+      if (this._autoSaveTimer) {
+        clearTimeout(this._autoSaveTimer);
+        this._autoSaveTimer = null;
+      }
+    },
+
+    // 触发自动保存（调度 2s 后执行）
+    _scheduleAutoSave() {
+      if (!this._autoSaveEnabled) return;
+      if (this._autoSaveTimer) clearTimeout(this._autoSaveTimer);
+      this._autoSaveTimer = setTimeout(() => {
+        if (!this._autoSaveEnabled) return;
+        if (this.saving) {
+          this._pendingAutoSave = true;
+          return;
+        }
+        this.saveWorkflow().catch(() => {});
+      }, 2000);
+    },
+
+    // 页面关闭前同步保存
+    flushAutoSave() {
+      if (this._autoSaveTimer) {
+        clearTimeout(this._autoSaveTimer);
+        this._autoSaveTimer = null;
+      }
+      if (this._pendingAutoSave || (this._autoSaveEnabled && this.workflowId)) {
+        return this.saveWorkflow();
+      }
+      return Promise.resolve();
+    },
+
+    // 获取最后自动保存时间
+    getLastAutoSaveAt() {
+      return this._lastAutoSaveAt;
     },
 
     // 发布工作流
