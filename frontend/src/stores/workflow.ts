@@ -47,13 +47,20 @@ export const useWorkflowStore = defineStore('workflow', {
 
     // 初始化历史记录
     initHistory() {
-      this.history = [
-        {
-          nodes: JSON.parse(JSON.stringify(this.nodes)),
-          edges: JSON.parse(JSON.stringify(this.edges)),
-        },
-      ];
-      this.historyIndex = 0;
+      try {
+        this.history = [
+          {
+            nodes: JSON.parse(JSON.stringify(this.nodes)),
+            edges: JSON.parse(JSON.stringify(this.edges)),
+          },
+        ];
+        this.historyIndex = 0;
+      } catch (e) {
+        console.error('[History] Failed to initialize history:', e);
+        // 降级：创建空历史，保证 undo/redo 系统不崩
+        this.history = [{ nodes: [], edges: [] }];
+        this.historyIndex = 0;
+      }
     },
 
     // 保存当前状态到历史

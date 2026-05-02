@@ -37,10 +37,15 @@ const getFieldValue = (field: NodeField) => {
   return value !== undefined ? value : field.defaultValue;
 };
 
-// 判断字段是否可见
+// 判断字段是否可见（带异常降级，防止自定义 visibleWhen 抛错导致面板白屏）
 const isFieldVisible = (field: NodeField) => {
   if (!field.visibleWhen) return true;
-  return field.visibleWhen(props.node?.data || {});
+  try {
+    return field.visibleWhen(props.node?.data || {});
+  } catch (e) {
+    console.error(`[PropertiesPanel] visibleWhen error for field "${field.key}":`, e);
+    return true; // 异常时默认显示，避免用户配置丢失
+  }
 };
 
 // 获取 select 字段的选项
