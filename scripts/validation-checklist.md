@@ -1,4 +1,4 @@
-# LOOM-PRO 重构校验清单
+# LOOM-PLUS 重构校验清单
 
 ## 校验目标
 本轮重构涉及：Undo/Redo 历史系统迁移到 Store、Schema-driven 属性面板、text-splitter 增强、字段兼容性与异常防护。

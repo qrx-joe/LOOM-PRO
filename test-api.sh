@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# LOOM-PRO API 烟雾测试脚本
+# LOOM-PLUS API 烟雾测试脚本
 
 BASE_URL="http://localhost:3000/api"
 
 echo "========================================="
-echo "LOOM-PRO API 烟雾测试"
+echo "LOOM-PLUS API 烟雾测试"
 echo "========================================="
 echo ""
 

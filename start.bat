@@ -1,6 +1,7 @@
 @echo off
+chcp 65001 >nul
 echo ========================================
-echo LOOM-PRO 启动脚本
+echo LOOM-PLUS 启动脚本
 echo ========================================
 echo.
 
@@ -18,15 +19,15 @@ timeout /t 10 /nobreak >nul
 echo.
 
 echo [3/3] 启动后端服务...
-start "LOOM-PRO Backend" cmd /k "cd backend && pnpm start:dev"
+start "LOOM-PLUS Backend" cmd /k "cd backend && pnpm start:dev"
 echo.
 
 echo [4/4] 启动前端服务...
-start "LOOM-PRO Frontend" cmd /k "cd frontend && pnpm dev"
+start "LOOM-PLUS Frontend" cmd /k "cd frontend && pnpm dev"
 echo.
 
 echo ========================================
-echo LOOM-PRO 已启动！
+echo LOOM-PLUS 已启动！
 echo 前端: http://localhost:5173
 echo 后端: http://localhost:3000
 echo ========================================

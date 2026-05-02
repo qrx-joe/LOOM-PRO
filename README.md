@@ -1,11 +1,11 @@
-# LOOM-PRO
+# LOOM-PLUS
 
 > **AI 工作流编排平台 · 知识库 · 智能问答 · SSE 流式输出**
 > 基于 AgentFlow Studio 骨架，融合 LOOM 织机精华模块的 plus 版本。
 
 ## 缘起
 
-LOOM-PRO 由两个项目合并而来：
+LOOM-PLUS 由两个项目合并而来：
 
 | 来源              | 贡献                                                          |
 | ----------------- | ------------------------------------------------------------- |
@@ -66,7 +66,7 @@ docker-compose up -d
 
 | 变量              | 默认值                                                  |
 | ----------------- | ------------------------------------------------------- |
-| `DATABASE_URL`    | `postgresql://loompro:loompro123@localhost:5432/loompro` |
+| `DATABASE_URL`    | `postgresql://loomplus:loomplus123@localhost:5432/loomplus` |
 | `REDIS_HOST`      | `localhost`                                             |
 | `REDIS_PORT`      | `6379`                                                  |
 | `OPENAI_API_KEY`  | -                                                       |
@@ -76,7 +76,7 @@ docker-compose up -d
 ## 项目结构
 
 ```
-LOOM-PRO/
+LOOM-PLUS/
 ├── backend/                       # NestJS 10
 │   └── src/
 │       ├── workflow/             # 工作流：CRUD + 执行引擎

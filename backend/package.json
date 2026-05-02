@@ -1,7 +1,7 @@
 {
-  "name": "loompro-backend",
+  "name": "loomplus-backend",
   "version": "1.0.0",
-  "description": "LOOM-PRO Backend - AI Workflow Orchestration Platform",
+  "description": "LOOM-PLUS Backend - AI Workflow Orchestration Platform",
   "author": "Day0 Team",
   "private": true,
   "license": "MIT",
