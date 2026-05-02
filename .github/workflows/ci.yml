@@ -17,7 +17,10 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 20
+
+      - name: Install root deps
+        run: pnpm install
 
       - name: Install backend deps
         run: pnpm -C backend install
@@ -25,11 +28,11 @@ jobs:
       - name: Install frontend deps
         run: pnpm -C frontend install
 
-      - name: Install root deps
-        run: pnpm install
+      - name: Type check backend
+        run: cd backend && pnpm tsc --noEmit
 
-      - name: Prettier check
-        run: pnpm run format:check
+      - name: Type check frontend
+        run: cd frontend && pnpm vue-tsc --noEmit
 
       - name: Lint backend
         run: pnpm -C backend lint
@@ -37,11 +40,14 @@ jobs:
       - name: Lint frontend
         run: pnpm -C frontend lint
 
+      - name: Test backend (workflow engine)
+        run: pnpm -C backend test:workflow
+
+      - name: Test frontend (vitest)
+        run: cd frontend && pnpm vitest run
+
       - name: Build backend
         run: pnpm -C backend build
 
-      - name: Backend jest test
-        run: pnpm -C backend test
-
       - name: Build frontend
-        run: pnpm -C frontend build
+        run: pnpm -C frontend build:ci
