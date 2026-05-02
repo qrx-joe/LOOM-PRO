@@ -1,4 +1,5 @@
 import { IsArray, IsIn, IsOptional, IsString } from 'class-validator';
+import { WorkflowNode, WorkflowEdge } from '../types';
 
 // 创建工作流 DTO
 export class CreateWorkflowDto {
@@ -22,10 +23,10 @@ export class CreateWorkflowDto {
   color?: string;
 
   @IsArray()
-  nodes!: any[];
+  nodes!: WorkflowNode[];
 
   @IsArray()
-  edges!: any[];
+  edges!: WorkflowEdge[];
 }
 
 // 更新工作流 DTO - 所有字段可选
@@ -52,9 +53,9 @@ export class UpdateWorkflowDto {
 
   @IsOptional()
   @IsArray()
-  nodes?: any[];
+  nodes?: WorkflowNode[];
 
   @IsOptional()
   @IsArray()
-  edges?: any[];
+  edges?: WorkflowEdge[];
 }

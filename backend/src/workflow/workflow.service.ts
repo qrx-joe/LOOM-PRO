@@ -203,8 +203,8 @@ export class WorkflowService {
         let found = false;
 
         while (stack.length > 0) {
-          const current = stack.pop() as string;
-          if (visited.has(current)) continue;
+          const current = stack.pop();
+          if (!current || visited.has(current)) continue;
           visited.add(current);
           const parents = reverseAdj.get(current) || [];
           for (const parent of parents) {

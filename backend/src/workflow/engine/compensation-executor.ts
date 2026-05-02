@@ -98,6 +98,10 @@ export class CompensationExecutor {
       return;
     }
     const idColumn = action.idColumn || 'id';
+    if (!/^[a-zA-Z0-9_]+$/.test(idColumn)) {
+      logs.push('补偿数据库失败：ID 列名不合法');
+      return;
+    }
     try {
       await this.dataSource
         .createQueryBuilder()

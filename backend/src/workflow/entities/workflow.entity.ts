@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { WorkflowNode, WorkflowEdge } from '../types';
 
 // 工作流实体：存储节点与连线的 JSON
 @Entity('workflows')
@@ -22,10 +23,10 @@ export class WorkflowEntity {
   color?: string;
 
   @Column({ type: 'jsonb', default: () => "'[]'" })
-  nodes: any;
+  nodes!: WorkflowNode[];
 
   @Column({ type: 'jsonb', default: () => "'[]'" })
-  edges: any;
+  edges!: WorkflowEdge[];
 
   @Column({ type: 'timestamp', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
