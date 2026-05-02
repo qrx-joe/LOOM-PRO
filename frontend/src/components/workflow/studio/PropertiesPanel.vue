@@ -668,8 +668,8 @@ const variableGroups = computed(() => [
 }
 
 .node-type-badge.type-condition {
-  background: #ede9fe;
-  color: #8b5cf6;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .node-type-badge.type-code {
@@ -691,8 +691,8 @@ const variableGroups = computed(() => [
 }
 
 .node-type-badge.type-http {
-  background: #ede9fe;
-  color: #667eea;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .node-id {

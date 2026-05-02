@@ -166,14 +166,14 @@ const handleDelete = (e: Event, id: string) => {
 
 <style scoped>
 .sessions-sidebar {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   height: 100%;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   transition: width 0.3s ease;
   width: 280px;
 }
@@ -182,7 +182,6 @@ const handleDelete = (e: Event, id: string) => {
   width: 60px;
 }
 
-/* 收起状态样式 */
 .collapsed-content {
   display: flex;
   flex-direction: column;
@@ -198,17 +197,17 @@ const handleDelete = (e: Event, id: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1f5f9;
+  background: var(--color-border-light);
   border: none;
-  border-radius: 8px;
-  color: #64748b;
+  border-radius: var(--radius-md);
+  color: var(--color-medium);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .btn-expand:hover {
-  background: #e2e8f0;
-  color: #0f172a;
+  background: var(--color-border);
+  color: var(--color-dark);
 }
 
 .btn-new-chat-mini {
@@ -217,16 +216,16 @@ const handleDelete = (e: Event, id: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary-900);
-  color: #ffffff;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .btn-new-chat-mini:hover {
-  background: var(--color-primary-800);
+  background: var(--color-primary-hover);
 }
 
 .collapsed-sessions {
@@ -245,23 +244,22 @@ const handleDelete = (e: Event, id: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  color: #94a3b8;
-  transition: all 0.2s;
+  color: var(--color-medium);
+  transition: all var(--transition-fast);
 }
 
 .session-dot:hover {
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 .session-dot.active {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
-/* 展开状态样式 */
 .sidebar-header {
   padding: 20px 16px 16px;
   display: flex;
@@ -282,9 +280,9 @@ const handleDelete = (e: Event, id: string) => {
 }
 
 .logo-text {
-  font-size: 16px;
-  font-weight: 700;
-  color: #111827;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
   letter-spacing: 0.5px;
   flex: 1;
 }
@@ -297,15 +295,15 @@ const handleDelete = (e: Event, id: string) => {
   justify-content: center;
   background: transparent;
   border: none;
-  border-radius: 6px;
-  color: #94a3b8;
+  border-radius: var(--radius-sm);
+  color: var(--color-medium);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .btn-collapse:hover {
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 .btn-new-chat {
@@ -314,18 +312,18 @@ const handleDelete = (e: Event, id: string) => {
   justify-content: center;
   gap: 8px;
   padding: 10px 16px;
-  background: var(--color-primary-900);
-  color: #ffffff;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
   border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
 }
 
 .btn-new-chat:hover {
-  background: var(--color-primary-800);
+  background: var(--color-primary-hover);
   transform: translateY(-1px);
 }
 
@@ -351,8 +349,8 @@ const handleDelete = (e: Event, id: string) => {
 }
 
 .session-list::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
-  border-radius: 4px;
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
 }
 
 .session-item {
@@ -360,32 +358,32 @@ const handleDelete = (e: Event, id: string) => {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--transition-fast);
   position: relative;
-  color: #4b5563;
+  color: var(--color-medium);
 }
 
 .session-item:hover {
-  background: #f3f4f6;
-  color: #111827;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 .session-item.active {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-primary-light);
+  color: var(--color-dark);
 }
 
 .session-icon {
-  color: #9ca3af;
+  color: var(--color-border);
   flex-shrink: 0;
   display: flex;
   align-items: center;
 }
 
 .session-item.active .session-icon {
-  color: #0f172a;
+  color: var(--color-primary);
 }
 
 .session-info {
@@ -394,32 +392,32 @@ const handleDelete = (e: Event, id: string) => {
 }
 
 .session-title {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .session-time {
-  font-size: 11px;
-  color: #9ca3af;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
   margin-top: 2px;
 }
 
 .session-item.active .session-time {
-  color: #94a3b8;
+  color: var(--color-medium);
 }
 
 .btn-delete {
   opacity: 0;
-  color: #9ca3af;
+  color: var(--color-border);
   background: none;
   border: none;
   cursor: pointer;
   padding: 4px;
-  border-radius: 6px;
-  transition: all 0.15s;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -430,8 +428,8 @@ const handleDelete = (e: Event, id: string) => {
 }
 
 .btn-delete:hover {
-  color: #ef4444;
-  background: #fee2e2;
+  color: var(--color-error);
+  background: var(--color-error-bg);
 }
 
 .empty-sessions {
@@ -451,13 +449,13 @@ const handleDelete = (e: Event, id: string) => {
 }
 
 .empty-text {
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--color-medium);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
 .empty-hint {
-  color: #9ca3af;
-  font-size: 12px;
+  color: var(--color-border);
+  font-size: var(--font-size-xs);
 }
 </style>

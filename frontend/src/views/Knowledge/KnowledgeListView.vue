@@ -354,14 +354,14 @@ const formatDate = (dateStr?: string) => {
 .page-title {
   font-size: 26px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-dark);
   margin: 0 0 6px 0;
   letter-spacing: -0.5px;
 }
 
 .page-desc {
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-medium);
   margin: 0;
 }
 
@@ -383,9 +383,9 @@ const formatDate = (dateStr?: string) => {
 }
 
 .kb-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
   padding: 24px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -395,8 +395,8 @@ const formatDate = (dateStr?: string) => {
 }
 
 .kb-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-float);
   transform: translateY(-4px);
 }
 
@@ -442,14 +442,14 @@ const formatDate = (dateStr?: string) => {
 .kb-name {
   font-size: 17px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-dark);
   margin: 0 0 8px;
   line-height: 1.4;
 }
 
 .kb-desc {
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-medium);
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -463,8 +463,8 @@ const formatDate = (dateStr?: string) => {
   display: flex;
   gap: 24px;
   padding: 16px 0;
-  border-top: 1px dashed #e2e8f0; /* Dashed line for unified look */
-  border-bottom: 1px dashed #e2e8f0;
+  border-top: 1px dashed var(--color-border); /* Dashed line for unified look */
+  border-bottom: 1px dashed var(--color-border);
   margin-bottom: 16px;
 }
 
@@ -477,24 +477,24 @@ const formatDate = (dateStr?: string) => {
 .stat-value {
   font-size: 16px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-dark);
 }
 
 .stat-label {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-border);
 }
 
 .card-meta {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-border);
   font-weight: 500;
 }
 
 /* 创建卡片 */
 .create-card {
-  border: 2px dashed #e2e8f0;
-  background: #f8fafc;
+  border: 2px dashed var(--color-border);
+  background: var(--color-border-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -503,8 +503,8 @@ const formatDate = (dateStr?: string) => {
 }
 
 .create-card:hover {
-  border-color: var(--color-primary-900);
-  background: #f1f5f9;
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
   box-shadow: none;
   transform: none; /* No lift specific for create card if preferred, or keep it */
 }
@@ -514,17 +514,17 @@ const formatDate = (dateStr?: string) => {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  color: #64748b;
+  color: var(--color-medium);
 }
 
 .create-icon {
   font-size: 32px;
-  color: #94a3b8;
+  color: var(--color-border);
   transition: color 0.2s;
 }
 
 .create-card:hover .create-icon {
-  color: var(--color-primary-900);
+  color: var(--color-primary);
 }
 
 .create-text {
@@ -535,11 +535,11 @@ const formatDate = (dateStr?: string) => {
 
 .create-hint {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-border);
 }
 
 .create-card:hover .create-text {
-  color: var(--color-primary-900);
+  color: var(--color-primary);
 }
 
 /* 空状态 */
@@ -592,8 +592,8 @@ const formatDate = (dateStr?: string) => {
 }
 
 .color-option.active {
-  border-color: #0f172a;
-  box-shadow: 0 0 0 2px #fff;
+  border-color: var(--color-dark);
+  box-shadow: 0 0 0 2px var(--color-surface);
   transform: scale(1.1);
 }
 
@@ -626,25 +626,25 @@ const formatDate = (dateStr?: string) => {
 .delete-icon {
   width: 72px;
   height: 72px;
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: var(--color-error-bg);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
-  color: #ef4444;
+  color: var(--color-error);
 }
 
 .delete-title {
   font-size: 20px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-dark);
   margin: 0 0 12px;
 }
 
 .delete-desc {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-medium);
   margin: 0;
   line-height: 1.5;
 }
@@ -657,17 +657,17 @@ const formatDate = (dateStr?: string) => {
 
 .delete-footer .el-button {
   min-width: 120px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-weight: 500;
 }
 
 .delete-footer .el-button--default {
-  border-color: #e5e7eb;
-  color: #374151;
+  border-color: var(--color-border);
+  color: var(--color-dark);
 }
 
 .delete-footer .el-button--default:hover {
-  border-color: #d1d5db;
-  background: #f9fafb;
+  border-color: var(--color-border);
+  background: var(--color-border-light);
 }
 </style>

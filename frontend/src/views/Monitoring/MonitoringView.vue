@@ -142,10 +142,10 @@ onMounted(load);
 }
 
 .card {
-  background: #ffffff;
+  background: var(--color-surface);
   padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -162,9 +162,9 @@ onMounted(load);
 
 .metric {
   font-size: 13px;
-  color: #334155;
+  color: var(--color-medium);
 }
 </style>
-.alert { grid-column: 1 / -1; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412;
-padding: 10px 12px; border-radius: 10px; display: flex; flex-direction: column; gap: 4px; font-size:
+.alert { grid-column: 1 / -1; background: var(--color-warning-bg); border: 1px solid var(--color-warning); color: var(--color-warning-text);
+padding: 10px 12px; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 4px; font-size:
 12px; }

@@ -26,10 +26,10 @@ defineProps<{
 .code-preview {
   font-family: monospace;
   font-size: 11px;
-  color: var(--color-neutral-600);
-  background: var(--color-neutral-50);
+  color: var(--color-medium);
+  background: var(--color-border-light);
   padding: 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   white-space: pre-wrap;
   max-height: 60px;
   overflow: hidden;

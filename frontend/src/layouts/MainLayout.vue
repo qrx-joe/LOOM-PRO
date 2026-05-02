@@ -155,16 +155,16 @@ const handleLogout = () => {
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  background-color: #f8fafc; /* Lighter background */
+  background-color: var(--color-border-light);
   font-family: var(--font-family-base);
-  color: #0f172a;
+  color: var(--color-dark);
 }
 
 /* Navbar */
 .navbar {
   height: 72px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -194,7 +194,7 @@ const handleLogout = () => {
 .logo-box {
   width: 40px;
   height: 40px;
-  background: #0f172a; /* Solid dark brand color */
+  background: var(--color-dark);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -205,7 +205,7 @@ const handleLogout = () => {
 .brand-text {
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-dark);
   letter-spacing: -0.5px;
 }
 
@@ -224,10 +224,10 @@ const handleLogout = () => {
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: none;
   background: transparent;
-  color: #64748b;
+  color: var(--color-medium);
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
@@ -235,13 +235,13 @@ const handleLogout = () => {
 }
 
 .nav-item:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 .nav-item.active {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-border-light);
+  color: var(--color-dark);
   font-weight: 600;
 }
 
@@ -260,20 +260,20 @@ const handleLogout = () => {
   align-items: center;
   gap: 10px;
   padding: 6px 12px 6px 6px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .user-profile:hover {
-  background: #f1f5f9;
+  background: var(--color-border-light);
 }
 
 .avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -286,7 +286,7 @@ const handleLogout = () => {
 .username {
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--color-dark);
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -295,7 +295,7 @@ const handleLogout = () => {
 
 .dropdown-arrow {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--color-border);
   transition: transform 0.2s;
 }
 
@@ -356,7 +356,7 @@ const handleLogout = () => {
 .logout-icon {
   width: 72px;
   height: 72px;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  background: var(--color-warning-bg);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -367,19 +367,19 @@ const handleLogout = () => {
 .logout-icon svg {
   width: 32px;
   height: 32px;
-  color: #f59e0b;
+  color: var(--color-warning);
 }
 
 .logout-title {
   font-size: 20px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-dark);
   margin: 0 0 12px;
 }
 
 .logout-desc {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-medium);
   margin: 0;
   line-height: 1.5;
 }
@@ -392,27 +392,27 @@ const handleLogout = () => {
 
 .logout-footer .el-button {
   min-width: 120px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-weight: 500;
 }
 
 .logout-footer .el-button--default {
-  border-color: #e5e7eb;
-  color: #374151;
+  border-color: var(--color-border);
+  color: var(--color-dark);
 }
 
 .logout-footer .el-button--default:hover {
-  border-color: #d1d5db;
-  background: #f9fafb;
+  border-color: var(--color-border);
+  background: var(--color-border-light);
 }
 
 .logout-footer .el-button--primary {
-  background: #0f172a;
-  border-color: #0f172a;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .logout-footer .el-button--primary:hover {
-  background: #1f2937;
-  border-color: #1f2937;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 </style>

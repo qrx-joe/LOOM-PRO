@@ -352,7 +352,7 @@ watch(
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  background: #f5f7fa;
+  background: var(--color-border-light);
   overflow: hidden;
 }
 
@@ -367,8 +367,8 @@ watch(
 .studio-left {
   width: 240px;
   flex-shrink: 0;
-  background: #ffffff;
-  border-right: 1px solid #e4e7ed;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
   overflow-y: auto;
   z-index: 20;
 }
@@ -379,12 +379,12 @@ watch(
   flex-direction: column;
   position: relative;
   min-width: 0;
-  background: #f5f7fa;
+  background: var(--color-border-light);
 }
 
 .canvas-wrapper {
   flex: 1;
-  background: #fafbfc;
+  background: var(--color-border-light);
   position: relative;
   overflow: hidden;
 }
@@ -392,8 +392,8 @@ watch(
 .studio-right {
   width: 360px;
   flex-shrink: 0;
-  background: #ffffff;
-  border-left: 1px solid #e4e7ed;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
   overflow-y: auto;
   z-index: 20;
 }
@@ -406,13 +406,13 @@ watch(
 
 .studio-left::-webkit-scrollbar-thumb,
 .studio-right::-webkit-scrollbar-thumb {
-  background: #dcdfe6;
+  background: var(--color-border);
   border-radius: 3px;
 }
 
 .studio-left::-webkit-scrollbar-thumb:hover,
 .studio-right::-webkit-scrollbar-thumb:hover {
-  background: #c0c4cc;
+  background: var(--color-medium);
 }
 
 .studio-left::-webkit-scrollbar-track,

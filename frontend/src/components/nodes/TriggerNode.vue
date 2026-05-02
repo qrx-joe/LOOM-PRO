@@ -22,7 +22,7 @@ defineProps<{
 
 <style scoped>
 .node-info {
-  color: var(--color-neutral-500);
+  color: var(--color-medium);
   font-size: 12px;
 }
 </style>

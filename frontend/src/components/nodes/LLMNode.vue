@@ -45,16 +45,16 @@ defineProps<{
 }
 
 .label {
-  color: var(--color-neutral-500);
+  color: var(--color-medium);
   flex-shrink: 0;
 }
 
 .value {
-  color: var(--color-neutral-800);
+  color: var(--color-dark);
   font-family: var(--font-family-mono);
-  background: var(--color-neutral-100);
+  background: var(--color-border-light);
   padding: 1px 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .prompt {

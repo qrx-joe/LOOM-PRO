@@ -100,21 +100,21 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
 .component-library {
   width: 100%;
   height: 100%;
-  background: #ffffff;
-  border-right: 1px solid var(--color-neutral-200);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
 }
 
 .panel-header {
   padding: 16px;
-  border-bottom: 1px solid var(--color-neutral-100);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .panel-title {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-neutral-900);
+  color: var(--color-dark);
 }
 
 .search-box {
@@ -133,7 +133,7 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
 
 .group-title {
   font-size: 12px;
-  color: var(--color-neutral-500);
+  color: var(--color-medium);
   margin-bottom: 8px;
   font-weight: 500;
 }
@@ -150,7 +150,7 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
   align-items: center;
   justify-content: center;
   padding: 12px 8px;
-  background: var(--color-neutral-50);
+  background: var(--color-border-light);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   cursor: grab;
@@ -160,8 +160,8 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
 }
 
 .component-card:hover {
-  background: #ffffff;
-  border-color: var(--color-primary-200);
+  background: var(--color-surface);
+  border-color: var(--color-primary-light);
   box-shadow: var(--shadow-sm);
   transform: translateY(-1px);
 }
@@ -188,7 +188,7 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
 
 .label {
   font-size: 12px;
-  color: var(--color-neutral-700);
+  color: var(--color-dark);
   font-weight: 500;
 }
 
@@ -197,11 +197,11 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
   top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-neutral-800);
+  background: var(--color-dark);
   color: white;
   font-size: 10px;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;

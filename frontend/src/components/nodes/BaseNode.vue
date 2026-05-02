@@ -15,12 +15,12 @@ const props = defineProps<{
 }>();
 
 const headerStyle = computed(() => ({
-  background: props.color ? `${props.color}15` : '#f8fafc',
-  color: props.color || '#64748b',
+  background: props.color ? `${props.color}15` : 'var(--color-border-light)',
+  color: props.color || 'var(--color-medium)',
 }));
 
 const iconStyle = computed(() => ({
-  background: props.color || '#64748b',
+  background: props.color || 'var(--color-medium)',
   color: '#ffffff',
 }));
 </script>
@@ -48,10 +48,10 @@ const iconStyle = computed(() => ({
       </div>
       <div class="node-actions">
         <!-- Optional status icon -->
-        <el-icon v-if="status === 'success'" color="#10b981">
+        <el-icon v-if="status === 'success'" color="var(--color-success)">
           <Check />
         </el-icon>
-        <el-icon v-if="status === 'failed'" color="#ef4444">
+        <el-icon v-if="status === 'failed'" color="var(--color-error)">
           <Close />
         </el-icon>
         <el-icon class="more-btn">
@@ -80,33 +80,27 @@ const iconStyle = computed(() => ({
 
 <style scoped>
 .base-node {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid var(--color-neutral-200);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    0 1px 2px rgba(0, 0, 0, 0.1);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
   min-width: 240px;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all var(--transition-normal);
   position: relative;
 }
 
 /* Hover Effect: Lift & Deeper Shadow */
 .base-node:hover {
   transform: translateY(-2px);
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-color: var(--color-primary-300);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
   z-index: 10;
 }
 
 /* Selected State: Glow & Border */
 .base-node.selected {
-  border-color: var(--color-primary-500);
-  box-shadow:
-    0 0 0 2px rgba(15, 23, 42, 0.08),
-    0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 20;
 }
@@ -117,30 +111,30 @@ const iconStyle = computed(() => ({
 }
 
 .base-node.failed {
-  border-color: #ef4444;
+  border-color: var(--color-error);
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }
 
 .base-node.success {
-  border-color: #10b981;
+  border-color: var(--color-success);
   box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 /* Header */
 .node-header {
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   gap: 10px;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   transition: background 0.2s;
 }
 
 .icon-box {
   width: 28px;
   height: 28px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,7 +164,7 @@ const iconStyle = computed(() => ({
   display: flex;
   align-items: center;
   gap: 4px;
-  color: var(--color-neutral-400);
+  color: var(--color-border);
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -187,15 +181,15 @@ const iconStyle = computed(() => ({
 }
 
 .more-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: var(--color-neutral-900);
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 /* Body */
 .node-body {
   padding: 12px;
   font-size: 13px;
-  color: var(--color-neutral-600);
+  color: var(--color-medium);
   line-height: 1.5;
 }
 
@@ -203,9 +197,9 @@ const iconStyle = computed(() => ({
 :deep(.vue-flow__handle) {
   width: 10px;
   height: 10px;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--color-surface);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  background: var(--color-neutral-400);
+  background: var(--color-medium);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0; /* Hidden by default */
   transform: scale(0.5);
@@ -220,9 +214,9 @@ const iconStyle = computed(() => ({
 :deep(.vue-flow__handle:hover) {
   width: 14px;
   height: 14px;
-  background: var(--color-primary-500);
+  background: var(--color-primary);
   transform: scale(1.2);
-  border-color: #ffffff;
+  border-color: var(--color-surface);
 }
 
 :deep(.vue-flow__handle-left) {

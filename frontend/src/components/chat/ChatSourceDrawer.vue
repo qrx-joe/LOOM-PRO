@@ -101,9 +101,9 @@ const emit = defineEmits<{
 }
 
 .detail-card {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  background: var(--color-border-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -120,37 +120,37 @@ const emit = defineEmits<{
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-medium);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .value {
-  font-size: 13px;
-  color: #0f172a;
+  font-size: var(--font-size-sm);
+  color: var(--color-dark);
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   word-break: break-all;
 }
 
 .content-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-medium);
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .snippet {
-  background: #0f172a;
-  color: #e2e8f0;
+  background: var(--color-dark);
+  color: var(--color-border);
   padding: 14px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   width: 100%;
   overflow: auto;
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   line-height: 1.6;
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   white-space: pre-wrap;

@@ -502,7 +502,7 @@ const formatNumber = (num: number) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f9fafb;
+  background: var(--color-border-light);
 }
 
 .page-header {
@@ -510,8 +510,8 @@ const formatNumber = (num: number) => {
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header-left {
@@ -545,13 +545,13 @@ const formatNumber = (num: number) => {
 .kb-name {
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-dark);
   margin: 0;
 }
 
 .kb-desc {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--color-medium);
   margin: 0;
 }
 
@@ -565,27 +565,27 @@ const formatNumber = (num: number) => {
   display: flex;
   gap: 16px;
   padding: 20px 24px;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .stat-card {
   flex: 1;
   text-align: center;
   padding: 12px;
-  background: #f9fafb;
-  border-radius: 8px;
+  background: var(--color-border-light);
+  border-radius: var(--radius-md);
 }
 
 .stat-value {
   font-size: 24px;
   font-weight: 700;
-  color: #111827;
+  color: var(--color-dark);
 }
 
 .stat-label {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--color-medium);
   margin-top: 4px;
 }
 
@@ -594,8 +594,8 @@ const formatNumber = (num: number) => {
   display: flex;
   gap: 4px;
   padding: 0 24px;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .tab-btn {
@@ -607,7 +607,7 @@ const formatNumber = (num: number) => {
   background: transparent;
   font-size: 14px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-medium);
   cursor: pointer;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
@@ -615,12 +615,12 @@ const formatNumber = (num: number) => {
 }
 
 .tab-btn:hover {
-  color: var(--color-primary-900);
+  color: var(--color-primary);
 }
 
 .tab-btn.active {
-  color: var(--color-primary-900);
-  border-bottom-color: var(--color-primary-900);
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
 }
 
 /* Tab 内容 */
@@ -636,10 +636,10 @@ const formatNumber = (num: number) => {
 }
 
 .panel-card {
-  background: #ffffff;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 20px;
 }
 
@@ -647,10 +647,10 @@ const formatNumber = (num: number) => {
 .settings-section-title {
   font-size: 14px;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-dark);
   margin: 20px 0 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .settings-section-title:first-child {
@@ -659,7 +659,7 @@ const formatNumber = (num: number) => {
 
 .setting-hint {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--color-border);
   margin-left: 8px;
 }
 
@@ -692,25 +692,25 @@ const formatNumber = (num: number) => {
 .delete-icon {
   width: 72px;
   height: 72px;
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: var(--color-error-bg);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
-  color: #ef4444;
+  color: var(--color-error);
 }
 
 .delete-title {
   font-size: 20px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-dark);
   margin: 0 0 12px;
 }
 
 .delete-desc {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-medium);
   margin: 0;
   line-height: 1.5;
 }
@@ -723,18 +723,18 @@ const formatNumber = (num: number) => {
 
 .delete-footer .el-button {
   min-width: 120px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-weight: 500;
 }
 
 .delete-footer .el-button--default {
-  border-color: #e5e7eb;
-  color: #374151;
+  border-color: var(--color-border);
+  color: var(--color-dark);
 }
 
 .delete-footer .el-button--default:hover {
-  border-color: #d1d5db;
-  background: #f9fafb;
+  border-color: var(--color-border);
+  background: var(--color-border-light);
 }
 
 .search-loading {
@@ -743,7 +743,7 @@ const formatNumber = (num: number) => {
   justify-content: center;
   gap: 8px;
   padding: 40px 0;
-  color: #6b7280;
+  color: var(--color-medium);
   font-size: 14px;
 }
 
@@ -770,20 +770,20 @@ const formatNumber = (num: number) => {
 }
 
 .empty-icon {
-  color: #d1d5db;
+  color: var(--color-border);
   margin-bottom: 12px;
 }
 
 .empty-title {
   font-size: 16px;
   font-weight: 500;
-  color: #374151;
+  color: var(--color-dark);
   margin-bottom: 8px;
 }
 
 .empty-hint {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--color-medium);
   max-width: 400px;
   line-height: 1.5;
 }

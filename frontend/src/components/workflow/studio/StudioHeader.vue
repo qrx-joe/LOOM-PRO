@@ -197,7 +197,7 @@ const currentColor = computed(() => props.workflowColor || '#475569');
               <el-icon><Upload /></el-icon>
               <span>导入配置</span>
             </el-dropdown-item>
-            <el-dropdown-item divided command="delete" style="color: #f56c6c">
+            <el-dropdown-item divided command="delete" style="color: var(--color-error)">
               <el-icon><Delete /></el-icon>
               <span>删除工作流</span>
             </el-dropdown-item>
@@ -269,8 +269,8 @@ const currentColor = computed(() => props.workflowColor || '#475569');
 <style scoped>
 .studio-header {
   height: 64px;
-  background: #ffffff;
-  border-bottom: 1px solid #e4e7ed;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -326,7 +326,7 @@ const currentColor = computed(() => props.workflowColor || '#475569');
 }
 
 .workflow-info:hover {
-  background: #f5f7fa;
+  background: var(--color-border-light);
 }
 
 .workflow-info:hover .edit-icon {
@@ -353,19 +353,19 @@ const currentColor = computed(() => props.workflowColor || '#475569');
 .workflow-name {
   font-size: 14px;
   font-weight: 600;
-  color: #303133;
+  color: var(--color-dark);
 }
 
 .edit-icon {
   font-size: 12px;
-  color: #909399;
+  color: var(--color-border);
   opacity: 0;
   transition: opacity 0.2s;
 }
 
 .save-status {
   font-size: 11px;
-  color: #909399;
+  color: var(--color-border);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -459,9 +459,9 @@ const currentColor = computed(() => props.workflowColor || '#475569');
 }
 
 .color-option.active {
-  border-color: #0f172a;
+  border-color: var(--color-dark);
   box-shadow:
-    0 0 0 2px #fff,
+    0 0 0 2px var(--color-surface),
     0 0 0 4px currentColor;
 }
 

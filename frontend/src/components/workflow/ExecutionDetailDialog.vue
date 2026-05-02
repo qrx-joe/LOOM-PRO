@@ -114,26 +114,26 @@ const emit = defineEmits<{
 
 .label {
   width: 80px;
-  font-weight: 600;
-  color: #334155;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-dark);
 }
 
 .value {
-  color: #0f172a;
+  color: var(--color-dark);
 }
 
 .value.error {
-  color: #b91c1c;
+  color: var(--color-error);
 }
 
 .code {
-  background: #0f172a;
-  color: #e2e8f0;
+  background: var(--color-dark);
+  color: var(--color-border);
   padding: 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   width: 100%;
   overflow: auto;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .log-list {
@@ -143,8 +143,8 @@ const emit = defineEmits<{
 }
 
 .group {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 8px;
 }
 
@@ -152,31 +152,31 @@ const emit = defineEmits<{
   display: flex;
   justify-content: space-between;
   cursor: pointer;
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
 .group-title {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .group-toggle {
-  color: #38bdf8;
+  color: var(--color-info);
 }
 
 .log-item {
-  font-size: 12px;
-  color: #334155;
+  font-size: var(--font-size-xs);
+  color: var(--color-dark);
   padding: 4px 0;
 }
 
 .log-item.muted {
-  color: #94a3b8;
+  color: var(--color-medium);
 }
 
 .log-item.clickable {
   cursor: pointer;
-  color: #0ea5e9;
+  color: var(--color-info);
 }
 
 .actions {

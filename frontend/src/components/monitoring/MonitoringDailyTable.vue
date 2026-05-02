@@ -49,16 +49,16 @@ const props = defineProps<{
   grid-template-columns: 1fr repeat(4, 0.6fr);
   gap: 8px;
   font-size: 12px;
-  color: #334155;
+  color: var(--color-dark);
 }
 
 .row.header {
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-medium);
 }
 
 .muted {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-border);
 }
 </style>

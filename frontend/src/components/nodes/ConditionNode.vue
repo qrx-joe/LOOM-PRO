@@ -44,19 +44,19 @@ defineProps<{
 }
 
 .label {
-  color: var(--color-neutral-500);
+  color: var(--color-medium);
 }
 .value.code {
   font-family: monospace;
-  background: var(--color-neutral-100);
+  background: var(--color-border-light);
   padding: 2px 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .branches {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: var(--color-neutral-400);
+  color: var(--color-border);
 }
 </style>

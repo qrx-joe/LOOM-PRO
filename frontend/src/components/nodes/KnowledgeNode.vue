@@ -43,10 +43,10 @@ defineProps<{
 }
 
 .label {
-  color: var(--color-neutral-500);
+  color: var(--color-medium);
 }
 .value {
-  color: var(--color-neutral-800);
+  color: var(--color-dark);
   font-weight: 500;
 }
 </style>

@@ -64,16 +64,16 @@ const methodColor = computed(() => {
 <style scoped>
 .http-node {
   min-width: 200px;
-  background: #ffffff;
-  border: 2px solid #909399;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s;
+  background: var(--color-surface);
+  border: 2px solid var(--color-medium);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-slow);
   position: relative;
 }
 
 .http-node:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-1px);
 }
 
@@ -90,7 +90,7 @@ const methodColor = computed(() => {
   width: 32px;
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,8 +104,8 @@ const methodColor = computed(() => {
 }
 
 .node-label {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   color: #ffffff;
   margin-bottom: 4px;
 }
@@ -125,12 +125,12 @@ const methodColor = computed(() => {
 
 .node-body {
   padding: 12px;
-  background: #f8fafc;
+  background: var(--color-border-light);
 }
 
 .url-display {
-  font-size: 11px;
-  color: #606266;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
   font-family: 'JetBrains Mono', Consolas, monospace;
   word-break: break-all;
   line-height: 1.4;
@@ -149,8 +149,8 @@ const methodColor = computed(() => {
   position: absolute;
   width: 12px;
   height: 12px;
-  background: #ffffff;
-  border: 2px solid var(--color-primary-900);
+  background: var(--color-surface);
+  border: 2px solid var(--color-primary);
   border-radius: 50%;
   pointer-events: all;
   cursor: crosshair;

@@ -321,7 +321,7 @@ const handleOpen = (id: string) => {
                   <el-icon><CopyDocument /></el-icon>
                   <span>复制应用</span>
                 </el-dropdown-item>
-                <el-dropdown-item command="delete" divided style="color: #f56c6c">
+                <el-dropdown-item command="delete" divided style="color: var(--color-error)">
                   <el-icon><Delete /></el-icon>
                   <span>删除应用</span>
                 </el-dropdown-item>
@@ -526,9 +526,9 @@ const handleOpen = (id: string) => {
 }
 
 .app-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px; /* Doze/Dify style rounded corners */
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
   padding: 24px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -541,8 +541,8 @@ const handleOpen = (id: string) => {
 
 .app-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08);
-  border-color: #cbd5e1;
+  box-shadow: var(--shadow-float);
+  border-color: var(--color-border);
 }
 
 .card-header {
@@ -577,40 +577,40 @@ const handleOpen = (id: string) => {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #64748b;
-  background: #f8fafc;
+  color: var(--color-medium);
+  background: var(--color-border-light);
   padding: 4px 10px;
   border-radius: 100px;
-  border: 1px solid #f1f5f9;
+  border: 1px solid var(--color-border);
 }
 
 .status-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #cbd5e1;
+  background: var(--color-border);
 }
 
 .status-dot.published {
-  background: #10b981;
+  background: var(--color-success);
 }
 .status-dot.draft {
-  background: #f59e0b;
+  background: var(--color-warning);
 }
 
 .app-menu {
-  color: #94a3b8;
+  color: var(--color-border);
   cursor: pointer;
   padding: 6px;
   margin-right: -10px;
   margin-top: -6px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s;
 }
 
 .app-menu:hover {
-  color: #475569;
-  background: #f1f5f9;
+  color: var(--color-medium);
+  background: var(--color-border-light);
 }
 
 .card-body {
@@ -750,9 +750,9 @@ const handleOpen = (id: string) => {
 }
 
 .color-option.active {
-  border-color: #0f172a;
+  border-color: var(--color-dark);
   box-shadow:
-    0 0 0 2px #fff,
+    0 0 0 2px var(--color-surface),
     0 0 0 4px currentColor;
 }
 
