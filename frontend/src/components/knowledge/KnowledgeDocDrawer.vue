@@ -103,26 +103,27 @@ const emit = defineEmits<{
 }
 
 .detail-row {
-  font-size: 12px;
-  color: #334155;
+  font-size: var(--font-size-xs);
+  color: var(--color-dark);
 }
 
 .label {
   display: inline-block;
   width: 90px;
-  color: #64748b;
+  color: var(--color-medium);
 }
 
 .detail-section {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--color-border);
 }
 
 .section-title {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 6px;
-  font-size: 13px;
+  font-size: var(--font-size-sm);
+  color: var(--color-dark);
 }
 
 .chunk-config {
@@ -139,29 +140,29 @@ const emit = defineEmits<{
 }
 
 .chunk-item {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 8px;
 }
 
 .chunk-item.focused {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
 }
 
 .chunk-title {
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
   margin-bottom: 4px;
 }
 
 .chunk-content {
-  font-size: 12px;
-  color: #0f172a;
+  font-size: var(--font-size-xs);
+  color: var(--color-dark);
 }
 
 .loading {
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 </style>

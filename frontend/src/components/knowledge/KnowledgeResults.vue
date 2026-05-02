@@ -71,7 +71,7 @@ const highlightKeywords = (text: string) => {
 
 <style scoped>
 .result-item {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 8px;
@@ -85,18 +85,18 @@ const highlightKeywords = (text: string) => {
 
 .meta {
   font-size: 12px;
-  color: #64748b;
-  margin-bottom: 6px;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
 }
 
 .content {
-  font-size: 13px;
-  color: #334155;
+  font-size: var(--font-size-base);
+  color: var(--color-dark);
 }
 
 .score-bar {
   height: 6px;
-  background: #e2e8f0;
+  background: var(--color-border);
   border-radius: 999px;
   overflow: hidden;
   margin: 6px 0 8px;
@@ -108,14 +108,14 @@ const highlightKeywords = (text: string) => {
 }
 
 .hit {
-  background: #fef9c3;
-  color: #854d0e;
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
   padding: 0 2px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .empty {
-  font-size: 12px;
-  color: #94a3b8;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
 }
 </style>

@@ -128,15 +128,16 @@ const runEval = async () => {
 
 <style scoped>
 .panel {
-  background: #ffffff;
+  background: var(--color-surface);
   padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 .title {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 12px;
+  color: var(--color-dark);
 }
 
 .grid {
@@ -146,15 +147,16 @@ const runEval = async () => {
 }
 
 .block {
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 12px;
 }
 
 .block-title {
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
   margin-bottom: 8px;
+  color: var(--color-dark);
 }
 
 .controls,
@@ -167,13 +169,13 @@ const runEval = async () => {
 }
 
 .label {
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
 .error {
   margin-top: 8px;
-  color: #b91c1c;
-  font-size: 12px;
+  color: var(--color-error);
+  font-size: var(--font-size-xs);
 }
 </style>

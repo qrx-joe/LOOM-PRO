@@ -51,8 +51,8 @@ const props = defineProps<{
 }
 
 .metric {
-  font-size: 12px;
-  color: #0f172a;
+  font-size: var(--font-size-xs);
+  color: var(--color-dark);
 }
 
 .table {
@@ -64,13 +64,13 @@ const props = defineProps<{
   display: grid;
   grid-template-columns: 1.4fr 0.6fr 0.6fr;
   gap: 8px;
-  font-size: 12px;
-  color: #334155;
+  font-size: var(--font-size-xs);
+  color: var(--color-dark);
 }
 
 .row.header {
-  font-weight: 600;
-  color: #64748b;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-medium);
 }
 
 .query {
@@ -80,7 +80,7 @@ const props = defineProps<{
 }
 
 .muted {
-  font-size: 12px;
-  color: #94a3b8;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 </style>
