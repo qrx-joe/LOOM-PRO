@@ -405,6 +405,7 @@ const formatDate = (dateStr?: string) => {
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
+  position: relative;
 }
 
 .kb-icon {
@@ -461,11 +462,11 @@ const formatDate = (dateStr?: string) => {
 
 .card-footer {
   display: flex;
-  gap: 24px;
-  padding: 16px 0;
-  border-top: 1px dashed var(--color-border); /* Dashed line for unified look */
-  border-bottom: 1px dashed var(--color-border);
-  margin-bottom: 16px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed var(--color-border);
+  padding-top: 16px;
+  margin-top: auto;
 }
 
 .stat-item {
@@ -496,17 +497,19 @@ const formatDate = (dateStr?: string) => {
   border: 2px dashed var(--color-border);
   background: var(--color-border-light);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
-  padding: 0; /* Clear padding for center alignment */
+  gap: 12px;
+  min-height: 180px;
+  padding: 24px;
 }
 
 .create-card:hover {
   border-color: var(--color-primary);
   background: var(--color-primary-light);
   box-shadow: none;
-  transform: none; /* No lift specific for create card if preferred, or keep it */
+  transform: none;
 }
 
 .create-content {
