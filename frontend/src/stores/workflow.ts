@@ -2,6 +2,9 @@ import { defineStore } from 'pinia';
 import type { WorkflowNode, WorkflowEdge, Workflow, WorkflowExecution } from '@/types';
 import { workflowApi } from '@/api';
 
+// 模块级防抖 timer（配置更新使用）
+let configHistoryTimer: ReturnType<typeof setTimeout> | null = null;
+
 interface HistoryState {
   nodes: WorkflowNode[];
   edges: WorkflowEdge[];
@@ -26,6 +29,8 @@ export const useWorkflowStore = defineStore('workflow', {
     history: [] as HistoryState[],
     historyIndex: -1,
     maxHistory: 50,
+    // 标记是否正在恢复历史状态（undo/redo），避免循环保存
+    _skipNextHistory: false,
   }),
 
   getters: {
@@ -53,6 +58,7 @@ export const useWorkflowStore = defineStore('workflow', {
 
     // 保存当前状态到历史
     saveHistory() {
+      if (this._skipNextHistory) return;
       // 截断 redo 分支
       this.history = this.history.slice(0, this.historyIndex + 1);
       this.history.push({
@@ -69,21 +75,74 @@ export const useWorkflowStore = defineStore('workflow', {
     // 撤销
     undo() {
       if (this.historyIndex <= 0) return null;
+      this._skipNextHistory = true;
       this.historyIndex--;
       const state = this.history[this.historyIndex];
       this.nodes = JSON.parse(JSON.stringify(state.nodes));
       this.edges = JSON.parse(JSON.stringify(state.edges));
+      this._skipNextHistory = false;
       return state;
     },
 
     // 重做
     redo() {
       if (this.historyIndex >= this.history.length - 1) return null;
+      this._skipNextHistory = true;
       this.historyIndex++;
       const state = this.history[this.historyIndex];
       this.nodes = JSON.parse(JSON.stringify(state.nodes));
       this.edges = JSON.parse(JSON.stringify(state.edges));
+      this._skipNextHistory = false;
       return state;
+    },
+
+    // ========== 结构性变更（自动保存历史）==========
+
+    addNodes(newNodes: WorkflowNode[]) {
+      this.nodes.push(...newNodes);
+      this.saveHistory();
+    },
+
+    removeNode(id: string) {
+      const index = this.nodes.findIndex((n) => n.id === id);
+      if (index !== -1) {
+        this.nodes.splice(index, 1);
+        this.edges = this.edges.filter((e) => e.source !== id && e.target !== id);
+        this.saveHistory();
+      }
+    },
+
+    removeEdge(id: string) {
+      const index = this.edges.findIndex((e) => e.id === id);
+      if (index !== -1) {
+        this.edges.splice(index, 1);
+        this.saveHistory();
+      }
+    },
+
+    updateNodeData(id: string, data: Record<string, any>) {
+      const node = this.nodes.find((n) => n.id === id);
+      if (node) {
+        node.data = { ...node.data, ...data };
+        // 配置更新防抖保存历史
+        if (configHistoryTimer) clearTimeout(configHistoryTimer);
+        configHistoryTimer = setTimeout(() => this.saveHistory(), 500);
+      }
+    },
+
+    updateEdgeData(id: string, data: Record<string, any>) {
+      const edge = this.edges.find((e) => e.id === id);
+      if (edge) {
+        Object.assign(edge, data);
+        // 配置更新防抖保存历史
+        if (configHistoryTimer) clearTimeout(configHistoryTimer);
+        configHistoryTimer = setTimeout(() => this.saveHistory(), 500);
+      }
+    },
+
+    addEdge(edge: WorkflowEdge) {
+      this.edges.push(edge);
+      this.saveHistory();
     },
 
     // 清空历史

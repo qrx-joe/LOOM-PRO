@@ -3,13 +3,14 @@ import { computed, ref, onMounted } from 'vue';
 import { ElCollapseTransition } from 'element-plus';
 import { Setting, Delete, InfoFilled, ArrowRight, Connection } from '@element-plus/icons-vue';
 import { useKnowledgeStore } from '@/stores/knowledge';
+import { NODE_TYPE_CONFIGS, type NodeField } from '@/config/node-config-schema';
 
 const props = defineProps<{
   node: any;
   edge?: any;
 }>();
 
-defineEmits(['update', 'delete', 'update-edge', 'delete-edge']);
+const emit = defineEmits(['update', 'delete', 'update-edge', 'delete-edge']);
 
 const knowledgeStore = useKnowledgeStore();
 
@@ -17,14 +18,34 @@ onMounted(() => {
   knowledgeStore.fetchKnowledgeBases();
 });
 
-// Mock config schema based on node type
-const isLLM = computed(() => props.node?.type === 'llm');
-const isKnowledge = computed(() => props.node?.type === 'knowledge');
-const isCondition = computed(() => props.node?.type === 'condition');
-const isCode = computed(() => props.node?.type === 'code');
-const isEnd = computed(() => props.node?.type === 'end');
+// Schema-driven 节点配置
+const currentNodeConfig = computed(() => {
+  if (!props.node?.type) return null;
+  return NODE_TYPE_CONFIGS[props.node.type] || null;
+});
+
 const isTrigger = computed(() => props.node?.type === 'trigger');
-const isHttp = computed(() => props.node?.type === 'http');
+
+// 根据字段类型获取当前值
+const getFieldValue = (field: NodeField) => {
+  const data = props.node?.data || {};
+  const value = data[field.key];
+  return value !== undefined ? value : field.defaultValue;
+};
+
+// 判断字段是否可见
+const isFieldVisible = (field: NodeField) => {
+  if (!field.visibleWhen) return true;
+  return field.visibleWhen(props.node?.data || {});
+};
+
+// 获取 select 字段的选项
+const getSelectOptions = (field: NodeField) => {
+  if (field.key === 'dataset') {
+    return knowledgeStore.knowledgeBases.map((kb) => ({ label: kb.name, value: kb.id }));
+  }
+  return field.options || [];
+};
 
 // 展开/折叠状态
 const expandedSections = ref<Record<string, boolean>>({
@@ -209,207 +230,78 @@ const toggleSection = (section: string) => {
           <el-collapse-transition>
             <div v-show="expandedSections.config" class="section-content">
               <el-form label-position="top" size="default">
-                <!-- LLM Specific -->
-                <template v-if="isLLM">
-                  <el-form-item label="模型选择">
-                    <el-select
-                      :model-value="node.data?.model || 'deepseek-chat'"
-                      style="width: 100%"
-                      @update:model-value="$emit('update', node.id, { model: $event })"
-                    >
-                      <el-option label="DeepSeek Chat" value="deepseek-chat" />
-                      <el-option label="GPT-3.5 Turbo" value="gpt-3.5-turbo" />
-                      <el-option label="GPT-4" value="gpt-4" />
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="系统提示词">
-                    <el-input
-                      type="textarea"
-                      :rows="4"
-                      :model-value="node.data?.systemPrompt"
-                      placeholder="你是一个专业的AI助手..."
-                      @input="$emit('update', node.id, { systemPrompt: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item label="温度 (Temperature)">
-                    <el-slider
-                      :model-value="node.data?.temperature || 0.7"
-                      :min="0"
-                      :max="2"
-                      :step="0.1"
-                      show-input
-                      @update:model-value="$emit('update', node.id, { temperature: $event })"
-                    />
-                  </el-form-item>
-                </template>
+                <!-- Schema-driven 节点配置 -->
+                <template v-if="currentNodeConfig">
+                  <!-- 提示信息 -->
+                  <template v-for="tip in currentNodeConfig.tips" :key="tip.content">
+                    <el-alert :type="tip.type" :closable="false" show-icon>
+                      <template #default>
+                        <div class="tip-content">{{ tip.content }}</div>
+                      </template>
+                    </el-alert>
+                  </template>
 
-                <!-- Knowledge Specific -->
-                <template v-if="isKnowledge">
-                  <el-form-item label="知识库">
-                    <el-select
-                      placeholder="选择知识库"
-                      :model-value="node.data?.dataset"
-                      :loading="knowledgeStore.loadingBases"
-                      clearable
-                      style="width: 100%"
-                      @update:model-value="$emit('update', node.id, { dataset: $event })"
-                    >
-                      <el-option
-                        v-for="kb in knowledgeStore.knowledgeBases"
-                        :key="kb.id"
-                        :label="kb.name"
-                        :value="kb.id"
-                      />
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="召回数量 (TopK)">
-                    <el-input-number
-                      :model-value="node.data?.topK || 3"
-                      :min="1"
-                      :max="10"
-                      style="width: 100%"
-                      @update:model-value="$emit('update', node.id, { topK: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item label="相似度阈值">
-                    <el-slider
-                      :model-value="node.data?.scoreThreshold || 0.7"
-                      :min="0"
-                      :max="1"
-                      :step="0.05"
-                      show-input
-                      @update:model-value="$emit('update', node.id, { scoreThreshold: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item label="混合检索">
-                    <el-switch
-                      :model-value="node.data?.hybrid || false"
-                      @update:model-value="$emit('update', node.id, { hybrid: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item label="重排序">
-                    <el-switch
-                      :model-value="node.data?.rerank || false"
-                      @update:model-value="$emit('update', node.id, { rerank: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item label="分块策略">
-                    <el-select
-                      :model-value="node.data?.strategy || 'recursive'"
-                      style="width: 100%"
-                      @update:model-value="$emit('update', node.id, { strategy: $event })"
-                    >
-                      <el-option label="递归（中文优先）" value="recursive" />
-                      <el-option label="语义（按段落）" value="semantic" />
-                      <el-option label="固定长度" value="fixed" />
-                    </el-select>
-                  </el-form-item>
-                </template>
-
-                <!-- Condition Specific -->
-                <template v-if="isCondition">
-                  <el-form-item label="判断条件">
-                    <el-input
-                      type="textarea"
-                      :rows="3"
-                      placeholder="例如: input.includes('error')"
-                      :model-value="node.data?.expression"
-                      @input="$emit('update', node.id, { expression: $event })"
-                    />
-                  </el-form-item>
-                  <el-alert type="info" :closable="false" show-icon>
-                    <template #default>
-                      <div class="tip-content">支持 JavaScript 表达式，返回 true/false</div>
+                  <!-- 字段渲染 -->
+                  <template v-for="field in currentNodeConfig.fields" :key="field.key">
+                    <template v-if="isFieldVisible(field)">
+                      <el-form-item :label="field.label">
+                        <el-input
+                          v-if="field.type === 'text'"
+                          :model-value="getFieldValue(field)"
+                          :placeholder="field.placeholder"
+                          @input="$emit('update', node.id, { [field.key]: $event })"
+                        />
+                        <el-input
+                          v-else-if="field.type === 'textarea'"
+                          type="textarea"
+                          :rows="field.rows || 3"
+                          :model-value="getFieldValue(field)"
+                          :placeholder="field.placeholder"
+                          :class="field.key === 'code' ? 'code-editor' : ''"
+                          @input="$emit('update', node.id, { [field.key]: $event })"
+                        />
+                        <el-input-number
+                          v-else-if="field.type === 'number'"
+                          :model-value="getFieldValue(field)"
+                          :min="field.min"
+                          :max="field.max"
+                          :step="field.step"
+                          style="width: 100%"
+                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                        />
+                        <el-select
+                          v-else-if="field.type === 'select'"
+                          :model-value="getFieldValue(field)"
+                          :placeholder="field.placeholder"
+                          :loading="field.key === 'dataset' && knowledgeStore.loadingBases"
+                          clearable
+                          style="width: 100%"
+                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                        >
+                          <el-option
+                            v-for="opt in getSelectOptions(field)"
+                            :key="opt.value"
+                            :label="opt.label"
+                            :value="opt.value"
+                          />
+                        </el-select>
+                        <el-switch
+                          v-else-if="field.type === 'switch'"
+                          :model-value="getFieldValue(field)"
+                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                        />
+                        <el-slider
+                          v-else-if="field.type === 'slider'"
+                          :model-value="getFieldValue(field)"
+                          :min="field.min"
+                          :max="field.max"
+                          :step="field.step"
+                          show-input
+                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                        />
+                      </el-form-item>
                     </template>
-                  </el-alert>
-                </template>
-
-                <!-- Code Specific -->
-                <template v-if="isCode">
-                  <el-form-item label="代码逻辑">
-                    <el-input
-                      type="textarea"
-                      :rows="8"
-                      placeholder="// JavaScript 代码&#10;return { result: 'ok' }"
-                      :model-value="node.data?.code"
-                      class="code-editor"
-                      @input="$emit('update', node.id, { code: $event })"
-                    />
-                  </el-form-item>
-                </template>
-
-                <!-- End Specific -->
-                <template v-if="isEnd">
-                  <el-form-item label="输出变量名">
-                    <el-input
-                      placeholder="result"
-                      :model-value="node.data?.outputVar || 'result'"
-                      @input="$emit('update', node.id, { outputVar: $event })"
-                    />
-                  </el-form-item>
-                </template>
-
-                <!-- Trigger Specific -->
-                <template v-if="isTrigger">
-                  <el-alert type="success" :closable="false">
-                    <template #default>
-                      <div class="tip-content">
-                        <el-icon><InfoFilled /></el-icon>
-                        <span>工作流的起始节点，接收外部输入</span>
-                      </div>
-                    </template>
-                  </el-alert>
-                </template>
-
-                <!-- HTTP Specific -->
-                <template v-if="isHttp">
-                  <el-form-item label="请求方法">
-                    <el-select
-                      :model-value="node.data?.method || 'GET'"
-                      style="width: 100%"
-                      @update:model-value="$emit('update', node.id, { method: $event })"
-                    >
-                      <el-option label="GET" value="GET" />
-                      <el-option label="POST" value="POST" />
-                      <el-option label="PUT" value="PUT" />
-                      <el-option label="DELETE" value="DELETE" />
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="请求 URL">
-                    <el-input
-                      :model-value="node.data?.url"
-                      placeholder="https://api.example.com/endpoint"
-                      @input="$emit('update', node.id, { url: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item label="请求头 (Headers)">
-                    <el-input
-                      type="textarea"
-                      :rows="3"
-                      :model-value="node.data?.headers"
-                      placeholder='{"Content-Type": "application/json"}'
-                      @input="$emit('update', node.id, { headers: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item v-if="node.data?.method !== 'GET'" label="请求体 (Body)">
-                    <el-input
-                      type="textarea"
-                      :rows="4"
-                      :model-value="node.data?.body"
-                      placeholder='{"key": "value"}'
-                      @input="$emit('update', node.id, { body: $event })"
-                    />
-                  </el-form-item>
-                  <el-form-item label="超时时间 (ms)">
-                    <el-input-number
-                      :model-value="node.data?.timeout || 30000"
-                      :min="1000"
-                      :max="300000"
-                      :step="1000"
-                      style="width: 100%"
-                      @update:model-value="$emit('update', node.id, { timeout: $event })"
-                    />
-                  </el-form-item>
+                  </template>
                 </template>
               </el-form>
             </div>

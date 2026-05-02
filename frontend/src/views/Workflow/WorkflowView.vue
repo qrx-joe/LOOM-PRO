@@ -83,19 +83,9 @@ const edgeTypes = {
   branch: BranchEdge,
 };
 
-// 防抖保存历史（用于频繁触发的配置更新）
-let saveHistoryTimer: ReturnType<typeof setTimeout> | null = null;
-const debouncedSaveHistory = () => {
-  if (saveHistoryTimer) clearTimeout(saveHistoryTimer);
-  saveHistoryTimer = setTimeout(() => {
-    workflowStore.saveHistory();
-  }, 500);
-};
-
 // Add nodes directly to store (synced with VueFlow via v-model)
 const addNodesToStore = (nodes: any[]) => {
-  workflowStore.nodes.push(...nodes);
-  workflowStore.saveHistory();
+  workflowStore.addNodes(nodes);
 };
 
 // Logic Hooks
@@ -130,38 +120,20 @@ const onPaneClick = () => {
 };
 
 const handleUpdateNode = (id: string, data: any) => {
-  const node = workflowStore.nodes.find((n) => n.id === id);
-  if (node) {
-    node.data = { ...node.data, ...data };
-    debouncedSaveHistory();
-  }
+  workflowStore.updateNodeData(id, data);
 };
 
 const handleDeleteNode = (id: string) => {
-  const index = workflowStore.nodes.findIndex((n) => n.id === id);
-  if (index !== -1) {
-    workflowStore.nodes.splice(index, 1);
-    // Also remove connected edges
-    workflowStore.edges = workflowStore.edges.filter((e) => e.source !== id && e.target !== id);
-    workflowStore.saveHistory();
-  }
+  workflowStore.removeNode(id);
   selectedNodeId.value = '';
 };
 
 const handleUpdateEdge = (id: string, data: any) => {
-  const edge = workflowStore.edges.find((e) => e.id === id);
-  if (edge) {
-    Object.assign(edge, data);
-    debouncedSaveHistory();
-  }
+  workflowStore.updateEdgeData(id, data);
 };
 
 const handleDeleteEdge = (id: string) => {
-  const index = workflowStore.edges.findIndex((e) => e.id === id);
-  if (index !== -1) {
-    workflowStore.edges.splice(index, 1);
-    workflowStore.saveHistory();
-  }
+  workflowStore.removeEdge(id);
   selectedEdgeId.value = '';
 };
 
