@@ -47,12 +47,29 @@ const STRATEGY_OPTIONS: FieldOption[] = [
   { label: '固定长度', value: 'fixed' },
 ];
 
+// 错误处理策略选项
+const ON_ERROR_OPTIONS: FieldOption[] = [
+  { label: '失败终止', value: 'fail' },
+  { label: '失败跳过', value: 'skip' },
+  { label: '回滚终止', value: 'rollback' },
+  { label: '补偿终止', value: 'compensate' },
+];
+
+/** 通用执行配置字段（timeout / retry / error handling） */
+const COMMON_EXEC_FIELDS: NodeField[] = [
+  { key: 'timeoutMs', label: '超时时间 (ms)', type: 'number', defaultValue: 30000, min: 1000, max: 300000, step: 1000 },
+  { key: 'retryCount', label: '重试次数', type: 'number', defaultValue: 0, min: 0, max: 10 },
+  { key: 'retryDelayMs', label: '重试间隔 (ms)', type: 'number', defaultValue: 1000, min: 0, max: 30000, step: 500 },
+  { key: 'onError', label: '失败时', type: 'select', defaultValue: 'fail', options: ON_ERROR_OPTIONS },
+];
+
 export const NODE_TYPE_CONFIGS: Record<string, NodeTypeConfig> = {
   llm: {
     fields: [
       { key: 'model', label: '模型选择', type: 'select', defaultValue: 'deepseek-chat', options: MODEL_OPTIONS },
       { key: 'systemPrompt', label: '系统提示词', type: 'textarea', defaultValue: '', rows: 4, placeholder: '你是一个专业的AI助手...' },
       { key: 'temperature', label: '温度 (Temperature)', type: 'slider', defaultValue: 0.7, min: 0, max: 2, step: 0.1 },
+      ...COMMON_EXEC_FIELDS,
     ],
   },
 
@@ -64,12 +81,14 @@ export const NODE_TYPE_CONFIGS: Record<string, NodeTypeConfig> = {
       { key: 'hybrid', label: '混合检索', type: 'switch', defaultValue: false },
       { key: 'rerank', label: '重排序', type: 'switch', defaultValue: false },
       { key: 'strategy', label: '分块策略', type: 'select', defaultValue: 'recursive', options: STRATEGY_OPTIONS },
+      ...COMMON_EXEC_FIELDS,
     ],
   },
 
   condition: {
     fields: [
       { key: 'expression', label: '判断条件', type: 'textarea', defaultValue: '', rows: 3, placeholder: '例如: input.includes("error")' },
+      ...COMMON_EXEC_FIELDS,
     ],
     tips: [{ type: 'info', content: '支持 JavaScript 表达式，返回 true/false。连线点击可切换 True/False 分支。' }],
   },
@@ -77,6 +96,7 @@ export const NODE_TYPE_CONFIGS: Record<string, NodeTypeConfig> = {
   code: {
     fields: [
       { key: 'code', label: '代码逻辑', type: 'textarea', defaultValue: '', rows: 8, placeholder: '// JavaScript 代码\nreturn { result: "ok" }' },
+      ...COMMON_EXEC_FIELDS,
     ],
   },
 
@@ -92,7 +112,7 @@ export const NODE_TYPE_CONFIGS: Record<string, NodeTypeConfig> = {
       { key: 'url', label: '请求 URL', type: 'text', defaultValue: '', placeholder: 'https://api.example.com/endpoint' },
       { key: 'headers', label: '请求头 (Headers)', type: 'textarea', defaultValue: '', rows: 3, placeholder: '{"Content-Type": "application/json"}' },
       { key: 'body', label: '请求体 (Body)', type: 'textarea', defaultValue: '', rows: 4, placeholder: '{"key": "value"}', visibleWhen: (d) => d.method !== 'GET' },
-      { key: 'timeoutMs', label: '超时时间 (ms)', type: 'number', defaultValue: 30000, min: 1000, max: 300000, step: 1000 },
+      ...COMMON_EXEC_FIELDS,
     ],
   },
 

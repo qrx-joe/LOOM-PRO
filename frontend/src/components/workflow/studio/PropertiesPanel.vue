@@ -63,7 +63,6 @@ const expandedSections = ref<Record<string, boolean>>({
   config: true,
   input: false,
   output: false,
-  error: false,
 });
 
 const toggleSection = (section: string) => {
@@ -475,62 +474,6 @@ const toggleSection = (section: string) => {
           </el-collapse-transition>
         </div>
 
-        <!-- 错误处理 -->
-        <div class="section">
-          <div class="section-header" @click="toggleSection('error')">
-            <span class="section-title">错误处理</span>
-            <el-icon class="toggle-icon" :class="{ expanded: expandedSections.error }">
-              <ArrowRight />
-            </el-icon>
-          </div>
-          <el-collapse-transition>
-            <div v-show="expandedSections.error" class="section-content">
-              <el-form label-position="top" size="default">
-                <el-form-item label="超时时间 (ms)">
-                  <el-input-number
-                    :model-value="node.data?.timeoutMs || 0"
-                    :min="0"
-                    :max="120000"
-                    :step="1000"
-                    style="width: 100%"
-                    @update:model-value="$emit('update', node.id, { timeoutMs: $event })"
-                  />
-                </el-form-item>
-                <el-form-item label="重试次数">
-                  <el-input-number
-                    :model-value="node.data?.retryCount || 0"
-                    :min="0"
-                    :max="10"
-                    style="width: 100%"
-                    @update:model-value="$emit('update', node.id, { retryCount: $event })"
-                  />
-                </el-form-item>
-                <el-form-item label="重试间隔 (ms)">
-                  <el-input-number
-                    :model-value="node.data?.retryDelayMs || 1000"
-                    :min="0"
-                    :max="30000"
-                    :step="500"
-                    style="width: 100%"
-                    @update:model-value="$emit('update', node.id, { retryDelayMs: $event })"
-                  />
-                </el-form-item>
-                <el-form-item label="失败时">
-                  <el-select
-                    :model-value="node.data?.onError || 'fail'"
-                    style="width: 100%"
-                    @update:model-value="$emit('update', node.id, { onError: $event })"
-                  >
-                    <el-option label="失败终止" value="fail" />
-                    <el-option label="失败跳过" value="skip" />
-                    <el-option label="回滚终止" value="rollback" />
-                    <el-option label="补偿终止" value="compensate" />
-                  </el-select>
-                </el-form-item>
-              </el-form>
-            </div>
-          </el-collapse-transition>
-        </div>
       </div>
     </div>
   </div>
