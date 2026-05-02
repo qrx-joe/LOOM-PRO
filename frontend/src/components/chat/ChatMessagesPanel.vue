@@ -439,14 +439,13 @@ const handleQuickPrompt = (text: string) => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #ffffff; /* Clean white bg */
+  background: var(--color-surface);
   overflow: hidden;
-  border: 1px solid #e2e8f0; /* Full border */
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
 }
 
-/* ===== 1. 消息滚动区 ===== */
 .messages-scroll-area {
   flex: 1;
   overflow-y: auto;
@@ -454,7 +453,6 @@ const handleQuickPrompt = (text: string) => {
   padding: 0;
 }
 
-/* 隐藏滚动条但保留功能 (Chrome/Safari) */
 .messages-scroll-area::-webkit-scrollbar {
   width: 6px;
 }
@@ -466,7 +464,6 @@ const handleQuickPrompt = (text: string) => {
   background: transparent;
 }
 
-/* 欢迎页 */
 .welcome-container {
   max-width: 640px;
   margin: 0 auto;
@@ -489,30 +486,30 @@ const handleQuickPrompt = (text: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
 }
 
 .logo-icon-large {
-  color: #0f172a;
+  color: var(--color-dark);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .welcome-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
   letter-spacing: -0.5px;
   margin-bottom: 12px;
 }
 
 .welcome-desc {
-  font-size: 15px;
-  color: #64748b;
+  font-size: var(--font-size-lg);
+  color: var(--color-medium);
   margin-bottom: 40px;
 }
 
@@ -527,18 +524,18 @@ const handleQuickPrompt = (text: string) => {
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all var(--transition-slow);
   text-align: left;
 }
 
 .quick-prompt:hover {
-  border-color: #cbd5e1;
+  border-color: var(--color-medium);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
 }
 
 .qp-icon {
@@ -547,51 +544,49 @@ const handleQuickPrompt = (text: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8fafc;
+  background: var(--color-border-light);
   border-radius: 10px;
-  color: #475569;
+  color: var(--color-dark);
 }
 
 .quick-prompt:hover .qp-icon {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 .qp-text {
   flex: 1;
-  font-size: 14px;
-  font-weight: 500;
-  color: #334155;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark);
 }
 
 .quick-prompt:hover .qp-text {
-  color: #0f172a;
+  color: var(--color-dark);
 }
 
 .qp-arrow {
-  color: #cbd5e1;
+  color: var(--color-border);
   opacity: 0;
   transform: translateX(-5px);
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .quick-prompt:hover .qp-arrow {
   opacity: 1;
   transform: translateX(0);
-  color: #94a3b8;
+  color: var(--color-medium);
 }
 
-/* 对话流容器 - 取 Dify 的居中窄布局 */
 .chat-flow {
-  max-width: 800px; /* 关键：限制宽度 */
+  max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
-  gap: 32px; /* 消息间距大一点 */
+  gap: 32px;
 }
 
-/* 消息行 */
 .message-row {
   display: flex;
   gap: 16px;
@@ -602,7 +597,6 @@ const handleQuickPrompt = (text: string) => {
   flex-direction: row-reverse;
 }
 
-/* 头像 */
 .avatar {
   width: 32px;
   height: 32px;
@@ -616,23 +610,22 @@ const handleQuickPrompt = (text: string) => {
 }
 
 .avatar.user {
-  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: var(--color-primary-text);
   border: none;
 }
 
 .avatar.assistant {
-  background: #ffffff;
-  color: #0f172a;
-  border-color: #e2e8f0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle shadow for white avatar */
+  background: var(--color-surface);
+  color: var(--color-dark);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
-/* 消息体 Wrapper */
 .message-content-wrapper {
   flex: 1;
   min-width: 0;
-  max-width: 90%; /* 给头像留点空间 */
+  max-width: 90%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -643,10 +636,10 @@ const handleQuickPrompt = (text: string) => {
 }
 
 .message-sender {
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
   margin-bottom: 6px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .msg-time {
@@ -655,44 +648,40 @@ const handleQuickPrompt = (text: string) => {
   font-weight: 400;
 }
 
-/* 消息内容 (气泡/文本) */
 .message-bubble {
-  font-size: 15px;
+  font-size: var(--font-size-lg);
   line-height: 1.7;
   word-break: break-word;
 }
 
-/* AI 消息：去气泡化，直接显示 markdown */
 .message-row.assistant .message-bubble {
   width: 100%;
-  color: #1e293b;
+  color: var(--color-dark);
 }
 
-/* 用户消息：纯蓝气泡，无渐变 */
 .message-row.user .message-bubble {
-  background: var(--color-primary-900);
-  color: #ffffff;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
   padding: 12px 16px;
-  border-radius: 12px 2px 12px 12px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1);
+  border-radius: var(--radius-lg) 2px var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .user-text {
   font-family: inherit;
 }
 
-/* 来源 */
 .sources-area {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px dashed #e2e8f0;
+  border-top: 1px dashed var(--color-border);
   width: 100%;
 }
 
 .sources-title {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 600;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 6px;
   text-transform: uppercase;
 }
@@ -707,25 +696,25 @@ const handleQuickPrompt = (text: string) => {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   padding: 4px 8px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .source-item:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: var(--color-border-light);
+  border-color: var(--color-medium);
 }
 
 .source-idx {
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--color-border-light);
+  color: var(--color-medium);
   width: 16px;
   height: 16px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 10px;
   display: flex;
   align-items: center;
@@ -734,8 +723,8 @@ const handleQuickPrompt = (text: string) => {
 }
 
 .source-name {
-  font-size: 12px;
-  color: #475569;
+  font-size: var(--font-size-xs);
+  color: var(--color-dark);
 }
 
 .message-actions {
@@ -743,7 +732,7 @@ const handleQuickPrompt = (text: string) => {
   gap: 8px;
   margin-top: 8px;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity var(--transition-fast);
 }
 
 .message-row:hover .message-actions {
@@ -756,24 +745,23 @@ const handleQuickPrompt = (text: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94a3b8;
+  color: var(--color-medium);
   background: none;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   cursor: pointer;
 }
 
 .action-btn:hover {
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
-/* Markdown 样式覆盖 (Light) */
 .markdown-body :deep(h2) {
   font-size: 1.1em;
   font-weight: 700;
   margin-top: 16px;
-  color: #0f172a;
+  color: var(--color-dark);
 }
 .markdown-body :deep(p) {
   margin: 8px 0;
@@ -783,17 +771,17 @@ const handleQuickPrompt = (text: string) => {
   padding-left: 20px;
 }
 .markdown-body :deep(.code-block) {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  color: #334155;
+  background: var(--color-border-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-dark);
   margin: 12px 0;
 }
 .markdown-body :deep(.inline-code) {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-border-light);
+  color: var(--color-dark);
   padding: 2px 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-family: monospace;
 }
 .markdown-body :deep(.source-highlight) {
@@ -801,14 +789,13 @@ const handleQuickPrompt = (text: string) => {
   border-bottom: 2px solid #eab308;
 }
 
-/* 流式加载 */
 .streaming-status {
-  padding-left: 50px; /* Align with text */
+  padding-left: 50px;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
 .animate-spin {
@@ -820,18 +807,16 @@ const handleQuickPrompt = (text: string) => {
   }
 }
 
-/* ===== 2. 悬浮输入区 ===== */
 .input-float-container {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 0 20px 24px;
-  /* background: linear-gradient(to top, #ffffff 80%, rgba(255,255,255,0)); */
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255, 255, 255, 0.5); /* Subtle top border */
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -841,20 +826,20 @@ const handleQuickPrompt = (text: string) => {
 .input-card {
   width: 100%;
   max-width: 800px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Strong shadow */
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
   padding: 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .input-card:focus-within {
-  border-color: var(--color-primary-900);
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 30px rgba(98, 93, 245, 0.08);
 }
 
 .input-card textarea {
@@ -862,16 +847,16 @@ const handleQuickPrompt = (text: string) => {
   border: none;
   outline: none;
   resize: none;
-  font-size: 15px;
+  font-size: var(--font-size-lg);
   line-height: 1.5;
-  color: #111827;
+  color: var(--color-dark);
   background: transparent;
   max-height: 200px;
   font-family: inherit;
 }
 
 .input-card textarea::placeholder {
-  color: #9ca3af;
+  color: var(--color-border);
 }
 
 .input-actions-row {
@@ -891,17 +876,17 @@ const handleQuickPrompt = (text: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: none;
   background: none;
-  color: #6b7280;
+  color: var(--color-medium);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .tool-btn:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--color-border-light);
+  color: var(--color-dark);
 }
 
 .send-btn {
@@ -910,29 +895,29 @@ const handleQuickPrompt = (text: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: none;
-  background: #f3f4f6;
-  color: #9ca3af;
+  background: var(--color-border-light);
+  color: var(--color-border);
   cursor: not-allowed;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .send-btn.active {
-  background: var(--color-primary-900);
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
   cursor: pointer;
 }
 
 .send-btn.stop {
-  background: #fee2e2;
-  color: #ef4444;
+  background: var(--color-error-bg);
+  color: var(--color-error);
   cursor: pointer;
 }
 
 .footer-hint {
-  font-size: 11px;
-  color: #d1d5db;
+  font-size: var(--font-size-xs);
+  color: var(--color-border);
   margin-top: 8px;
 }
 </style>

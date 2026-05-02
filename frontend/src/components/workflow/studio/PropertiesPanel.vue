@@ -593,7 +593,7 @@ const variableGroups = computed(() => [
 .properties-panel {
   width: 100%;
   height: 100%;
-  background: #ffffff;
+  background: var(--color-surface);
   display: flex;
   flex-direction: column;
 }
@@ -604,19 +604,19 @@ const variableGroups = computed(() => [
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #909399;
+  color: var(--color-medium);
   gap: 12px;
   padding: 40px 20px;
 }
 
 .empty-icon {
   font-size: 48px;
-  color: #dcdfe6;
+  color: var(--color-border);
 }
 
 .empty-text {
-  font-size: 13px;
-  color: #909399;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
 }
 
 .config-content {
@@ -628,8 +628,8 @@ const variableGroups = computed(() => [
 
 .panel-header {
   padding: 16px;
-  border-bottom: 1px solid #e4e7ed;
-  background: #f5f7fa;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -643,28 +643,28 @@ const variableGroups = computed(() => [
 }
 
 .node-type-badge {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
-  background: #e4e7ed;
-  color: #606266;
+  background: var(--color-border);
+  color: var(--color-medium);
 }
 
 .node-type-badge.type-trigger {
-  background: #fef0c7;
-  color: #f59e0b;
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
 }
 
 .node-type-badge.type-llm {
-  background: #f1f5f9;
-  color: #0ea5e9;
+  background: var(--color-border-light);
+  color: var(--color-info);
 }
 
 .node-type-badge.type-knowledge {
-  background: #d1fae5;
-  color: #10b981;
+  background: var(--color-success-bg);
+  color: var(--color-success);
 }
 
 .node-type-badge.type-condition {
@@ -673,18 +673,18 @@ const variableGroups = computed(() => [
 }
 
 .node-type-badge.type-code {
-  background: #e0e7ff;
-  color: #6366f1;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .node-type-badge.type-end {
-  background: #fee2e2;
-  color: #ef4444;
+  background: var(--color-error-bg);
+  color: var(--color-error);
 }
 
 .node-type-badge.type-edge {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: var(--color-info-bg);
+  color: var(--color-info);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -696,8 +696,8 @@ const variableGroups = computed(() => [
 }
 
 .node-id {
-  font-size: 11px;
-  color: #909399;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
   font-family: 'JetBrains Mono', Consolas, monospace;
 }
 
@@ -708,7 +708,7 @@ const variableGroups = computed(() => [
 }
 
 .section {
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .section:last-child {
@@ -722,17 +722,17 @@ const variableGroups = computed(() => [
   justify-content: space-between;
   cursor: pointer;
   user-select: none;
-  transition: background 0.2s;
+  transition: background var(--transition-fast);
 }
 
 .section-header:hover {
-  background: #f5f7fa;
+  background: var(--color-border-light);
 }
 
 .section-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-dark);
   flex: 1;
 }
 
@@ -742,7 +742,7 @@ const variableGroups = computed(() => [
 
 .toggle-icon {
   font-size: 14px;
-  color: #909399;
+  color: var(--color-medium);
   transition: transform 0.3s;
 }
 
@@ -759,29 +759,29 @@ const variableGroups = computed(() => [
 }
 
 :deep(.el-form-item__label) {
-  font-size: 12px !important;
-  color: #606266 !important;
-  font-weight: 500;
+  font-size: var(--font-size-xs) !important;
+  color: var(--color-medium) !important;
+  font-weight: var(--font-weight-medium);
   margin-bottom: 8px;
 }
 
 :deep(.el-input__inner),
 :deep(.el-textarea__inner) {
-  font-size: 13px;
+  font-size: var(--font-size-sm);
 }
 
 .code-editor :deep(textarea) {
   font-family: 'JetBrains Mono', Consolas, monospace;
   font-size: 12px;
   line-height: 1.6;
-  background: #f8fafc;
+  background: var(--color-border-light);
 }
 
 .tip-content {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 :deep(.el-alert) {
@@ -798,22 +798,21 @@ const variableGroups = computed(() => [
 }
 
 :deep(.el-empty__description) {
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
-/* 滚动条样式 */
 .config-sections::-webkit-scrollbar {
   width: 6px;
 }
 
 .config-sections::-webkit-scrollbar-thumb {
-  background: #dcdfe6;
+  background: var(--color-border);
   border-radius: 3px;
 }
 
 .config-sections::-webkit-scrollbar-thumb:hover {
-  background: #c0c4cc;
+  background: var(--color-medium);
 }
 
 .config-sections::-webkit-scrollbar-track {
@@ -851,14 +850,14 @@ const variableGroups = computed(() => [
 .add-btn {
   width: 100%;
   border-style: dashed !important;
-  color: #606266;
+  color: var(--color-medium);
   font-weight: normal;
 }
 
 .add-btn:hover {
-  color: var(--color-primary-500);
-  border-color: var(--color-primary-300) !important;
-  background: var(--color-primary-50) !important;
+  color: var(--color-primary);
+  border-color: var(--color-primary) !important;
+  background: var(--color-primary-light) !important;
 }
 
 .info-row {
@@ -866,10 +865,9 @@ const variableGroups = computed(() => [
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
-/* 变量选择器 */
 .input-with-var {
   position: relative;
   display: flex;
@@ -889,16 +887,16 @@ const variableGroups = computed(() => [
   font-size: 12px;
   font-weight: 600;
   font-family: 'JetBrains Mono', Consolas, monospace;
-  color: #64748b;
-  border-color: #e2e8f0;
-  background: #f8fafc;
+  color: var(--color-medium);
+  border-color: var(--color-border);
+  background: var(--color-border-light);
   letter-spacing: 0;
 }
 
 .var-btn:hover {
-  color: #0ea5e9;
-  border-color: #0ea5e9;
-  background: #f0f9ff;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .var-selector {
@@ -915,33 +913,33 @@ const variableGroups = computed(() => [
 }
 
 .var-group-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #94a3b8;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-medium);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   padding: 4px 0 6px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border-light);
   margin-bottom: 4px;
 }
 
 .var-option {
   padding: 6px 8px;
   font-size: 12px;
-  color: #475569;
+  color: var(--color-dark);
   cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.15s;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
 }
 
 .var-option:hover {
-  background: #f1f5f9;
-  color: #0ea5e9;
+  background: var(--color-border-light);
+  color: var(--color-primary);
 }
 
 .var-empty {
-  font-size: 11px;
-  color: #cbd5e1;
+  font-size: var(--font-size-xs);
+  color: var(--color-border);
   padding: 4px 0;
   font-style: italic;
 }
@@ -951,13 +949,13 @@ const variableGroups = computed(() => [
 }
 
 .info-label {
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
 .info-value {
-  font-size: 12px;
-  color: #303133;
+  font-size: var(--font-size-xs);
+  color: var(--color-dark);
   font-family: 'JetBrains Mono', Consolas, monospace;
 }
 </style>

@@ -228,13 +228,12 @@ const applyPreset = (preset: (typeof presets)[0]) => {
 
 <style scoped>
 .search-panel {
-  background: #ffffff;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
-/* 主搜索区 */
 .search-main {
   margin-bottom: 16px;
 }
@@ -244,16 +243,16 @@ const applyPreset = (preset: (typeof presets)[0]) => {
   align-items: flex-start;
   gap: 12px;
   padding: 12px;
-  background: #f9fafb;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  transition: all 0.2s;
+  background: var(--color-border-light);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
 }
 
 .search-input-wrapper:focus-within {
-  border-color: var(--color-primary-900);
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+  border-color: var(--color-primary);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px rgba(98, 93, 245, 0.08);
 }
 
 .search-icon {
@@ -267,23 +266,23 @@ const applyPreset = (preset: (typeof presets)[0]) => {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 15px;
+  font-size: var(--font-size-lg);
   line-height: 1.5;
   resize: none;
   min-height: 24px;
   max-height: 120px;
   font-family: inherit;
+  color: var(--color-dark);
 }
 
 .search-btn {
   flex-shrink: 0;
   height: 36px;
   padding: 0 20px;
-  border-radius: 8px;
-  font-weight: 500;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
 }
 
-/* 快速配置 */
 .quick-config {
   display: flex;
   flex-direction: column;
@@ -301,17 +300,18 @@ const applyPreset = (preset: (typeof presets)[0]) => {
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  background: var(--color-border-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 13px;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+  color: var(--color-dark);
 }
 
 .preset-btn:hover {
-  background: #e5e7eb;
-  border-color: #d1d5db;
+  background: var(--color-border);
+  border-color: var(--color-medium);
   transform: translateY(-1px);
 }
 
@@ -320,8 +320,8 @@ const applyPreset = (preset: (typeof presets)[0]) => {
 }
 
 .preset-name {
-  font-weight: 500;
-  color: #374151;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark);
 }
 
 .basic-params {
@@ -330,8 +330,8 @@ const applyPreset = (preset: (typeof presets)[0]) => {
   gap: 20px;
   align-items: center;
   padding: 16px;
-  background: #f9fafb;
-  border-radius: 8px;
+  background: var(--color-border-light);
+  border-radius: var(--radius-md);
 }
 
 .param-item {
@@ -341,16 +341,16 @@ const applyPreset = (preset: (typeof presets)[0]) => {
 }
 
 .param-label {
-  font-size: 13px;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
+  font-weight: var(--font-weight-medium);
   white-space: nowrap;
 }
 
 .param-value {
-  font-size: 13px;
-  color: var(--color-primary-900);
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
   min-width: 36px;
   text-align: center;
 }
@@ -363,29 +363,28 @@ const applyPreset = (preset: (typeof presets)[0]) => {
   width: 100%;
   padding: 8px;
   background: transparent;
-  border: 1px dashed #d1d5db;
-  border-radius: 6px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 13px;
-  color: #6b7280;
-  transition: all 0.2s;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
+  transition: all var(--transition-fast);
 }
 
 .advanced-toggle:hover {
-  border-color: #9ca3af;
-  color: #374151;
-  background: #f9fafb;
+  border-color: var(--color-medium);
+  color: var(--color-dark);
+  background: var(--color-border-light);
 }
 
 .toggle-icon {
   font-size: 10px;
 }
 
-/* 高级设置 */
 .advanced-panel {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -398,9 +397,9 @@ const applyPreset = (preset: (typeof presets)[0]) => {
 }
 
 .section-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #374151;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-dark);
   margin: 0;
 }
 
@@ -421,8 +420,8 @@ const applyPreset = (preset: (typeof presets)[0]) => {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  color: #6b7280;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
 }
 
 .label-icon {
@@ -430,9 +429,9 @@ const applyPreset = (preset: (typeof presets)[0]) => {
 }
 
 .weight-value {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-primary-900);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
   text-align: center;
 }
 
@@ -444,37 +443,36 @@ const applyPreset = (preset: (typeof presets)[0]) => {
 
 .mode-btn {
   padding: 12px;
-  background: #f9fafb;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
+  background: var(--color-border-light);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
   text-align: left;
 }
 
 .mode-btn:hover {
-  border-color: #d1d5db;
-  background: #f3f4f6;
+  border-color: var(--color-medium);
+  background: var(--color-border-light);
 }
 
 .mode-btn.active {
-  border-color: var(--color-primary-900);
-  background: #f1f5f9;
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .mode-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-dark);
   margin-bottom: 4px;
 }
 
 .mode-desc {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
-/* 响应式 */
 @media (max-width: 768px) {
   .basic-params {
     flex-direction: column;

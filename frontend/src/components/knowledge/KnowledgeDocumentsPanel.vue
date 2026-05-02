@@ -297,19 +297,18 @@ const getFileIcon = (fileType?: string) => {
 
 <style scoped>
 .knowledge-panel {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
 }
 
-/* 头部 */
 .panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .header-left {
@@ -319,18 +318,18 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .panel-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
   margin: 0;
-  color: #1f2937;
+  color: var(--color-dark);
 }
 
 .stats {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
-  color: #6b7280;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
 }
 
 .stat-item {
@@ -338,7 +337,7 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .stat-divider {
-  color: #d1d5db;
+  color: var(--color-border);
 }
 
 .header-right {
@@ -350,11 +349,10 @@ const getFileIcon = (fileType?: string) => {
   margin-right: 4px;
 }
 
-/* 设置面板 */
 .settings-panel {
   padding: 16px 24px;
-  background: #f9fafb;
-  border-bottom: 1px solid #f0f0f0;
+  background: var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
   display: flex;
   gap: 24px;
 }
@@ -366,25 +364,24 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .setting-label {
-  font-size: 13px;
-  color: #374151;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  color: var(--color-dark);
+  font-weight: var(--font-weight-medium);
   min-width: 70px;
 }
 
 .setting-hint {
-  font-size: 12px;
-  color: #9ca3af;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
-/* 工具栏 */
 .toolbar {
   padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .search-input {
@@ -398,26 +395,25 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .selected-count {
-  font-size: 13px;
-  color: var(--color-primary-900);
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
 }
 
-/* 拖拽上传区域 */
 .upload-area {
   margin: 40px 24px;
   padding: 60px 20px;
-  border: 2px dashed #d1d5db;
-  border-radius: 12px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
   text-align: center;
-  transition: all 0.3s;
+  transition: all var(--transition-slow);
   cursor: pointer;
 }
 
 .upload-area:hover,
 .upload-area.dragging {
-  border-color: var(--color-primary-100);
-  background: #f1f5f9;
+  border-color: var(--color-primary);
+  background: var(--color-border-light);
 }
 
 .upload-icon {
@@ -426,24 +422,23 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .upload-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #374151;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark);
   margin-bottom: 8px;
 }
 
 .upload-hint {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--font-size-base);
+  color: var(--color-medium);
   margin-bottom: 12px;
 }
 
 .upload-formats {
-  font-size: 12px;
-  color: #9ca3af;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
-/* 文档卡片网格 */
 .documents-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -453,23 +448,23 @@ const getFileIcon = (fileType?: string) => {
 
 .doc-card {
   position: relative;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 16px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .doc-card:hover {
-  border-color: var(--color-primary-900);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
 }
 
 .doc-card.selected {
-  border-color: var(--color-primary-900);
-  background: #f1f5f9;
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .card-checkbox {
@@ -490,9 +485,9 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .card-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1f2937;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark);
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -509,8 +504,8 @@ const getFileIcon = (fileType?: string) => {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
-  color: #6b7280;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
 .meta-icon {
@@ -518,8 +513,8 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .card-time {
-  font-size: 11px;
-  color: #9ca3af;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium);
 }
 
 .card-actions {
@@ -527,7 +522,7 @@ const getFileIcon = (fileType?: string) => {
   gap: 8px;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid var(--color-border-light);
 }
 
 .card-status {
@@ -539,17 +534,16 @@ const getFileIcon = (fileType?: string) => {
 .status-badge {
   display: inline-block;
   padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
 }
 
 .status-badge.success {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
-/* 空状态 */
 .empty-state {
   padding: 60px 20px;
   text-align: center;
@@ -562,11 +556,10 @@ const getFileIcon = (fileType?: string) => {
 }
 
 .empty-text {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--font-size-base);
+  color: var(--color-medium);
 }
 
-/* 响应式 */
 @media (max-width: 768px) {
   .documents-grid {
     grid-template-columns: 1fr;

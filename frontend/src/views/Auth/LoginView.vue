@@ -229,14 +229,13 @@ const handleKeyPress = (e: KeyboardEvent) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, var(--color-border-light) 0%, var(--color-border) 100%);
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 40px 20px;
 }
 
-/* 背景装饰 */
 .bg-decoration {
   position: absolute;
   inset: 0;
@@ -253,7 +252,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
 .circle-1 {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-medium) 100%);
   top: -200px;
   right: -100px;
   opacity: 0.1;
@@ -271,27 +270,23 @@ const handleKeyPress = (e: KeyboardEvent) => {
 .circle-3 {
   width: 200px;
   height: 200px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);
   top: 50%;
   left: 10%;
   opacity: 0.05;
 }
 
-/* 登录卡片 */
 .login-card {
   width: 100%;
   max-width: 420px;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
   padding: 40px;
   position: relative;
   z-index: 1;
 }
 
-/* 头部 */
 .login-header {
   text-align: center;
   margin-bottom: 32px;
@@ -307,8 +302,8 @@ const handleKeyPress = (e: KeyboardEvent) => {
 .logo-box {
   width: 44px;
   height: 44px;
-  background: #0f172a;
-  border-radius: 12px;
+  background: var(--color-dark);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -316,26 +311,25 @@ const handleKeyPress = (e: KeyboardEvent) => {
 }
 
 .brand-text {
-  font-size: 22px;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
   letter-spacing: -0.5px;
 }
 
 .login-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
   margin: 0 0 8px;
 }
 
 .login-subtitle {
-  font-size: 14px;
-  color: #64748b;
+  font-size: var(--font-size-base);
+  color: var(--color-medium);
   margin: 0;
 }
 
-/* 表单 */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -349,9 +343,9 @@ const handleKeyPress = (e: KeyboardEvent) => {
 }
 
 .form-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark);
 }
 
 .input-wrapper {
@@ -363,7 +357,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
 .input-icon {
   position: absolute;
   left: 14px;
-  color: #9ca3af;
+  color: var(--color-border);
   font-size: 18px;
   z-index: 1;
 }
@@ -372,39 +366,38 @@ const handleKeyPress = (e: KeyboardEvent) => {
   width: 100%;
   height: 48px;
   padding: 0 44px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #0f172a;
-  background: #f8fafc;
-  transition: all 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-lg);
+  color: var(--color-dark);
+  background: var(--color-border-light);
+  transition: all var(--transition-normal);
   outline: none;
 }
 
 .form-input::placeholder {
-  color: #9ca3af;
+  color: var(--color-border);
 }
 
 .form-input:focus {
-  border-color: var(--color-primary-900);
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+  border-color: var(--color-primary);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px rgba(98, 93, 245, 0.08);
 }
 
 .toggle-password {
   position: absolute;
   right: 14px;
-  color: #9ca3af;
+  color: var(--color-border);
   font-size: 18px;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: color var(--transition-fast);
 }
 
 .toggle-password:hover {
-  color: #64748b;
+  color: var(--color-medium);
 }
 
-/* 选项行 */
 .form-options {
   display: flex;
   justify-content: space-between;
@@ -421,44 +414,43 @@ const handleKeyPress = (e: KeyboardEvent) => {
 .remember-me input[type='checkbox'] {
   width: 16px;
   height: 16px;
-  accent-color: var(--color-primary-900);
+  accent-color: var(--color-primary);
   cursor: pointer;
 }
 
 .checkbox-label {
-  font-size: 14px;
-  color: #64748b;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
 }
 
 .forgot-link {
-  font-size: 14px;
-  color: #3b82f6;
+  font-size: var(--font-size-sm);
+  color: var(--color-info);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color var(--transition-fast);
 }
 
 .forgot-link:hover {
-  color: #2563eb;
+  color: var(--color-primary);
 }
 
-/* 登录按钮 */
 .login-btn {
   width: 100%;
   height: 48px;
-  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-text);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
   margin-top: 8px;
 }
 
 .login-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
+  box-shadow: 0 4px 12px rgba(98, 93, 245, 0.3);
 }
 
 .login-btn:active:not(:disabled) {
@@ -492,13 +484,12 @@ const handleKeyPress = (e: KeyboardEvent) => {
   }
 }
 
-/* 分隔线 */
 .divider {
   display: flex;
   align-items: center;
   margin: 24px 0;
-  color: #9ca3af;
-  font-size: 13px;
+  color: var(--color-border);
+  font-size: var(--font-size-sm);
 }
 
 .divider::before,
@@ -506,14 +497,13 @@ const handleKeyPress = (e: KeyboardEvent) => {
   content: '';
   flex: 1;
   height: 1px;
-  background: #e2e8f0;
+  background: var(--color-border);
 }
 
 .divider span {
   padding: 0 16px;
 }
 
-/* 社交登录 */
 .social-login {
   display: flex;
   gap: 12px;
@@ -526,19 +516,19 @@ const handleKeyPress = (e: KeyboardEvent) => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  background: var(--color-border-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .social-btn:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
+  background: var(--color-border);
+  border-color: var(--color-medium);
 }
 
 .social-btn:disabled {
@@ -547,38 +537,36 @@ const handleKeyPress = (e: KeyboardEvent) => {
 }
 
 .social-btn.loading {
-  background: #f1f5f9;
+  background: var(--color-border);
 }
 
 .btn-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid #e2e8f0;
-  border-top-color: var(--color-primary-900);
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 
-/* 注册链接 */
 .register-link {
   text-align: center;
   margin-top: 24px;
-  font-size: 14px;
-  color: #64748b;
+  font-size: var(--font-size-sm);
+  color: var(--color-medium);
 }
 
 .register-link a {
-  color: #3b82f6;
+  color: var(--color-info);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   margin-left: 4px;
 }
 
 .register-link a:hover {
-  color: #2563eb;
+  color: var(--color-primary);
 }
 
-/* 底部 */
 .footer {
   position: absolute;
   bottom: 20px;
@@ -586,12 +574,11 @@ const handleKeyPress = (e: KeyboardEvent) => {
 }
 
 .footer p {
-  font-size: 12px;
-  color: #9ca3af;
+  font-size: var(--font-size-xs);
+  color: var(--color-border);
   margin: 0;
 }
 
-/* 响应式 */
 @media (max-width: 480px) {
   .login-card {
     padding: 32px 24px;
