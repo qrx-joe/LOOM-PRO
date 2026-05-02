@@ -538,7 +538,7 @@ const formatDate = (dateStr?: string) => {
 
 .create-hint {
   font-size: 12px;
-  color: var(--color-border);
+  color: var(--color-medium);
 }
 
 .create-card:hover .create-text {
