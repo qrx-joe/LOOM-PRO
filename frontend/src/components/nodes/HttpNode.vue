@@ -82,8 +82,8 @@ const methodColor = computed(() => {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 6px 6px 0 0;
+  background: linear-gradient(135deg, #374151 0%, #1F1F1F 100%);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .icon-wrapper {

@@ -1,46 +1,46 @@
 /* ========================================================================
-   LOOM-PRO Design System - Inspired by Loom & AgentFlow
+   LOOM-PRO Design System - Black & White Style
    ======================================================================== */
 
 :root {
   /* ========================================================================
-     Brand Colors - Loom's Signature Purple + Warm Neutrals
+     Brand Colors - Grayscale / Black & White
      ======================================================================== */
 
-  /* Primary - Loom Purple */
-  --color-primary: #625DF5;
-  --color-primary-hover: #524ACC;
-  --color-primary-active: #433DBB;
-  --color-primary-light: #EEF0FF;
+  /* Primary - Neutral Black */
+  --color-primary: #1F1F1F;
+  --color-primary-hover: #374151;
+  --color-primary-active: #4B5563;
+  --color-primary-light: #F3F4F6;
   --color-primary-text: #FFFFFF;
 
-  /* Neutral - Warm Grays (Loom style) */
+  /* Neutral - Grayscale (Loom style) */
   --color-dark: #1F1F1F;      /* 标题/重要文字 */
-  --color-medium: #6B6B6B;     /* 正文/次要信息 */
-  --color-light: #F3F3F3;     /* 背景/卡片 */
-  --color-border: #E5E5E5;    /* 边框/分割线 */
-  --color-border-light: #F0F0F0;
+  --color-medium: #6B7280;     /* 正文/次要信息 */
+  --color-light: #F9FAFB;     /* 背景/卡片 */
+  --color-border: #E5E7EB;    /* 边框/分割线 */
+  --color-border-light: #F3F4F6;
 
   /* App Background */
-  --color-bg: #F5F5F5;
+  --color-bg: #FFFFFF;
   --color-surface: #FFFFFF;
 
-  /* Semantic Colors */
-  --color-success: #34D399;
+  /* Semantic Colors - Grayscale */
+  --color-success: #059669;
   --color-success-bg: #D1FAE5;
-  --color-success-text: #065F46;
+  --color-success-text: #064E3B;
 
-  --color-warning: #FBBF24;
+  --color-warning: #D97706;
   --color-warning-bg: #FEF3C7;
   --color-warning-text: #92400E;
 
-  --color-error: #F87171;
+  --color-error: #DC2626;
   --color-error-bg: #FEE2E2;
   --color-error-text: #991B1B;
 
-  --color-info: #60A5FA;
-  --color-info-bg: #DBEAFE;
-  --color-info-text: #1E40AF;
+  --color-info: #6B7280;
+  --color-info-bg: #F3F4F6;
+  --color-info-text: #374151;
 
   /* ========================================================================
      Typography
@@ -109,11 +109,11 @@
      Element Plus Overrides
      ======================================================================== */
   --el-color-primary: var(--color-primary);
-  --el-color-primary-light-3: #8B8AF5;
-  --el-color-primary-light-5: #AEAEF7;
+  --el-color-primary-light-3: #9CA3AF;
+  --el-color-primary-light-5: #D1D5DB;
   --el-color-primary-light-7: var(--color-primary-light);
-  --el-color-primary-light-8: #F5F5FF;
-  --el-color-primary-light-9: #FAFAFF;
+  --el-color-primary-light-8: #F9FAFB;
+  --el-color-primary-light-9: #FFFFFF;
   --el-color-primary-dark-2: var(--color-primary-hover);
 
   --el-border-radius-base: var(--radius-md);
@@ -129,7 +129,7 @@
   /* Input */
   --el-input-border-radius: var(--radius-md);
   --el-input-border-color: var(--color-border);
-  --el-input-hover-border-color: var(--color-primary);
+  --el-input-hover-border-color: var(--color-medium);
   --el-input-focus-border-color: var(--color-primary);
 }
 

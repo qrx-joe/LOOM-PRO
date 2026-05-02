@@ -261,7 +261,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
 .circle-2 {
   width: 300px;
   height: 300px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #374151 0%, #1F1F1F 100%);
   bottom: -150px;
   left: -100px;
   opacity: 0.1;
