@@ -29,7 +29,11 @@ export class CodeExecutionService {
    * 注意：这是一个简化实现，使用 Function 构造器创建隔离环境
    * 生产环境建议使用 isolated-vm 或 Docker 沙箱
    */
-  async execute(config: CodeExecutionConfig, nodeId: string): Promise<CodeExecutionResult> {
+  async execute(
+    config: CodeExecutionConfig,
+    nodeId: string,
+    signal?: AbortSignal,
+  ): Promise<CodeExecutionResult> {
     const startTime = Date.now();
     const logs: string[] = [];
     const errors: string[] = [];
@@ -48,7 +52,7 @@ export class CodeExecutionService {
       this.logger.debug(`执行代码节点 ${nodeId}，超时: ${timeout}ms`);
 
       // 执行代码
-      const output = await this.runWithTimeout(wrappedCode, context, timeout);
+      const output = await this.runWithTimeout(wrappedCode, context, timeout, signal);
 
       const executionTime = Date.now() - startTime;
 
@@ -193,15 +197,23 @@ export class CodeExecutionService {
     code: string,
     context: Record<string, any>,
     timeout: number,
+    signal?: AbortSignal,
   ): Promise<any> {
     // 创建函数
     const func = new Function(...Object.keys(context), `return (${code})`);
 
     // 创建超时 Promise
     const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         reject(new Error(`代码执行超时（${timeout}ms）`));
       }, timeout);
+
+      if (signal) {
+        signal.addEventListener('abort', () => {
+          clearTimeout(timer);
+          reject(new Error('代码执行已取消'));
+        });
+      }
     });
 
     // 竞争执行

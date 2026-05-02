@@ -22,6 +22,7 @@ export class AgentService {
     input: string;
     context: Record<string, any>;
     history?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
+    signal?: AbortSignal;
   }) {
     const model = process.env.LLM_MODEL || 'deepseek-chat';
 
@@ -30,14 +31,17 @@ export class AgentService {
 
     if (this.client) {
       try {
-        const response = await this.client.chat.completions.create({
-          model,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            ...history,
-            { role: 'user', content: payload.input },
-          ],
-        });
+        const response = await this.client.chat.completions.create(
+          {
+            model,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              ...history,
+              { role: 'user', content: payload.input },
+            ],
+          },
+          { signal: payload.signal },
+        );
         const content = response.choices[0]?.message?.content;
         if (!content) {
           console.error('[AgentService] LLM returned empty content');

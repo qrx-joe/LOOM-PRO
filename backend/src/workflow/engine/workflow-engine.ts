@@ -5,6 +5,21 @@ import {
   WorkflowNode,
   PerformanceMetrics,
 } from '../types';
+
+/** 深克隆辅助：优先 structuredClone，失败时 fallback 到 JSON */
+function deepClone<T>(obj: T): T {
+  try {
+    return structuredClone(obj);
+  } catch {
+    return JSON.parse(JSON.stringify(obj));
+  }
+}
+
+/** 安全解析数字：过滤 NaN/Infinity/非数字，返回默认值 */
+function safeNumber(value: unknown, defaultValue: number): number {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : defaultValue;
+}
 import { CompensationExecutor, CompensationAction } from './compensation-executor';
 import { AgentService } from '../../agent/agent.service';
 import { KnowledgeService } from '../../knowledge/knowledge.service';
@@ -88,6 +103,8 @@ export class WorkflowEngine {
         output: context.variables,
         logs: context.logs,
         steps: context.steps,
+        compensationStatus: context.compensationStatus || 'none',
+        compensationErrors: context.compensationErrors,
       };
     } catch (error: any) {
       return {
@@ -95,11 +112,13 @@ export class WorkflowEngine {
         error: error?.message || '执行失败',
         logs: context.logs,
         steps: context.steps,
+        compensationStatus: context.compensationStatus || 'none',
+        compensationErrors: context.compensationErrors,
       };
     }
   }
 
-  private async executeNode(node: WorkflowNode, context: ExecutionContext) {
+  private async executeNode(node: WorkflowNode, context: ExecutionContext, signal: AbortSignal) {
     context.logs.push(`执行节点：${node.type} (${node.id})`);
 
     switch (node.type) {
@@ -107,9 +126,9 @@ export class WorkflowEngine {
         context.variables[node.id] = context.input;
         return;
 
-      case 'knowledge':
+      case 'knowledge': {
         // 调用知识库检索
-        context.variables[node.id] = await this.knowledgeService.search(
+        const result = await this.knowledgeService.search(
           context.input,
           node.data?.topK || 3,
           {
@@ -117,10 +136,14 @@ export class WorkflowEngine {
             hybrid: node.data?.hybrid,
             rerank: node.data?.rerank,
           },
+          signal,
         );
+        if (signal.aborted) throw new Error('节点执行已取消');
+        context.variables[node.id] = result;
         return;
+      }
 
-      case 'llm':
+      case 'llm': {
         // 调用大模型，支持变量模板替换
         const llmPrompt = this.replaceVariables(
           node.data?.prompt || '你是一个智能助手',
@@ -133,19 +156,23 @@ export class WorkflowEngine {
             ? context.input
             : (context.variables[inputSourceKey] ?? context.input);
 
-        context.variables[node.id] = await this.agentService.chat({
+        const result = await this.agentService.chat({
           prompt: llmPrompt,
           input: llmInput,
           context: context.variables,
+          signal,
         });
+        if (signal.aborted) throw new Error('节点执行已取消');
+        context.variables[node.id] = result;
         return;
+      }
 
       case 'condition':
         // 条件节点只做判断，不在这里选择路径
         context.logs.push('条件节点已评估条件');
         return;
 
-      case 'code':
+      case 'code': {
         // 执行代码节点
         if (!this.codeExecutionService) {
           throw new Error('代码执行服务未初始化');
@@ -155,10 +182,13 @@ export class WorkflowEngine {
           timeout: node.data?.timeout || 5000,
           context: context.variables,
         };
-        context.variables[node.id] = await this.codeExecutionService.execute(codeConfig, node.id);
+        const result = await this.codeExecutionService.execute(codeConfig, node.id, signal);
+        if (signal.aborted) throw new Error('节点执行已取消');
+        context.variables[node.id] = result;
         return;
+      }
 
-      case 'http':
+      case 'http': {
         // HTTP 请求节点
         if (!this.httpService) {
           throw new Error('HTTP 服务未初始化');
@@ -179,12 +209,18 @@ export class WorkflowEngine {
           ? this.httpService.replaceVariablesInBody(httpConfig.body, context.variables)
           : undefined;
 
-        context.variables[node.id] = await this.httpService.execute({
-          ...httpConfig,
-          url: resolvedUrl,
-          body: resolvedBody,
-        });
+        const result = await this.httpService.execute(
+          {
+            ...httpConfig,
+            url: resolvedUrl,
+            body: resolvedBody,
+          },
+          signal,
+        );
+        if (signal.aborted) throw new Error('节点执行已取消');
+        context.variables[node.id] = result;
         return;
+      }
 
       case 'end':
         context.logs.push('到达结束节点');
@@ -193,14 +229,14 @@ export class WorkflowEngine {
   }
 
   private async executeNodeWithPolicy(node: WorkflowNode, context: ExecutionContext) {
-    const retryCount = Number(node.data?.retryCount || 0);
-    const retryDelayMs = Number(node.data?.retryDelayMs || 0);
-    const timeoutMs = Number(node.data?.timeoutMs || 0);
+    const retryCount = safeNumber(node.data?.retryCount, 0);
+    const retryDelayMs = safeNumber(node.data?.retryDelayMs, 0);
+    const timeoutMs = safeNumber(node.data?.timeoutMs, 0);
     const onError =
       node.data?.onError === 'skip' || node.data?.onError === 'rollback'
         ? node.data?.onError
         : 'fail';
-    const snapshot = { ...context.variables };
+    const snapshot = deepClone(context.variables);
 
     // Record Step Start
     const startTime = Date.now();
@@ -220,13 +256,18 @@ export class WorkflowEngine {
     for (let attempt = 0; attempt <= retryCount; attempt += 1) {
       try {
         if (attempt > 0) {
-          context.variables = { ...snapshot };
+          context.variables = deepClone(snapshot);
         }
 
+        const abortController = new AbortController();
         if (timeoutMs > 0) {
-          await this.withTimeout(this.executeNode(node, context), timeoutMs);
+          await this.withTimeout(
+            this.executeNode(node, context, abortController.signal),
+            timeoutMs,
+            abortController,
+          );
         } else {
-          await this.executeNode(node, context);
+          await this.executeNode(node, context, abortController.signal);
         }
 
         // 根据节点类型收集特定指标
@@ -310,7 +351,7 @@ export class WorkflowEngine {
       return 'failed';
     }
     if (onError === 'rollback') {
-      context.variables = { ...snapshot };
+      context.variables = deepClone(snapshot);
       context.logs.push(`节点 ${node.id} 已回滚（失败后策略）`);
       return 'failed';
     }
@@ -353,25 +394,45 @@ export class WorkflowEngine {
   }
 
   private async runCompensations(context: ExecutionContext) {
-    const stack = [...context.compensations].reverse();
-    for (const task of stack) {
+    const failedMessages: string[] = [];
+
+    // 从栈顶逐个弹出执行，只有成功的才移除，失败的记录但不重新入栈
+    while (context.compensations.length > 0) {
+      const task = context.compensations.pop();
+      if (!task) continue;
+
       try {
-        await task();
-      } catch {
-        context.logs.push('补偿执行失败');
+        // 补偿执行使用独立的 10 秒超时控制
+        await this.withTimeout(Promise.resolve(task()), 10000);
+      } catch (error: any) {
+        const message = error?.message || '补偿执行失败';
+        context.logs.push(`补偿执行失败: ${message}`);
+        failedMessages.push(message);
       }
     }
-    context.compensations = [];
+
+    context.compensationStatus = failedMessages.length > 0 ? 'partial' : 'success';
+    if (failedMessages.length > 0) {
+      context.compensationErrors = failedMessages;
+    }
   }
 
   private async executeCompensationAction(action: CompensationAction, context: ExecutionContext) {
     await this.compensationExecutor.execute(action, context, context.logs);
   }
 
-  private async withTimeout<T>(task: Promise<T>, timeoutMs: number) {
+  private async withTimeout<T>(
+    task: Promise<T>,
+    timeoutMs: number,
+    abortController?: AbortController,
+  ) {
+    const controller = abortController || new AbortController();
     let timer: ReturnType<typeof setTimeout> | undefined;
     const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(() => reject(new Error('节点执行超时')), timeoutMs);
+      timer = setTimeout(() => {
+        controller.abort();
+        reject(new Error('节点执行超时'));
+      }, timeoutMs);
     });
     try {
       return await Promise.race([task, timeout]);

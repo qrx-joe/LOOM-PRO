@@ -281,9 +281,20 @@ export class KnowledgeService {
     }
   }
 
-  async search(query: string, topK = 3, options: KnowledgeSearchOptions = {}) {
+  async search(
+    query: string,
+    topK = 3,
+    options: KnowledgeSearchOptions = {},
+    signal?: AbortSignal,
+  ) {
+    if (signal?.aborted) {
+      throw new Error('知识库检索已取消');
+    }
     const start = Date.now();
     const result = await this.searchService.search(query, topK, options);
+    if (signal?.aborted) {
+      throw new Error('知识库检索已取消');
+    }
     void this.metricsService.recordKnowledgeSearch(Date.now() - start);
     return result;
   }

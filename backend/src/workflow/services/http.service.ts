@@ -9,7 +9,7 @@ export class WorkflowHttpService {
   /**
    * 执行 HTTP 请求
    */
-  async execute(config: HttpNodeConfig): Promise<HttpResponse> {
+  async execute(config: HttpNodeConfig, signal?: AbortSignal): Promise<HttpResponse> {
     const startTime = Date.now();
     const {
       url,
@@ -32,6 +32,7 @@ export class WorkflowHttpService {
           method: method as Method,
           headers: this.sanitizeHeaders(headers),
           timeout,
+          signal,
           validateStatus: config.validateStatus || ((status) => status >= 200 && status < 300),
         };
 

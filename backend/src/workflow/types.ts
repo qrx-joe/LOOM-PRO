@@ -78,6 +78,10 @@ export interface ExecutionContext {
   compensations: Array<() => void | Promise<void>>;
   steps: ExecutionStep[];
   metrics?: PerformanceMetrics[];
+  /** 补偿执行状态 */
+  compensationStatus?: 'success' | 'partial' | 'none';
+  /** 补偿执行失败的错误信息 */
+  compensationErrors?: string[];
 }
 
 export interface ExecutionResult {
@@ -86,4 +90,8 @@ export interface ExecutionResult {
   logs: string[];
   steps?: ExecutionStep[];
   error?: string;
+  /** 补偿执行状态 */
+  compensationStatus?: 'success' | 'partial' | 'none';
+  /** 补偿执行失败的错误信息 */
+  compensationErrors?: string[];
 }
