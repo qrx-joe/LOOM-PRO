@@ -89,7 +89,7 @@ export class RecursiveCharacterTextSplitter {
           if (this.chunkOverlap > 0 && currentChunk.length > this.chunkOverlap) {
             const overlapText = currentChunk.slice(-this.chunkOverlap);
             currentChunk = overlapText + '\n\n' + para;
-            currentStart = paraStart - this.chunkOverlap - 2;
+            currentStart = Math.max(0, paraStart - this.chunkOverlap);
           } else {
             currentChunk = para;
             currentStart = paraStart;

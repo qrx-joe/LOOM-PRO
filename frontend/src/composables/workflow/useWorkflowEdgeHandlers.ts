@@ -137,72 +137,10 @@ export const useWorkflowEdgeHandlers = (workflowStore: any, addEdges: (edges: an
     ]);
     workflowStore.saveHistory();
   };
-  const handleEdgeClick = (_: any, edge: any) => {
-    const sourceNode = workflowStore.nodes.find((node: any) => node.id === edge.source);
-    if (sourceNode?.type !== 'condition') return;
-
-    const nextLabel = edge.label === 'True' ? 'False' : 'True';
-    workflowStore.edges = workflowStore.edges.map((item: any) => {
-      if (item.id !== edge.id) return item;
-      return {
-        ...item,
-        label: nextLabel,
-        branchType: nextLabel,
-        style: getEdgeStyle(nextLabel),
-        labelStyle: getEdgeLabelStyle(nextLabel),
-        labelBgStyle: getEdgeLabelBgStyle(nextLabel),
-      };
-    });
-
-    const siblings = workflowStore.edges.filter(
-      (item: any) => item.source === edge.source && item.id !== edge.id,
-    );
-    if (nextLabel === 'True') {
-      sourceNode.data = {
-        ...sourceNode.data,
-        trueEdgeId: edge.id,
-        trueTarget: edge.target,
-        falseEdgeId: siblings[0]?.id,
-        falseTarget: siblings[0]?.target,
-      };
-      workflowStore.edges = workflowStore.edges.map((item: any) => {
-        if (item.source !== edge.source || item.id === edge.id) return item;
-        return {
-          ...item,
-          label: 'False',
-          branchType: 'False',
-          style: getEdgeStyle('False'),
-          labelStyle: getEdgeLabelStyle('False'),
-          labelBgStyle: getEdgeLabelBgStyle('False'),
-        };
-      });
-    } else {
-      sourceNode.data = {
-        ...sourceNode.data,
-        falseEdgeId: edge.id,
-        falseTarget: edge.target,
-        trueEdgeId: siblings[0]?.id,
-        trueTarget: siblings[0]?.target,
-      };
-      workflowStore.edges = workflowStore.edges.map((item: any) => {
-        if (item.source !== edge.source || item.id === edge.id) return item;
-        return {
-          ...item,
-          label: 'True',
-          branchType: 'True',
-          style: getEdgeStyle('True'),
-          labelStyle: getEdgeLabelStyle('True'),
-          labelBgStyle: getEdgeLabelBgStyle('True'),
-        };
-      });
-    }
-  };
-
   return {
     getEdgeStyle,
     getEdgeLabelStyle,
     getEdgeLabelBgStyle,
     handleConnect,
-    handleEdgeClick,
   };
 };
