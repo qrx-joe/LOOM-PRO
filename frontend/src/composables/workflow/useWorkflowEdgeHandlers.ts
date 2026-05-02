@@ -1,5 +1,5 @@
 import { ElMessage } from 'element-plus';
-export const useWorkflowEdgeHandlers = (workflowStore: any, addEdges: (edges: any[]) => void) => {
+export const useWorkflowEdgeHandlers = (workflowStore: any) => {
   const getEdgeStyle = (label?: string) => {
     if (label === 'True') {
       return { stroke: '#16a34a', strokeWidth: 2 };
@@ -113,29 +113,14 @@ export const useWorkflowEdgeHandlers = (workflowStore: any, addEdges: (edges: an
       }
     }
 
-    if (sourceNode?.type === 'condition' && label) {
-      if (label === 'True') {
-        sourceNode.data = { ...sourceNode.data, trueEdgeId: params.id, trueTarget: params.target };
-      } else if (label === 'False') {
-        sourceNode.data = {
-          ...sourceNode.data,
-          falseEdgeId: params.id,
-          falseTarget: params.target,
-        };
-      }
-    }
-
-    addEdges([
-      {
-        ...params,
-        label,
-        branchType: label,
-        style: getEdgeStyle(label),
-        labelStyle: getEdgeLabelStyle(label),
-        labelBgStyle: getEdgeLabelBgStyle(label),
-      },
-    ]);
-    workflowStore.saveHistory();
+    workflowStore.addEdge({
+      ...params,
+      label,
+      branchType: label,
+      style: getEdgeStyle(label),
+      labelStyle: getEdgeLabelStyle(label),
+      labelBgStyle: getEdgeLabelBgStyle(label),
+    });
   };
   return {
     getEdgeStyle,

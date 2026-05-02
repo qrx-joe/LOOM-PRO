@@ -163,7 +163,24 @@ export const useWorkflowStore = defineStore('workflow', {
       }
     },
 
-    addEdge(edge: WorkflowEdge) {
+    addEdge(
+      edge: WorkflowEdge & {
+        branchType?: string;
+        label?: string;
+        style?: any;
+        labelStyle?: any;
+        labelBgStyle?: any;
+      },
+    ) {
+      // 同步 condition 节点的 edge 追踪信息
+      const sourceNode = this.nodes.find((n) => n.id === edge.source);
+      if (sourceNode?.type === 'condition' && edge.branchType) {
+        if (edge.branchType === 'True') {
+          sourceNode.data = { ...sourceNode.data, trueEdgeId: edge.id, trueTarget: edge.target };
+        } else if (edge.branchType === 'False') {
+          sourceNode.data = { ...sourceNode.data, falseEdgeId: edge.id, falseTarget: edge.target };
+        }
+      }
       this.edges.push(edge);
       this.saveHistory();
     },

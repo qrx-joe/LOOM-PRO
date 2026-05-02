@@ -67,7 +67,7 @@ onMounted(async () => {
 // );
 const FLOW_ID = 'workflow-canvas';
 const vueFlow = useVueFlow(FLOW_ID);
-const { onConnect, addEdges, project } = vueFlow;
+const { onConnect, project } = vueFlow;
 
 // Node & Edge Types
 const nodeTypes = {
@@ -89,7 +89,7 @@ const addNodesToStore = (nodes: any[]) => {
 };
 
 // Logic Hooks
-const { handleConnect } = useWorkflowEdgeHandlers(workflowStore, addEdges);
+const { handleConnect } = useWorkflowEdgeHandlers(workflowStore);
 onConnect(handleConnect);
 const { onDragOver, onDrop } = useWorkflowDragDrop(project, addNodesToStore);
 
