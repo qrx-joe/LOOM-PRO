@@ -28,6 +28,10 @@ export class RecursiveCharacterTextSplitter {
     this.chunkOverlap = options.chunkOverlap ?? 50;
     this.strategy = options.strategy ?? 'recursive';
     this.separators = options.separators ?? ['\n\n', '\n', '。', '.', '！', '!', '？', '?', '；', ';', ' ', ''];
+
+    if (this.chunkOverlap >= this.chunkSize) {
+      throw new Error(`chunkOverlap (${this.chunkOverlap}) must be less than chunkSize (${this.chunkSize})`);
+    }
   }
 
   splitText(text: string): string[] {

@@ -89,9 +89,8 @@ LOOM-PRO/
 │       ├── views/Workflow/       # 工作流主视图
 │       ├── components/workflow/  # 节点工具栏（含 Undo/Redo 按钮）
 │       ├── composables/workflow/
-│       │   ├── useWorkflowHistory.ts   # 撤销重做（来自 LOOM）
-│       │   ├── useWorkflowValidation.ts
-│       │   └── useWorkflowCanvas.ts    # 桥接 store + history
+│       │   ├── useWorkflowHistory.ts   # 撤销重做历史记录管理
+│       │   └── useWorkflowValidation.ts
 │       ├── stores/               # Pinia
 │       └── styles/variables.css  # 工业靛蓝主题变量
 ├── docker-compose.yml             # 全栈编排

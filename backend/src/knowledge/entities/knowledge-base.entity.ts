@@ -6,6 +6,7 @@ export interface ChunkSettings {
   chunkSize: number;
   overlap: number;
   separators?: string[];
+  strategy?: 'fixed' | 'semantic' | 'recursive';
 }
 
 // 检索设置
@@ -33,6 +34,7 @@ export const defaultKnowledgeBaseSettings: KnowledgeBaseSettings = {
     method: 'auto',
     chunkSize: 500,
     overlap: 50,
+    strategy: 'recursive',
   },
   retrieval: {
     mode: 'hybrid',

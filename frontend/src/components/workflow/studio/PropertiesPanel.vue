@@ -281,6 +281,29 @@ const toggleSection = (section: string) => {
                       @update:model-value="$emit('update', node.id, { scoreThreshold: $event })"
                     />
                   </el-form-item>
+                  <el-form-item label="混合检索">
+                    <el-switch
+                      :model-value="node.data?.hybrid || false"
+                      @update:model-value="$emit('update', node.id, { hybrid: $event })"
+                    />
+                  </el-form-item>
+                  <el-form-item label="重排序">
+                    <el-switch
+                      :model-value="node.data?.rerank || false"
+                      @update:model-value="$emit('update', node.id, { rerank: $event })"
+                    />
+                  </el-form-item>
+                  <el-form-item label="分块策略">
+                    <el-select
+                      :model-value="node.data?.strategy || 'recursive'"
+                      style="width: 100%"
+                      @update:model-value="$emit('update', node.id, { strategy: $event })"
+                    >
+                      <el-option label="递归（中文优先）" value="recursive" />
+                      <el-option label="语义（按段落）" value="semantic" />
+                      <el-option label="固定长度" value="fixed" />
+                    </el-select>
+                  </el-form-item>
                 </template>
 
                 <!-- Condition Specific -->
@@ -552,25 +575,46 @@ const toggleSection = (section: string) => {
           <el-collapse-transition>
             <div v-show="expandedSections.error" class="section-content">
               <el-form label-position="top" size="default">
-                <el-form-item label="失败时">
-                  <el-select
-                    :model-value="node.data?.onError || 'stop'"
-                    style="width: 100%"
-                    @update:model-value="$emit('update', node.id, { onError: $event })"
-                  >
-                    <el-option label="停止执行" value="stop" />
-                    <el-option label="继续执行" value="continue" />
-                    <el-option label="重试" value="retry" />
-                  </el-select>
-                </el-form-item>
-                <el-form-item v-if="node.data?.onError === 'retry'" label="重试次数">
+                <el-form-item label="超时时间 (ms)">
                   <el-input-number
-                    :model-value="node.data?.retryCount || 3"
-                    :min="1"
+                    :model-value="node.data?.timeoutMs || 0"
+                    :min="0"
+                    :max="120000"
+                    :step="1000"
+                    style="width: 100%"
+                    @update:model-value="$emit('update', node.id, { timeoutMs: $event })"
+                  />
+                </el-form-item>
+                <el-form-item label="重试次数">
+                  <el-input-number
+                    :model-value="node.data?.retryCount || 0"
+                    :min="0"
                     :max="10"
                     style="width: 100%"
                     @update:model-value="$emit('update', node.id, { retryCount: $event })"
                   />
+                </el-form-item>
+                <el-form-item label="重试间隔 (ms)">
+                  <el-input-number
+                    :model-value="node.data?.retryDelayMs || 1000"
+                    :min="0"
+                    :max="30000"
+                    :step="500"
+                    style="width: 100%"
+                    @update:model-value="$emit('update', node.id, { retryDelayMs: $event })"
+                  />
+                </el-form-item>
+                <el-form-item label="失败时">
+                  <el-select
+                    :model-value="node.data?.onError || 'fail'"
+                    style="width: 100%"
+                    @update:model-value="$emit('update', node.id, { onError: $event })"
+                  >
+                    <el-option label="失败终止" value="fail" />
+                    <el-option label="失败跳过" value="skip" />
+                    <el-option label="回滚终止" value="rollback" />
+                    <el-option label="补偿终止" value="compensate" />
+                  </el-select>
                 </el-form-item>
               </el-form>
             </div>

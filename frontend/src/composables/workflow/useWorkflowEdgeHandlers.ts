@@ -135,6 +135,7 @@ export const useWorkflowEdgeHandlers = (workflowStore: any, addEdges: (edges: an
         labelBgStyle: getEdgeLabelBgStyle(label),
       },
     ]);
+    workflowStore.saveHistory();
   };
   const handleEdgeClick = (_: any, edge: any) => {
     const sourceNode = workflowStore.nodes.find((node: any) => node.id === edge.source);
