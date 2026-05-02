@@ -19,6 +19,7 @@ export interface HistoryPluginOptions {
 
 declare module 'pinia' {
   export interface PiniaCustomProperties<
+    Id extends string = string,
     S extends StateTree = StateTree,
     G = _GettersTree<S>,
     A = _ActionsTree,
