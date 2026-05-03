@@ -86,16 +86,22 @@ export class DocumentProcessorService {
     try {
       this.logger.log(`Parsing PDF, buffer size: ${buffer.length} bytes`);
 
-      // 使用 pdf-parse v2 解析 PDF
-
       const { PDFParse } = require('pdf-parse');
 
       // 创建解析器实例
       const parser = new PDFParse({ data: buffer });
+      await parser.load();
 
-      // 获取文本内容
-      const result = await parser.getText();
-      const content = result.text || '';
+      // 获取文本内容 - pdf-parse 2.x 返回 { pages: [{text, num}], text, total }
+      const textResult = await parser.getText();
+      let content = '';
+      if (textResult?.pages && Array.isArray(textResult.pages)) {
+        content = textResult.pages.map((p: any) => p.text || '').join('\n');
+      } else if (typeof textResult?.text === 'string') {
+        content = textResult.text;
+      } else {
+        content = String(textResult || '');
+      }
 
       // 获取页面信息
       const info = await parser.getInfo();
@@ -104,13 +110,13 @@ export class DocumentProcessorService {
       await parser.destroy();
 
       this.logger.log(
-        `PDF parsed successfully. Pages: ${info.total}, Text length: ${content.length}`,
+        `PDF parsed successfully. Pages: ${info?.total}, Text length: ${content.length}`,
       );
 
       return {
         content,
         metadata: {
-          pageCount: info.total,
+          pageCount: info?.total,
           wordCount: this.countWords(content),
           format: 'pdf',
         },

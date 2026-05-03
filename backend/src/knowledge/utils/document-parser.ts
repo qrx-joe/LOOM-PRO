@@ -124,24 +124,19 @@ function parseMarkdown(buffer: Buffer): ParsedDocument {
  */
 async function parsePDF(buffer: Buffer): Promise<ParsedDocument> {
   try {
-    // pdf-parse 2.x 使用 PDFParse 类，构造函数需要 { data: Buffer }
     const { PDFParse } = pdfParse;
     const parser = new PDFParse({ data: buffer });
     await parser.load();
-    const text = await parser.getText();
+    const textResult = await parser.getText();
 
-    // 确保 text 是字符串类型
+    // pdf-parse 2.x 返回 { pages: [{text, num}], text, total }
     let textContent = '';
-    if (typeof text === 'string') {
-      textContent = text;
-    } else if (Array.isArray(text)) {
-      // 如果是数组，合并所有文本
-      textContent = text.join('\n');
-    } else if (text && typeof text === 'object') {
-      // 如果是对象，尝试提取文本内容
-      textContent = text.text || text.content || String(text);
+    if (textResult?.pages && Array.isArray(textResult.pages)) {
+      textContent = textResult.pages.map((p: any) => p.text || '').join('\n');
+    } else if (typeof textResult?.text === 'string') {
+      textContent = textResult.text;
     } else {
-      textContent = String(text || '');
+      textContent = String(textResult || '');
     }
 
     let info: any = {};
@@ -156,7 +151,7 @@ async function parsePDF(buffer: Buffer): Promise<ParsedDocument> {
       content,
       metadata: {
         format: 'pdf',
-        pages: info?.numPages,
+        pages: info?.total,
         info,
       },
     };
