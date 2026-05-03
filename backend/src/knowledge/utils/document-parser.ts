@@ -182,7 +182,8 @@ async function parseDocx(buffer: Buffer): Promise<ParsedDocument> {
     };
   } catch (error) {
     console.error('[DocumentParser] DOCX parsing error:', error);
-    throw new Error('Word 文档解析失败，请确保文件未损坏');
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Word 文档解析失败 (${message})，请确保文件未损坏`);
   }
 }
 
