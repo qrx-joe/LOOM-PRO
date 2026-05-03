@@ -45,6 +45,23 @@ const selectedDoc = ref<any>(null);
 const chunkLimit = ref(10);
 const focusedChunkId = ref('');
 
+const readFocusDocFromStorage = () => {
+  const focusData = localStorage.getItem('knowledgeDocFocus');
+  if (focusData) {
+    try {
+      const { docId } = JSON.parse(focusData);
+      const doc = knowledgeStore.documents.find((d) => d.id === docId);
+      if (doc) {
+        openDocDetail(doc);
+        // 清理 storage
+        localStorage.removeItem('knowledgeDocFocus');
+      }
+    } catch {
+      localStorage.removeItem('knowledgeDocFocus');
+    }
+  }
+};
+
 // 编辑对话框
 const showEditDialog = ref(false);
 const editForm = ref({ name: '', description: '' });
@@ -86,6 +103,7 @@ onMounted(async () => {
     } finally {
       loading.value = false;
     }
+    readFocusDocFromStorage();
   }
 });
 
