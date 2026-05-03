@@ -1,16 +1,26 @@
 import { Controller, Post, Body, Get, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { IsString, IsEmail, MinLength } from 'class-validator';
 import { Public } from '../common/guards/public.decorator';
 import { AuthService } from './auth.service';
 
 class LoginDto {
+  @IsString()
   username!: string;
+
+  @IsString()
   password!: string;
 }
 
 class RegisterDto {
+  @IsString()
   username!: string;
+
+  @IsEmail()
   email!: string;
+
+  @IsString()
+  @MinLength(6)
   password!: string;
 }
 
