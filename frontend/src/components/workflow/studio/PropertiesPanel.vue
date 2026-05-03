@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue';
-import { ElCollapseTransition, ElPopover } from 'element-plus';
-import { Setting, Delete, ArrowRight, Connection } from '@element-plus/icons-vue';
-import { useKnowledgeStore } from '@/stores/knowledge';
-import { useVariableStore } from '@/stores/variable';
-import { useWorkflowStore } from '@/stores/workflow';
-import { NODE_TYPE_CONFIGS, type NodeField } from '@/config/node-config-schema';
+import { computed, ref, onMounted, watch } from "vue";
+import { ElCollapseTransition, ElPopover } from "element-plus";
+import {
+  Setting,
+  Delete,
+  ArrowRight,
+  Connection,
+} from "@element-plus/icons-vue";
+import { useKnowledgeStore } from "@/stores/knowledge";
+import { useVariableStore } from "@/stores/variable";
+import { useWorkflowStore } from "@/stores/workflow";
+import { NODE_TYPE_CONFIGS, type NodeField } from "@/config/node-config-schema";
 
 const props = defineProps<{
   node: any;
   edge?: any;
 }>();
 
-const emit = defineEmits(['update', 'delete', 'update-edge', 'delete-edge']);
+const emit = defineEmits(["update", "delete", "update-edge", "delete-edge"]);
 
 const knowledgeStore = useKnowledgeStore();
 const variableStore = useVariableStore();
@@ -37,15 +42,19 @@ const currentNodeConfig = computed(() => {
   return NODE_TYPE_CONFIGS[props.node.type] || null;
 });
 
-const isTrigger = computed(() => props.node?.type === 'trigger');
-const isEnd = computed(() => props.node?.type === 'end');
+const isTrigger = computed(() => props.node?.type === "trigger");
+const isEnd = computed(() => props.node?.type === "end");
 
 // 根据字段类型获取当前值（含向后兼容处理）
 const getFieldValue = (field: NodeField) => {
   const data = props.node?.data || {};
   let value = data[field.key];
   // 兼容旧工作流：timeout 字段已重命名为 timeoutMs
-  if (value === undefined && field.key === 'timeoutMs' && data.timeout !== undefined) {
+  if (
+    value === undefined &&
+    field.key === "timeoutMs" &&
+    data.timeout !== undefined
+  ) {
     value = data.timeout;
   }
   return value !== undefined ? value : field.defaultValue;
@@ -57,15 +66,21 @@ const isFieldVisible = (field: NodeField) => {
   try {
     return field.visibleWhen(props.node?.data || {});
   } catch (e) {
-    console.error(`[PropertiesPanel] visibleWhen error for field "${field.key}":`, e);
+    console.error(
+      `[PropertiesPanel] visibleWhen error for field "${field.key}":`,
+      e,
+    );
     return true; // 异常时默认显示，避免用户配置丢失
   }
 };
 
 // 获取 select 字段的选项
 const getSelectOptions = (field: NodeField) => {
-  if (field.key === 'dataset') {
-    return knowledgeStore.knowledgeBases.map((kb) => ({ label: kb.name, value: kb.id }));
+  if (field.key === "dataset") {
+    return knowledgeStore.knowledgeBases.map((kb) => ({
+      label: kb.name,
+      value: kb.id,
+    }));
   }
   return field.options || [];
 };
@@ -88,23 +103,23 @@ const toggleSection = (section: string) => {
 const variablePopoverVisible = ref<Record<string, boolean>>({});
 
 const insertVariableRef = (fieldKey: string, ref: string) => {
-  const current = props.node?.data?.[fieldKey] || '';
+  const current = props.node?.data?.[fieldKey] || "";
   const newValue = current + `{{${ref}}}`;
-  emit('update', props.node.id, { [fieldKey]: newValue });
+  emit("update", props.node.id, { [fieldKey]: newValue });
   variablePopoverVisible.value[fieldKey] = false;
 };
 
 const variableGroups = computed(() => [
   {
-    label: '输入变量',
+    label: "输入变量",
     options: variableStore.inputVariables,
   },
   {
-    label: '系统变量',
+    label: "系统变量",
     options: variableStore.systemVariables,
   },
   {
-    label: '节点输出',
+    label: "节点输出",
     options: variableStore.nodeVariables,
   },
 ]);
@@ -130,14 +145,22 @@ const variableGroups = computed(() => [
           </span>
           <span class="node-id">ID: {{ edge.id.slice(0, 8) }}</span>
         </div>
-        <el-button link type="danger" :icon="Delete" @click="$emit('delete-edge', edge.id)" />
+        <el-button
+          link
+          type="danger"
+          :icon="Delete"
+          @click="$emit('delete-edge', edge.id)"
+        />
       </div>
 
       <div class="config-sections">
         <div class="section">
           <div class="section-header" @click="toggleSection('basic')">
             <span class="section-title">连线配置</span>
-            <el-icon class="toggle-icon" :class="{ expanded: expandedSections.basic }">
+            <el-icon
+              class="toggle-icon"
+              :class="{ expanded: expandedSections.basic }"
+            >
               <ArrowRight />
             </el-icon>
           </div>
@@ -172,7 +195,9 @@ const variableGroups = computed(() => [
                   <el-select
                     :model-value="edge.type || 'default'"
                     style="width: 100%"
-                    @update:model-value="$emit('update-edge', edge.id, { type: $event })"
+                    @update:model-value="
+                      $emit('update-edge', edge.id, { type: $event })
+                    "
                   >
                     <el-option label="默认" value="default" />
                     <el-option label="分支线" value="branch" />
@@ -181,7 +206,9 @@ const variableGroups = computed(() => [
                 <el-form-item label="动画效果">
                   <el-switch
                     :model-value="edge.animated || false"
-                    @update:model-value="$emit('update-edge', edge.id, { animated: $event })"
+                    @update:model-value="
+                      $emit('update-edge', edge.id, { animated: $event })
+                    "
                   />
                 </el-form-item>
               </el-form>
@@ -192,7 +219,10 @@ const variableGroups = computed(() => [
         <div class="section">
           <div class="section-header" @click="toggleSection('config')">
             <span class="section-title">连接信息</span>
-            <el-icon class="toggle-icon" :class="{ expanded: expandedSections.config }">
+            <el-icon
+              class="toggle-icon"
+              :class="{ expanded: expandedSections.config }"
+            >
               <ArrowRight />
             </el-icon>
           </div>
@@ -226,11 +256,16 @@ const variableGroups = computed(() => [
       <div class="panel-header">
         <div class="header-left">
           <span class="node-type-badge" :class="`type-${node.type}`">
-            {{ node.type?.toUpperCase() || 'NODE' }}
+            {{ node.type?.toUpperCase() || "NODE" }}
           </span>
           <span class="node-id">ID: {{ node.id.slice(0, 8) }}</span>
         </div>
-        <el-button link type="danger" :icon="Delete" @click="$emit('delete', node.id)" />
+        <el-button
+          link
+          type="danger"
+          :icon="Delete"
+          @click="$emit('delete', node.id)"
+        />
       </div>
 
       <div class="config-sections">
@@ -238,7 +273,10 @@ const variableGroups = computed(() => [
         <div class="section">
           <div class="section-header" @click="toggleSection('basic')">
             <span class="section-title">基本信息</span>
-            <el-icon class="toggle-icon" :class="{ expanded: expandedSections.basic }">
+            <el-icon
+              class="toggle-icon"
+              :class="{ expanded: expandedSections.basic }"
+            >
               <ArrowRight />
             </el-icon>
           </div>
@@ -270,7 +308,10 @@ const variableGroups = computed(() => [
         <div class="section">
           <div class="section-header" @click="toggleSection('config')">
             <span class="section-title">节点配置</span>
-            <el-icon class="toggle-icon" :class="{ expanded: expandedSections.config }">
+            <el-icon
+              class="toggle-icon"
+              :class="{ expanded: expandedSections.config }"
+            >
               <ArrowRight />
             </el-icon>
           </div>
@@ -280,7 +321,10 @@ const variableGroups = computed(() => [
                 <!-- Schema-driven 节点配置 -->
                 <template v-if="currentNodeConfig">
                   <!-- 提示信息 -->
-                  <template v-for="tip in currentNodeConfig.tips" :key="tip.content">
+                  <template
+                    v-for="tip in currentNodeConfig.tips"
+                    :key="tip.content"
+                  >
                     <el-alert :type="tip.type" :closable="false" show-icon>
                       <template #default>
                         <div class="tip-content">{{ tip.content }}</div>
@@ -289,25 +333,37 @@ const variableGroups = computed(() => [
                   </template>
 
                   <!-- 字段渲染 -->
-                  <template v-for="field in currentNodeConfig.fields" :key="field.key">
+                  <template
+                    v-for="field in currentNodeConfig.fields"
+                    :key="field.key"
+                  >
                     <template v-if="isFieldVisible(field)">
                       <el-form-item :label="field.label">
                         <!-- text 字段：带变量引用按钮 -->
-                        <div v-if="field.type === 'text'" class="input-with-var">
+                        <div
+                          v-if="field.type === 'text'"
+                          class="input-with-var"
+                        >
                           <el-input
                             :model-value="getFieldValue(field)"
                             :placeholder="field.placeholder"
-                            @input="$emit('update', node.id, { [field.key]: $event })"
+                            @input="
+                              $emit('update', node.id, { [field.key]: $event })
+                            "
                           />
                           <el-popover
                             :visible="variablePopoverVisible[field.key]"
                             placement="bottom-start"
                             :width="240"
                             trigger="click"
-                            @update:visible="variablePopoverVisible[field.key] = $event"
+                            @update:visible="
+                              variablePopoverVisible[field.key] = $event
+                            "
                           >
                             <template #reference>
-                              <el-button class="var-btn" title="插入变量引用">fx</el-button>
+                              <el-button class="var-btn" title="插入变量引用"
+                                >fx</el-button
+                              >
                             </template>
                             <div class="var-selector">
                               <div
@@ -315,7 +371,9 @@ const variableGroups = computed(() => [
                                 :key="group.label"
                                 class="var-group"
                               >
-                                <div class="var-group-label">{{ group.label }}</div>
+                                <div class="var-group-label">
+                                  {{ group.label }}
+                                </div>
                                 <div
                                   v-for="v in group.options"
                                   :key="v.id"
@@ -335,24 +393,33 @@ const variableGroups = computed(() => [
                           </el-popover>
                         </div>
                         <!-- textarea 字段：带变量引用按钮 -->
-                        <div v-else-if="field.type === 'textarea'" class="input-with-var">
+                        <div
+                          v-else-if="field.type === 'textarea'"
+                          class="input-with-var"
+                        >
                           <el-input
                             type="textarea"
                             :rows="field.rows || 3"
                             :model-value="getFieldValue(field)"
                             :placeholder="field.placeholder"
                             :class="field.key === 'code' ? 'code-editor' : ''"
-                            @input="$emit('update', node.id, { [field.key]: $event })"
+                            @input="
+                              $emit('update', node.id, { [field.key]: $event })
+                            "
                           />
                           <el-popover
                             :visible="variablePopoverVisible[field.key]"
                             placement="bottom-start"
                             :width="240"
                             trigger="click"
-                            @update:visible="variablePopoverVisible[field.key] = $event"
+                            @update:visible="
+                              variablePopoverVisible[field.key] = $event
+                            "
                           >
                             <template #reference>
-                              <el-button class="var-btn" title="插入变量引用">fx</el-button>
+                              <el-button class="var-btn" title="插入变量引用"
+                                >fx</el-button
+                              >
                             </template>
                             <div class="var-selector">
                               <div
@@ -360,7 +427,9 @@ const variableGroups = computed(() => [
                                 :key="group.label"
                                 class="var-group"
                               >
-                                <div class="var-group-label">{{ group.label }}</div>
+                                <div class="var-group-label">
+                                  {{ group.label }}
+                                </div>
                                 <div
                                   v-for="v in group.options"
                                   :key="v.id"
@@ -386,16 +455,23 @@ const variableGroups = computed(() => [
                           :max="field.max"
                           :step="field.step"
                           style="width: 100%"
-                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                          @update:model-value="
+                            $emit('update', node.id, { [field.key]: $event })
+                          "
                         />
                         <el-select
                           v-else-if="field.type === 'select'"
                           :model-value="getFieldValue(field)"
                           :placeholder="field.placeholder"
-                          :loading="field.key === 'dataset' && knowledgeStore.loadingBases"
+                          :loading="
+                            field.key === 'dataset' &&
+                            knowledgeStore.loadingBases
+                          "
                           clearable
                           style="width: 100%"
-                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                          @update:model-value="
+                            $emit('update', node.id, { [field.key]: $event })
+                          "
                         >
                           <el-option
                             v-for="opt in getSelectOptions(field)"
@@ -407,7 +483,9 @@ const variableGroups = computed(() => [
                         <el-switch
                           v-else-if="field.type === 'switch'"
                           :model-value="getFieldValue(field)"
-                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                          @update:model-value="
+                            $emit('update', node.id, { [field.key]: $event })
+                          "
                         />
                         <el-slider
                           v-else-if="field.type === 'slider'"
@@ -416,7 +494,13 @@ const variableGroups = computed(() => [
                           :max="field.max"
                           :step="field.step"
                           show-input
-                          @update:model-value="$emit('update', node.id, { [field.key]: $event })"
+                          @update:model-value="
+                            $emit('update', node.id, { [field.key]: $event })
+                          "
+                        />
+                        <div
+                          v-else-if="field.type === 'divider'"
+                          class="field-divider"
                         />
                       </el-form-item>
                     </template>
@@ -426,7 +510,8 @@ const variableGroups = computed(() => [
                   <el-alert type="warning" :closable="false" show-icon>
                     <template #default>
                       <div class="tip-content">
-                        未知节点类型 "{{ node.type }}"，未找到对应的配置 schema。
+                        未知节点类型 "{{ node.type }}"，未找到对应的配置
+                        schema。
                       </div>
                     </template>
                   </el-alert>
@@ -446,27 +531,42 @@ const variableGroups = computed(() => [
               type="primary"
               class="section-badge"
             />
-            <el-icon class="toggle-icon" :class="{ expanded: expandedSections.input }">
+            <el-icon
+              class="toggle-icon"
+              :class="{ expanded: expandedSections.input }"
+            >
               <ArrowRight />
             </el-icon>
           </div>
           <el-collapse-transition>
             <div v-show="expandedSections.input" class="section-content">
               <div class="var-list">
-                <div v-for="(item, index) in node.data?.inputs || []" :key="index" class="var-item">
+                <div
+                  v-for="(item, index) in node.data?.inputs || []"
+                  :key="index"
+                  class="var-item"
+                >
                   <el-input
                     v-model="item.name"
                     placeholder="变量名"
                     size="small"
                     class="var-name"
-                    @change="$emit('update', node.id, { inputs: [...(node.data?.inputs || [])] })"
+                    @change="
+                      $emit('update', node.id, {
+                        inputs: [...(node.data?.inputs || [])],
+                      })
+                    "
                   />
                   <el-select
                     v-model="item.type"
                     placeholder="类型"
                     size="small"
                     class="var-type"
-                    @change="$emit('update', node.id, { inputs: [...(node.data?.inputs || [])] })"
+                    @change="
+                      $emit('update', node.id, {
+                        inputs: [...(node.data?.inputs || [])],
+                      })
+                    "
                   >
                     <el-option label="String" value="string" />
                     <el-option label="Number" value="number" />
@@ -518,7 +618,10 @@ const variableGroups = computed(() => [
               type="success"
               class="section-badge"
             />
-            <el-icon class="toggle-icon" :class="{ expanded: expandedSections.output }">
+            <el-icon
+              class="toggle-icon"
+              :class="{ expanded: expandedSections.output }"
+            >
               <ArrowRight />
             </el-icon>
           </div>
@@ -535,14 +638,22 @@ const variableGroups = computed(() => [
                     placeholder="变量名"
                     size="small"
                     class="var-name"
-                    @change="$emit('update', node.id, { outputs: [...(node.data?.outputs || [])] })"
+                    @change="
+                      $emit('update', node.id, {
+                        outputs: [...(node.data?.outputs || [])],
+                      })
+                    "
                   />
                   <el-select
                     v-model="item.type"
                     placeholder="类型"
                     size="small"
                     class="var-type"
-                    @change="$emit('update', node.id, { outputs: [...(node.data?.outputs || [])] })"
+                    @change="
+                      $emit('update', node.id, {
+                        outputs: [...(node.data?.outputs || [])],
+                      })
+                    "
                   >
                     <el-option label="String" value="string" />
                     <el-option label="Number" value="number" />
@@ -583,7 +694,6 @@ const variableGroups = computed(() => [
             </div>
           </el-collapse-transition>
         </div>
-
       </div>
     </div>
   </div>
@@ -698,7 +808,7 @@ const variableGroups = computed(() => [
 .node-id {
   font-size: var(--font-size-xs);
   color: var(--color-medium);
-  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-family: "JetBrains Mono", Consolas, monospace;
 }
 
 .config-sections {
@@ -771,7 +881,7 @@ const variableGroups = computed(() => [
 }
 
 .code-editor :deep(textarea) {
-  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-family: "JetBrains Mono", Consolas, monospace;
   font-size: 12px;
   line-height: 1.6;
   background: var(--color-border-light);
@@ -782,6 +892,12 @@ const variableGroups = computed(() => [
   align-items: center;
   gap: 6px;
   font-size: var(--font-size-xs);
+}
+
+.field-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 8px 0;
 }
 
 :deep(.el-alert) {
@@ -886,7 +1002,7 @@ const variableGroups = computed(() => [
   padding: 0 8px;
   font-size: 12px;
   font-weight: 600;
-  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-family: "JetBrains Mono", Consolas, monospace;
   color: var(--color-medium);
   border-color: var(--color-border);
   background: var(--color-border-light);
@@ -956,6 +1072,6 @@ const variableGroups = computed(() => [
 .info-value {
   font-size: var(--font-size-xs);
   color: var(--color-dark);
-  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-family: "JetBrains Mono", Consolas, monospace;
 }
 </style>

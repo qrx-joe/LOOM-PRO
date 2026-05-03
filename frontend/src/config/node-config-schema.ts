@@ -79,10 +79,13 @@ export const NODE_TYPE_CONFIGS: Record<string, NodeTypeConfig> = {
 
   condition: {
     fields: [
-      { key: 'expression', label: '判断条件', type: 'textarea', defaultValue: '', rows: 3, placeholder: '例如: input.includes("error")' },
+      { key: 'variableKey', label: '变量名', type: 'text', placeholder: '例如: status', defaultValue: '' },
+      { key: 'expectedValue', label: '期望值', type: 'text', placeholder: '例如: success', defaultValue: '' },
+      { key: 'divider', type: 'divider' },
+      { key: 'expression', label: '表达式', type: 'textarea', defaultValue: '', rows: 2, placeholder: '例如: input.includes("error")' },
       ...COMMON_EXEC_FIELDS,
     ],
-    tips: [{ type: 'info', content: '支持 JavaScript 表达式，返回 true/false。连线点击可切换 True/False 分支。' }],
+    tips: [{ type: 'info', content: '优先使用变量名+期望值匹配；也可使用表达式。连线点击可切换 True/False 分支。' }],
   },
 
   code: {
