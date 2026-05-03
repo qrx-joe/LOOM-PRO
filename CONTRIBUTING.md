@@ -6,8 +6,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/qrx-joe/AgentFlow-Studio.git
-cd AgentFlow-Studio
+git clone https://github.com/qrx-joe/LOOM-PLUS.git
+cd LOOM-PLUS
 
 # 安装根依赖
 pnpm install
