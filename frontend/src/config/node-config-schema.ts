@@ -3,11 +3,11 @@ export interface FieldOption {
   value: string | number | boolean;
 }
 
-export type FieldType = 'text' | 'textarea' | 'number' | 'select' | 'switch' | 'slider';
+export type FieldType = 'text' | 'textarea' | 'number' | 'select' | 'switch' | 'slider' | 'divider';
 
 export interface NodeField {
   key: string;
-  label: string;
+  label?: string;
   type: FieldType;
   defaultValue?: any;
   options?: FieldOption[];

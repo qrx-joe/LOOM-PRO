@@ -10,6 +10,12 @@ const router = createRouter({
       component: () => import('@/views/Auth/LoginView.vue'),
       meta: { title: '登录', guest: true },
     },
+    {
+      path: '/register',
+      name: 'Register',
+      component: () => import('@/views/Auth/RegisterView.vue'),
+      meta: { title: '注册', guest: true },
+    },
     // 工作流编辑器 - 独立全屏页面
     {
       path: '/studio/:id',
@@ -68,22 +74,16 @@ router.beforeEach((to, _from, next) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const token = localStorage.getItem('token');
 
-  // 兼容处理：已登录但没有token（修复前登录的用户），自动添加token
-  if (isLoggedIn && !token) {
-    const username = localStorage.getItem('username') || 'user';
-    localStorage.setItem('token', `mock-token-${Date.now()}-${username}`);
-  }
-
   // 需要登录的页面
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !token) {
       next({ name: 'Login', query: { redirect: to.fullPath } });
       return;
     }
   }
 
   // 已登录用户访问登录页，重定向到首页
-  if (to.meta.guest && isLoggedIn) {
+  if (to.meta.guest && isLoggedIn && token) {
     next({ path: '/' });
     return;
   }

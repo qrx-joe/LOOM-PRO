@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { parse } from 'pg-connection-string';
 
 import { CommonModule } from './common/common.module';
+import { AuthModule } from './auth/auth.module';
 import { WorkflowModule } from './workflow/workflow.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { ChatModule } from './chat/chat.module';
@@ -20,6 +21,8 @@ const isSQLiteDb = (url?: string) => url?.includes('.sqlite') || url?.startsWith
     ConfigModule.forRoot({ isGlobal: true }),
 
     CommonModule,
+
+    AuthModule,
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

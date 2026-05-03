@@ -2,7 +2,7 @@
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import { User, Lock, View, Hide } from '@element-plus/icons-vue';
+import { User, Lock, Message, View, Hide } from '@element-plus/icons-vue';
 import request from '@/api/request';
 
 const router = useRouter();
@@ -10,97 +10,94 @@ const router = useRouter();
 const loading = ref(false);
 const showPassword = ref(false);
 
-const loginForm = reactive({
+const registerForm = reactive({
   username: '',
+  email: '',
   password: '',
-  remember: false,
+  confirmPassword: '',
 });
 
-const handleLogin = async () => {
-  if (!loginForm.username.trim()) {
+const handleRegister = async () => {
+  if (!registerForm.username.trim()) {
     ElMessage.warning('请输入用户名');
     return;
   }
-  if (!loginForm.password) {
+  if (!registerForm.email.trim()) {
+    ElMessage.warning('请输入邮箱');
+    return;
+  }
+  if (!registerForm.password) {
     ElMessage.warning('请输入密码');
+    return;
+  }
+  if (registerForm.password !== registerForm.confirmPassword) {
+    ElMessage.warning('两次输入的密码不一致');
+    return;
+  }
+  if (registerForm.password.length < 6) {
+    ElMessage.warning('密码长度至少6位');
     return;
   }
 
   loading.value = true;
   try {
-    const res = await request.post('/auth/login', {
-      username: loginForm.username,
-      password: loginForm.password,
+    const res = await request.post('/auth/register', {
+      username: registerForm.username,
+      email: registerForm.email,
+      password: registerForm.password,
     });
     localStorage.setItem('token', res.accessToken);
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('username', res.user.username);
-    ElMessage.success('登录成功');
+    ElMessage.success('注册成功');
     router.push('/');
-  } catch {
-    ElMessage.error('登录失败，请检查用户名和密码');
+  } catch (err: any) {
+    ElMessage.error(err?.response?.data?.message || '注册失败');
   } finally {
     loading.value = false;
   }
 };
 
-const handleRegister = async () => {
-  router.push({ name: 'Register' });
-};
-
-const handleForgotPassword = () => {
-  ElMessage.info('请联系管理员重置密码');
+const handleBack = () => {
+  router.push({ name: 'Login' });
 };
 
 const handleKeyPress = (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
-    handleLogin();
+    handleRegister();
   }
 };
 </script>
 
 <template>
-  <div class="login-page">
-    <!-- 背景装饰 -->
+  <div class="register-page">
     <div class="bg-decoration">
       <div class="circle circle-1" />
       <div class="circle circle-2" />
       <div class="circle circle-3" />
     </div>
 
-    <!-- 登录卡片 -->
-    <div class="login-card">
-      <!-- Logo 和标题 -->
-      <div class="login-header">
+    <div class="register-card">
+      <div class="register-header">
         <div class="brand">
           <div class="logo-box">
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </div>
           <span class="brand-text">AgentFlow</span>
         </div>
-        <h1 class="login-title">欢迎回来</h1>
-        <p class="login-subtitle">登录您的账户以继续使用</p>
+        <h1 class="register-title">创建账户</h1>
+        <p class="register-subtitle">加入我们，开始您的智能体之旅</p>
       </div>
 
-      <!-- 登录表单 -->
-      <div class="login-form" @keypress="handleKeyPress">
+      <div class="register-form" @keypress="handleKeyPress">
         <div class="form-item">
           <label class="form-label">用户名</label>
           <div class="input-wrapper">
-            <el-icon class="input-icon">
-              <User />
-            </el-icon>
+            <el-icon class="input-icon"><User /></el-icon>
             <input
-              v-model="loginForm.username"
+              v-model="registerForm.username"
               type="text"
               class="form-input"
               placeholder="请输入用户名"
@@ -110,17 +107,29 @@ const handleKeyPress = (e: KeyboardEvent) => {
         </div>
 
         <div class="form-item">
+          <label class="form-label">邮箱</label>
+          <div class="input-wrapper">
+            <el-icon class="input-icon"><Message /></el-icon>
+            <input
+              v-model="registerForm.email"
+              type="email"
+              class="form-input"
+              placeholder="请输入邮箱"
+              autocomplete="email"
+            />
+          </div>
+        </div>
+
+        <div class="form-item">
           <label class="form-label">密码</label>
           <div class="input-wrapper">
-            <el-icon class="input-icon">
-              <Lock />
-            </el-icon>
+            <el-icon class="input-icon"><Lock /></el-icon>
             <input
-              v-model="loginForm.password"
+              v-model="registerForm.password"
               :type="showPassword ? 'text' : 'password'"
               class="form-input"
-              placeholder="请输入密码"
-              autocomplete="current-password"
+              placeholder="请输入密码（至少6位）"
+              autocomplete="new-password"
             />
             <el-icon class="toggle-password" @click="showPassword = !showPassword">
               <View v-if="!showPassword" />
@@ -129,37 +138,39 @@ const handleKeyPress = (e: KeyboardEvent) => {
           </div>
         </div>
 
-        <div class="form-options">
-          <label class="remember-me">
-            <input v-model="loginForm.remember" type="checkbox" />
-            <span class="checkbox-label">记住我</span>
-          </label>
-          <a href="javascript:void(0)" class="forgot-link" @click="handleForgotPassword"
-            >忘记密码？</a
-          >
+        <div class="form-item">
+          <label class="form-label">确认密码</label>
+          <div class="input-wrapper">
+            <el-icon class="input-icon"><Lock /></el-icon>
+            <input
+              v-model="registerForm.confirmPassword"
+              :type="showPassword ? 'text' : 'password'"
+              class="form-input"
+              placeholder="请再次输入密码"
+              autocomplete="new-password"
+            />
+          </div>
         </div>
 
-        <button class="login-btn" :class="{ loading }" :disabled="loading" @click="handleLogin">
-          <span v-if="!loading">登录</span>
+        <button
+          class="register-btn"
+          :class="{ loading }"
+          :disabled="loading"
+          @click="handleRegister"
+        >
+          <span v-if="!loading">注册</span>
           <span v-else class="loading-text">
             <span class="spinner" />
-            登录中...
+            注册中...
           </span>
         </button>
       </div>
 
-      <!-- 分隔线 -->
-      <div class="divider">
-        <span>或</span>
-      </div>
-
-      <!-- 注册链接 -->
-      <div class="register-link">
-        还没有账户？<a href="javascript:void(0)" @click="handleRegister">立即注册</a>
+      <div class="back-link">
+        <a href="javascript:void(0)" @click="handleBack">已有账户？返回登录</a>
       </div>
     </div>
 
-    <!-- 底部版权 -->
     <div class="footer">
       <p>&copy; 2024 AgentFlow. All rights reserved.</p>
     </div>
@@ -167,7 +178,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
 </template>
 
 <style scoped>
-.login-page {
+.register-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -220,7 +231,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
   opacity: 0.05;
 }
 
-.login-card {
+.register-card {
   width: 100%;
   max-width: 420px;
   background: var(--color-surface);
@@ -231,7 +242,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
   z-index: 1;
 }
 
-.login-header {
+.register-header {
   text-align: center;
   margin-bottom: 32px;
 }
@@ -261,20 +272,20 @@ const handleKeyPress = (e: KeyboardEvent) => {
   letter-spacing: -0.5px;
 }
 
-.login-title {
+.register-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-dark);
   margin: 0 0 8px;
 }
 
-.login-subtitle {
+.register-subtitle {
   font-size: var(--font-size-base);
   color: var(--color-medium);
   margin: 0;
 }
 
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -342,43 +353,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
   color: var(--color-medium);
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.remember-me {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.remember-me input[type='checkbox'] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--color-primary);
-  cursor: pointer;
-}
-
-.checkbox-label {
-  font-size: var(--font-size-sm);
-  color: var(--color-medium);
-}
-
-.forgot-link {
-  font-size: var(--font-size-sm);
-  color: var(--color-info);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.forgot-link:hover {
-  color: var(--color-primary);
-}
-
-.login-btn {
+.register-btn {
   width: 100%;
   height: 48px;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
@@ -392,16 +367,16 @@ const handleKeyPress = (e: KeyboardEvent) => {
   margin-top: 8px;
 }
 
-.login-btn:hover {
+.register-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(98, 93, 245, 0.3);
 }
 
-.login-btn:active:not(:disabled) {
+.register-btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.login-btn:disabled {
+.register-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
@@ -428,86 +403,20 @@ const handleKeyPress = (e: KeyboardEvent) => {
   }
 }
 
-.divider {
-  display: flex;
-  align-items: center;
-  margin: 24px 0;
-  color: var(--color-border);
-  font-size: var(--font-size-sm);
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--color-border);
-}
-
-.divider span {
-  padding: 0 16px;
-}
-
-.social-login {
-  display: flex;
-  gap: 12px;
-}
-
-.social-btn {
-  flex: 1;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: var(--color-border-light);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-dark);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.social-btn:hover {
-  background: var(--color-border);
-  border-color: var(--color-medium);
-}
-
-.social-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.social-btn.loading {
-  background: var(--color-border);
-}
-
-.btn-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--color-border);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-.register-link {
+.back-link {
   text-align: center;
   margin-top: 24px;
   font-size: var(--font-size-sm);
   color: var(--color-medium);
 }
 
-.register-link a {
+.back-link a {
   color: var(--color-info);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
-  margin-left: 4px;
 }
 
-.register-link a:hover {
+.back-link a:hover {
   color: var(--color-primary);
 }
 
@@ -521,15 +430,5 @@ const handleKeyPress = (e: KeyboardEvent) => {
   font-size: var(--font-size-xs);
   color: var(--color-border);
   margin: 0;
-}
-
-@media (max-width: 480px) {
-  .login-card {
-    padding: 32px 24px;
-  }
-
-  .social-login {
-    flex-direction: column;
-  }
 }
 </style>
