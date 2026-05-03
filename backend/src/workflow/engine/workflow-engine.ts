@@ -170,6 +170,7 @@ export class WorkflowEngine {
           input: llmInput,
           context: context.variables,
           signal,
+          temperature: node.data?.temperature,
         });
         if (signal.aborted) throw new Error('节点执行已取消');
         context.variables[node.id] = result;
@@ -319,14 +320,23 @@ export class WorkflowEngine {
 
         // 检查是否是 WorkflowError，根据严重级别决定是否重试
         if (error instanceof WorkflowError) {
-          if (!error.shouldRetry() && attempt === 0) {
-            // 不可重试的错误，直接跳出
+          if (!error.shouldRetry()) {
+            // 不可重试的错误（通常是 FATAL），立即停止重试
             context.logs.push(`错误级别: ${error.severity}，不可重试`);
             break;
           }
+          // 可重试的错误，检查是否还有重试机会
+          if (attempt >= retryCount) {
+            context.logs.push(`重试次数已用完`);
+            break;
+          }
+        } else if (attempt >= retryCount) {
+          // 非 WorkflowError 错误，重试次数用完也停止
+          break;
         }
 
-        if (attempt < retryCount && retryDelayMs > 0) {
+        // 等待重试延迟
+        if (retryDelayMs > 0) {
           await this.sleep(retryDelayMs);
         }
       }

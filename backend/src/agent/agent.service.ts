@@ -23,6 +23,7 @@ export class AgentService {
     context: Record<string, any>;
     history?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
     signal?: AbortSignal;
+    temperature?: number;
   }) {
     const model = process.env.LLM_MODEL || 'deepseek-chat';
 
@@ -39,6 +40,7 @@ export class AgentService {
               ...history,
               { role: 'user', content: payload.input },
             ],
+            temperature: payload.temperature,
           },
           { signal: payload.signal },
         );
@@ -64,6 +66,7 @@ export class AgentService {
     input: string;
     context: Record<string, any>;
     history?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
+    temperature?: number;
   }): AsyncGenerator<string> {
     const model = process.env.LLM_MODEL || 'deepseek-chat';
     const systemPrompt = `${payload.prompt}\n\n【上下文】\n${JSON.stringify(payload.context)}`;
@@ -79,6 +82,7 @@ export class AgentService {
             ...history,
             { role: 'user', content: payload.input },
           ],
+          temperature: payload.temperature,
         });
 
         for await (const part of stream) {

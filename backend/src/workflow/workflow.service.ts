@@ -164,6 +164,30 @@ export class WorkflowService {
           '条件节点必须包含 True/False 分支标签',
         );
       }
+
+      // 验证 trueEdgeId 和 falseEdgeId（如果设置）是否有效
+      const trueEdgeId = node.data?.trueEdgeId as string | undefined;
+      const falseEdgeId = node.data?.falseEdgeId as string | undefined;
+
+      if (trueEdgeId) {
+        const trueEdge = edges.find((e) => e.id === trueEdgeId);
+        if (!trueEdge || trueEdge.source !== node.id) {
+          throw new BusinessException(
+            ErrorCodes.WORKFLOW_INVALID,
+            `条件节点 ${node.id} 的 trueEdgeId "${trueEdgeId}" 无效：边不存在或不属于该节点`,
+          );
+        }
+      }
+
+      if (falseEdgeId) {
+        const falseEdge = edges.find((e) => e.id === falseEdgeId);
+        if (!falseEdge || falseEdge.source !== node.id) {
+          throw new BusinessException(
+            ErrorCodes.WORKFLOW_INVALID,
+            `条件节点 ${node.id} 的 falseEdgeId "${falseEdgeId}" 无效：边不存在或不属于该节点`,
+          );
+        }
+      }
     }
 
     // 规则2：触发节点必须只有 1 条出边
