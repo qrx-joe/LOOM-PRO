@@ -4,7 +4,14 @@
 
 ## 项目概述
 
-AgentFlow Studio 是一个轻量级的类 Coze 智能体平台，支持可视化拖拽工作流编排、知识库构建与 RAG 检索，以及智能问答 Agent。
+LOOM-PLUS 是一个轻量级的类 Coze 智能体平台，支持可视化拖拽工作流编排、知识库构建与 RAG 检索，以及智能问答 Agent。
+
+特点：
+- 7 种工作流节点类型（trigger / LLM / knowledge / condition / code / http / end）
+- 补偿执行机制（compensate / skip / rollback 三策略）
+- RRF 混合检索（向量 + 关键词融合）
+- temperature 参数透传
+- 2s 防抖自动保存 + Undo/Redo（最多 50 步历史）
 
 ## 开发命令
 

@@ -23,11 +23,14 @@ LOOM-PLUS 由两个项目合并而来：
 ## 核心特性
 
 - **可视化工作流**：拖拽编排 + Undo/Redo（最多 50 步历史）
+- **7 种节点类型**：trigger / LLM / knowledge / condition / code / http / end
 - **变量系统**：输入变量/系统变量/节点输出，属性面板 fx 按钮插入 `{{var}}` 引用
 - **2s 防抖自动保存**：编辑后自动持久化，顶部状态栏实时反馈
+- **错误处理**：compensate / skip / rollback 三策略，WorkflowError 语义分级
 - **知识库 RAG**：支持 PDF / DOCX / Markdown，3 种切块策略（fixed / semantic / recursive），中文语义分隔符
-- **混合检索**：向量 + 关键词 + 重排
+- **混合检索**：RRF 融合（向量 + 关键词），支持 temperature 参数传递
 - **SSE 流式输出**：实时对话体验
+- **补偿执行**：6 种补偿动作（变量/http/文件/数据库），带路径安全校验
 - **工业靛蓝设计语言**：来自 LOOM 织机的视觉系统
 
 ## 快速启动
