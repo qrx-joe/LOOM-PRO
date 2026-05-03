@@ -21,7 +21,8 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    if (token) {
+    // 只有当 token 是有效的 ISO-8859-1 字符串时才发送，避免 setRequestHeader 抛非 ASCII 字符异常
+    if (token && /^[\x00-\x7F]*$/.test(token)) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
