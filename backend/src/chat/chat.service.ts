@@ -57,6 +57,7 @@ export class ChatService {
       sources = searchResults.map((item) => ({
         documentId: item.documentId,
         content: item.content,
+        knowledgeBaseId: item.knowledgeBaseId,
       }));
       contextText = searchResults.map((item) => item.content).join('\n\n---\n\n');
     } catch (e) {
@@ -121,6 +122,7 @@ export class ChatService {
       sources = searchResults.map((item) => ({
         documentId: item.documentId,
         content: item.content,
+        knowledgeBaseId: item.knowledgeBaseId,
       }));
       contextText = searchResults.map((item) => item.content).join('\n\n---\n\n');
     } catch (e) {

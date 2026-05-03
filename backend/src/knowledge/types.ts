@@ -13,6 +13,7 @@ export interface SearchResult {
   finalScore?: number;
   vectorRank?: number;
   keywordRank?: number;
+  knowledgeBaseId?: string;
 }
 
 export interface KnowledgeSearchOptions {

@@ -52,11 +52,13 @@ export class RagService {
     // 使用原生 SQL 进行向量检索
     const results = await this.chunkRepo.query(
       `
-      SELECT id, content, document_id,
-             1 - (embedding <=> $1::vector) as similarity
-      FROM document_chunks
-      WHERE ($3::uuid IS NULL OR document_id IN (SELECT id FROM documents WHERE knowledge_base_id = $3::uuid))
-      ORDER BY embedding <=> $1::vector
+      SELECT dc.id, dc.content, dc.document_id,
+             1 - (dc.embedding <=> $1::vector) as similarity,
+             d.knowledge_base_id
+      FROM document_chunks dc
+      JOIN documents d ON d.id = dc.document_id
+      WHERE ($3::uuid IS NULL OR d.knowledge_base_id = $3::uuid)
+      ORDER BY dc.embedding <=> $1::vector
       LIMIT $2
     `,
       [JSON.stringify(queryEmbedding), topK, knowledgeBaseId || null],
@@ -68,6 +70,7 @@ export class RagService {
         documentId: row.document_id,
         content: row.content,
         similarity: Number(row.similarity),
+        knowledgeBaseId: row.knowledge_base_id,
       }))
       .filter((row: { similarity: number }) => row.similarity > 0.1);
 
@@ -111,10 +114,12 @@ export class RagService {
       mode === 'trgm'
         ? await this.chunkRepo.query(
             `
-            SELECT id, content, document_id,
-                   similarity(content, $2) as keyword_score
-            FROM document_chunks
-            WHERE ($4::uuid IS NULL OR document_id IN (SELECT id FROM documents WHERE knowledge_base_id = $4::uuid)) AND content ILIKE $3
+            SELECT dc.id, dc.content, dc.document_id,
+                   similarity(dc.content, $2) as keyword_score,
+                   d.knowledge_base_id
+            FROM document_chunks dc
+            JOIN documents d ON d.id = dc.document_id
+            WHERE ($4::uuid IS NULL OR d.knowledge_base_id = $4::uuid) AND dc.content ILIKE $3
             ORDER BY keyword_score DESC
             LIMIT $1
           `,
@@ -122,11 +127,13 @@ export class RagService {
           )
         : await this.chunkRepo.query(
             `
-            SELECT id, content, document_id,
-                   ${mode === 'tsrank' ? 'ts_rank' : 'ts_rank_cd'}(to_tsvector('simple', content), plainto_tsquery('simple', $2)) as keyword_score
-            FROM document_chunks
-            WHERE ($3::uuid IS NULL OR document_id IN (SELECT id FROM documents WHERE knowledge_base_id = $3::uuid))
-              AND (to_tsvector('simple', content) @@ plainto_tsquery('simple', $2) OR content ILIKE $4)
+            SELECT dc.id, dc.content, dc.document_id,
+                   ${mode === 'tsrank' ? 'ts_rank' : 'ts_rank_cd'}(to_tsvector('simple', dc.content), plainto_tsquery('simple', $2)) as keyword_score,
+                   d.knowledge_base_id
+            FROM document_chunks dc
+            JOIN documents d ON d.id = dc.document_id
+            WHERE ($3::uuid IS NULL OR d.knowledge_base_id = $3::uuid)
+              AND (to_tsvector('simple', dc.content) @@ plainto_tsquery('simple', $2) OR dc.content ILIKE $4)
             ORDER BY keyword_score DESC
             LIMIT $1
           `,
@@ -139,6 +146,7 @@ export class RagService {
       content: row.content,
       similarity: 0,
       keywordScore: Number(row.keyword_score) || 0,
+      knowledgeBaseId: row.knowledge_base_id,
     }));
 
     this.writeMemoryCache(cacheKey, mapped);
