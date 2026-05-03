@@ -63,7 +63,6 @@ export default defineConfig(() => {
         '/api': {
           target: 'http://localhost:3000',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
           // SSE 流式传输支持：禁用代理缓冲
           configure: (proxy) => {
             proxy.on('proxyRes', (proxyRes, _req) => {
