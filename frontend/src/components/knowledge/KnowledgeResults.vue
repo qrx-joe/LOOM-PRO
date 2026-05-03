@@ -50,17 +50,17 @@ const highlightKeywords = (text: string) => {
     </div>
     <div v-for="item in props.searchResults" :key="item.id" class="result-item">
       <div class="meta">
-        相似度：{{ item.similarity.toFixed(3) }}
+        相似度：{{ (item.similarity ?? 0).toFixed(3) }}
         <span v-if="item.fusedScore !== undefined">| 融合分：{{ item.fusedScore.toFixed(3) }}</span>
         <span v-if="item.keywordHits !== undefined">| 关键词命中：{{ item.keywordHits }}</span>
         <span v-if="item.keywordScore !== undefined"
-          >| 关键词分：{{ item.keywordScore.toFixed(3) }}</span
+          >| 关键词分：{{ (item.keywordScore ?? 0).toFixed(3) }}</span
         >
       </div>
       <div class="score-bar">
         <div
           class="score-fill"
-          :style="{ width: `${Math.min((item.fusedScore ?? item.similarity) / 1.5, 1) * 100}%` }"
+          :style="{ width: `${Math.min(((item.fusedScore ?? item.similarity ?? 0)) / 1.5, 1) * 100}%` }"
         />
       </div>
       <div class="content" v-html="highlightKeywords(item.content)" />
