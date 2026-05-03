@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { onMounted, ref, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
-import { useChatStore } from '@/stores/chat';
-import ChatSessionsPanel from '@/components/chat/ChatSessionsPanel.vue';
-import ChatMessagesPanel from '@/components/chat/ChatMessagesPanel.vue';
-import ChatSourceDrawer from '@/components/chat/ChatSourceDrawer.vue';
+import { onMounted, ref, nextTick } from "vue";
+import { useRouter } from "vue-router";
+import { useChatStore } from "@/stores/chat";
+import ChatSessionsPanel from "@/components/chat/ChatSessionsPanel.vue";
+import ChatMessagesPanel from "@/components/chat/ChatMessagesPanel.vue";
+import ChatSourceDrawer from "@/components/chat/ChatSourceDrawer.vue";
 
 const chatStore = useChatStore();
-const input = ref('');
+const input = ref("");
 const showSourceDrawer = ref(false);
 const selectedSource = ref<any>(null);
-const activeMessageId = ref('');
+const activeMessageId = ref("");
 const router = useRouter();
-const focusKey = 'knowledgeDocFocus';
+const focusKey = "knowledgeDocFocus";
 const sidebarCollapsed = ref(false);
 
 onMounted(() => {
@@ -22,7 +22,7 @@ onMounted(() => {
 const handleSend = async () => {
   if (!input.value.trim()) return;
   const content = input.value;
-  input.value = '';
+  input.value = "";
   await chatStore.sendMessage(content);
 };
 
@@ -42,23 +42,24 @@ const handleSelectSource = (messageId: string, source: any) => {
   nextTick(() => {
     const target = document.getElementById(`msg-${messageId}`);
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   });
 };
 
 const goToDocument = () => {
-  if (!selectedSource.value?.documentId || !selectedSource.value?.knowledgeBaseId) {
+  if (!selectedSource.value?.documentId) {
     return;
   }
   localStorage.setItem(
     focusKey,
     JSON.stringify({
       docId: selectedSource.value.documentId,
-      snippet: selectedSource.value.content || '',
+      snippet: selectedSource.value.content || "",
     }),
   );
-  router.push(`/knowledge/${selectedSource.value.knowledgeBaseId}`);
+  const kbId = selectedSource.value?.knowledgeBaseId;
+  router.push(kbId ? `/knowledge/${kbId}` : "/knowledge");
 };
 
 const toggleSidebar = () => {
