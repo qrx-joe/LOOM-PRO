@@ -178,7 +178,7 @@ const handleQuickPrompt = (text: string) => {
             <!-- <div class="logo-ring"></div> -->
           </div>
           <h2 class="welcome-title">有什么可以帮你的吗？</h2>
-          <p class="welcome-desc">AgentFlow AI 助手，基于你的知识库进行智能对话</p>
+          <p class="welcome-desc">LOOM AI 助手，基于你的知识库进行智能对话</p>
           <div class="quick-prompts">
             <button
               v-for="(prompt, index) in quickPrompts"
@@ -428,7 +428,7 @@ const handleQuickPrompt = (text: string) => {
           </div>
         </div>
       </div>
-      <div class="footer-hint">AgentFlow AI 提供技术支持</div>
+      <div class="footer-hint">LOOM AI 提供技术支持</div>
     </div>
   </section>
 </template>

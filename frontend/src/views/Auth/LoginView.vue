@@ -85,7 +85,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </div>
-          <span class="brand-text">AgentFlow</span>
+          <span class="brand-text">LOOM</span>
         </div>
         <h1 class="login-title">欢迎回来</h1>
         <p class="login-subtitle">登录您的账户以继续使用</p>
@@ -161,7 +161,7 @@ const handleKeyPress = (e: KeyboardEvent) => {
 
     <!-- 底部版权 -->
     <div class="footer">
-      <p>&copy; 2024 AgentFlow. All rights reserved.</p>
+      <p>&copy; 2024 LOOM. All rights reserved.</p>
     </div>
   </div>
 </template>
