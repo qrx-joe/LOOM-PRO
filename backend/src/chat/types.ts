@@ -4,4 +4,5 @@ export interface ChatSource {
   documentId?: string;
   nodeId?: string;
   content?: string;
+  knowledgeBaseId?: string;
 }

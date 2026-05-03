@@ -48,7 +48,7 @@ const handleSelectSource = (messageId: string, source: any) => {
 };
 
 const goToDocument = () => {
-  if (!selectedSource.value?.documentId) {
+  if (!selectedSource.value?.documentId || !selectedSource.value?.knowledgeBaseId) {
     return;
   }
   localStorage.setItem(
@@ -58,7 +58,7 @@ const goToDocument = () => {
       snippet: selectedSource.value.content || '',
     }),
   );
-  router.push('/knowledge');
+  router.push(`/knowledge/${selectedSource.value.knowledgeBaseId}`);
 };
 
 const toggleSidebar = () => {
