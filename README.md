@@ -99,7 +99,7 @@ cd frontend && pnpm install && pnpm dev
 
 后端 http://localhost:3000 · 前端 http://localhost:5173
 
-## 学到了什么
+## 踩坑与决策
 
 这些不是事后总结，是真实踩坑后留下的 commit：
 
