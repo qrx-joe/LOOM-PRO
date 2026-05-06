@@ -5,7 +5,7 @@ setlocal
 set "ROOT_DIR=%~dp0.."
 cd /d "%ROOT_DIR%"
 
-echo [AgentFlow] Root: %CD%
+echo [LOOM-PLUS] Root: %CD%
 
 set "PKG_MANAGER=pnpm"
 set "INSTALL_CMD=pnpm install"
@@ -27,7 +27,7 @@ if errorlevel 1 (
     set "RUN_FRONTEND=npm run dev"
 )
 
-echo [AgentFlow] Package manager: %PKG_MANAGER%
+echo [LOOM-PLUS] Package manager: %PKG_MANAGER%
 
 set "DOCKER_COMPOSE_CMD="
 where docker >nul 2>nul
@@ -44,8 +44,8 @@ if not errorlevel 1 (
 )
 
 if defined DOCKER_COMPOSE_CMD (
-    echo [AgentFlow] Using: %DOCKER_COMPOSE_CMD%
-    echo [AgentFlow] Starting containers...
+    echo [LOOM-PLUS] Using: %DOCKER_COMPOSE_CMD%
+    echo [LOOM-PLUS] Starting containers...
     %DOCKER_COMPOSE_CMD% up -d
     if errorlevel 1 (
         echo [Warn] Failed to start containers. Continue without Docker.
@@ -54,16 +54,34 @@ if defined DOCKER_COMPOSE_CMD (
     echo [Warn] Docker or Docker Compose not found. Continue without Docker.
 )
 
-echo [AgentFlow] Starting backend window...
-start "AgentFlow Backend" cmd /k "cd /d ""%ROOT_DIR%\backend"" && %INSTALL_CMD% && %RUN_BACKEND%"
+echo [LOOM-PLUS] Installing backend dependencies...
+cd /d "%ROOT_DIR%\backend"
+call %INSTALL_CMD%
+if errorlevel 1 (
+    echo [Error] Backend dependency installation failed.
+    pause
+    exit /b 1
+)
 
-echo [AgentFlow] Starting frontend window...
-start "AgentFlow Frontend" cmd /k "cd /d ""%ROOT_DIR%\frontend"" && %INSTALL_CMD% && %RUN_FRONTEND%"
+echo [LOOM-PLUS] Installing frontend dependencies...
+cd /d "%ROOT_DIR%\frontend"
+call %INSTALL_CMD%
+if errorlevel 1 (
+    echo [Error] Frontend dependency installation failed.
+    pause
+    exit /b 1
+)
+
+echo [LOOM-PLUS] Starting backend window...
+start "LOOM-PLUS Backend" cmd /k "cd /d ""%ROOT_DIR%\backend"" && %RUN_BACKEND%"
+
+echo [LOOM-PLUS] Starting frontend window...
+start "LOOM-PLUS Frontend" cmd /k "cd /d ""%ROOT_DIR%\frontend"" && %RUN_FRONTEND%"
 
 timeout /t 4 >nul
 start "" "http://localhost:5173"
 
-echo [AgentFlow] Startup complete.
-echo [AgentFlow] If backend cannot connect DB, install Docker and rerun this script.
+echo [LOOM-PLUS] Startup complete.
+echo [LOOM-PLUS] If backend cannot connect DB, install Docker and rerun this script.
 pause
 endlocal
