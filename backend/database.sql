@@ -8,6 +8,20 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- ========================================
+-- 用户表
+-- ========================================
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    roles TEXT[] DEFAULT '{user}',
+    status VARCHAR(50) DEFAULT 'active',
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================================
 -- 工作流表
 -- ========================================
 CREATE TABLE IF NOT EXISTS workflows (
@@ -50,6 +64,25 @@ CREATE TABLE IF NOT EXISTS documents (
     metadata JSONB DEFAULT '{}',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ========================================
+-- 知识库表
+-- ========================================
+CREATE TABLE IF NOT EXISTS knowledge_bases (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    icon VARCHAR(50),
+    color VARCHAR(20),
+    settings JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 为 documents 表添加 knowledge_base_id 列
+ALTER TABLE documents ADD COLUMN IF NOT EXISTS knowledge_base_id UUID;
+CREATE INDEX IF NOT EXISTS idx_documents_knowledge_base_id ON documents(knowledge_base_id);
+CREATE INDEX IF NOT EXISTS idx_knowledge_bases_created_at ON knowledge_bases(created_at);
 
 -- ========================================
 -- 文档块表 (用于 RAG)

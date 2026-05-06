@@ -14,3 +14,6 @@ frontend/node_modules/
 *.pem
 credentials.json
 .claude/
+docker-compose.override.yml
+data/postgres/
+data/redis/

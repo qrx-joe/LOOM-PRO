@@ -25,7 +25,7 @@ class RegisterDto {
 }
 
 @ApiTags('认证')
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
