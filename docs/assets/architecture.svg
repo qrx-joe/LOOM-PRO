@@ -1,116 +1,92 @@
 <svg width="100%" viewBox="0 0 720 540" xmlns="http://www.w3.org/2000/svg">
   <style>
-    :root { --bg: #f6f8fa; --fg: #24292f; --border: #d0d7de; --blue: #0969da; --green: #1a7f37; --purple: #8250df; --orange: #bc4c00; --gray: #6e7781; --teal: #1b7c83; }
-    @media (prefers-color-scheme: dark) { :root { --bg: #0d1117; --fg: #c9d1d9; --border: #30363d; --blue: #58a6ff; --green: #3fb950; --purple: #d2a8ff; --orange: #f0883e; --gray: #8b949e; --teal: #39c5cf; } }
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
-    .title { font-size: 15px; font-weight: 600; fill: var(--fg); }
-    .subtitle { font-size: 11px; fill: var(--gray); }
-    .label { font-size: 12px; font-weight: 500; fill: var(--fg); }
+    .title { font-size: 15px; font-weight: 600; fill: #24292f; }
+    .subtitle { font-size: 11px; fill: #6e7781; }
+    .label { font-size: 12px; font-weight: 500; fill: #24292f; }
     .box { rx: 6; stroke-width: 1.2; }
     .arrow { fill: none; stroke-width: 1.5; marker-end: url(#arrowhead); }
     .zone { rx: 8; stroke-width: 1; stroke-dasharray: 4 3; fill: none; }
-    .zone-label { font-size: 11px; font-weight: 600; fill: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+    .zone-label { font-size: 11px; font-weight: 600; fill: #6e7781; text-transform: uppercase; letter-spacing: 0.5px; }
   </style>
   <defs>
     <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="var(--gray)" />
-    </marker>
-    <marker id="arrowhead-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="var(--blue)" />
+      <polygon points="0 0, 8 3, 0 6" fill="#6e7781" />
     </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="720" height="540" fill="var(--bg)" rx="0" />
+  <rect width="720" height="540" fill="#f6f8fa" rx="0" />
 
-  <!-- Zone: Frontend -->
-  <rect x="20" y="40" width="220" height="130" class="zone" stroke="var(--blue)" />
+  <rect x="20" y="40" width="220" height="130" class="zone" stroke="#0969da" />
   <text x="30" y="58" class="zone-label">Frontend</text>
-  <rect x="40" y="70" width="180" height="36" class="box" fill="var(--bg)" stroke="var(--blue)" />
+  <rect x="40" y="70" width="180" height="36" class="box" fill="#f6f8fa" stroke="#0969da" />
   <text x="130" y="87" text-anchor="middle" class="label">Vue Flow Canvas</text>
   <text x="130" y="100" text-anchor="middle" class="subtitle">Vue 3.4 + Pinia + Element Plus</text>
-  <rect x="40" y="118" width="180" height="36" class="box" fill="var(--bg)" stroke="var(--blue)" />
+  <rect x="40" y="118" width="180" height="36" class="box" fill="#f6f8fa" stroke="#0969da" />
   <text x="130" y="135" text-anchor="middle" class="label">Chat UI (SSE)</text>
   <text x="130" y="148" text-anchor="middle" class="subtitle">Streaming + Knowledge Citation</text>
 
-  <!-- Zone: API Gateway -->
-  <rect x="20" y="190" width="680" height="60" class="zone" stroke="var(--orange)" />
+  <rect x="20" y="190" width="680" height="60" class="zone" stroke="#bc4c00" />
   <text x="30" y="208" class="zone-label">API Gateway</text>
-  <rect x="40" y="218" width="640" height="24" class="box" fill="var(--bg)" stroke="var(--orange)" />
+  <rect x="40" y="218" width="640" height="24" class="box" fill="#f6f8fa" stroke="#bc4c00" />
   <text x="360" y="234" text-anchor="middle" class="label">NestJS 10 Controllers  —  JWT Auth  —  Rate Limiting  —  Validation</text>
 
-  <!-- Zone: Backend Services -->
-  <rect x="20" y="270" width="460" height="170" class="zone" stroke="var(--green)" />
+  <rect x="20" y="270" width="460" height="170" class="zone" stroke="#1a7f37" />
   <text x="30" y="288" class="zone-label">Backend Services</text>
 
-  <!-- Workflow Engine -->
-  <rect x="40" y="300" width="200" height="50" class="box" fill="var(--bg)" stroke="var(--green)" />
+  <rect x="40" y="300" width="200" height="50" class="box" fill="#f6f8fa" stroke="#1a7f37" />
   <text x="140" y="320" text-anchor="middle" class="label">WorkflowEngine</text>
   <text x="140" y="335" text-anchor="middle" class="subtitle">DAG traversal + Compensation</text>
 
-  <!-- RAG Pipeline -->
-  <rect x="40" y="360" width="200" height="50" class="box" fill="var(--bg)" stroke="var(--green)" />
+  <rect x="40" y="360" width="200" height="50" class="box" fill="#f6f8fa" stroke="#1a7f37" />
   <text x="140" y="380" text-anchor="middle" class="label">RAG Pipeline</text>
   <text x="140" y="395" text-anchor="middle" class="subtitle">Chunk + Embed + Hybrid Search</text>
 
-  <!-- Agent Service -->
-  <rect x="260" y="300" width="200" height="50" class="box" fill="var(--bg)" stroke="var(--green)" />
+  <rect x="260" y="300" width="200" height="50" class="box" fill="#f6f8fa" stroke="#1a7f37" />
   <text x="360" y="320" text-anchor="middle" class="label">AgentService</text>
   <text x="360" y="335" text-anchor="middle" class="subtitle">Workflow + LLM Orchestration</text>
 
-  <!-- Chat Service -->
-  <rect x="260" y="360" width="200" height="50" class="box" fill="var(--bg)" stroke="var(--green)" />
+  <rect x="260" y="360" width="200" height="50" class="box" fill="#f6f8fa" stroke="#1a7f37" />
   <text x="360" y="380" text-anchor="middle" class="label">ChatService</text>
   <text x="360" y="395" text-anchor="middle" class="subtitle">SSE Stream + Session</text>
 
-  <!-- Zone: Data Layer -->
-  <rect x="500" y="270" width="200" height="170" class="zone" stroke="var(--purple)" />
+  <rect x="500" y="270" width="200" height="170" class="zone" stroke="#8250df" />
   <text x="510" y="288" class="zone-label">Data Layer</text>
-  <rect x="520" y="300" width="160" height="50" class="box" fill="var(--bg)" stroke="var(--purple)" />
+  <rect x="520" y="300" width="160" height="50" class="box" fill="#f6f8fa" stroke="#8250df" />
   <text x="600" y="320" text-anchor="middle" class="label">PostgreSQL 15</text>
   <text x="600" y="335" text-anchor="middle" class="subtitle">pgvector + Relational Data</text>
-  <rect x="520" y="360" width="160" height="50" class="box" fill="var(--bg)" stroke="var(--purple)" />
+  <rect x="520" y="360" width="160" height="50" class="box" fill="#f6f8fa" stroke="#8250df" />
   <text x="600" y="380" text-anchor="middle" class="label">Redis 7</text>
   <text x="600" y="395" text-anchor="middle" class="subtitle">Cache + Session</text>
 
-  <!-- Zone: External -->
-  <rect x="20" y="460" width="680" height="60" class="zone" stroke="var(--gray)" />
+  <rect x="20" y="460" width="680" height="60" class="zone" stroke="#6e7781" />
   <text x="30" y="478" class="zone-label">External</text>
-  <rect x="40" y="488" width="640" height="24" class="box" fill="var(--bg)" stroke="var(--gray)" />
+  <rect x="40" y="488" width="640" height="24" class="box" fill="#f6f8fa" stroke="#6e7781" />
   <text x="360" y="504" text-anchor="middle" class="label">OpenAI-compatible LLM API  —  PDF / DOCX / Markdown Documents</text>
 
-  <!-- Title -->
   <text x="360" y="26" text-anchor="middle" class="title">LOOM-PLUS Architecture</text>
 
-  <!-- Arrows: Frontend → API -->
-  <line x1="130" y1="106" x2="130" y2="190" class="arrow" stroke="var(--gray)" />
-  <line x1="130" y1="154" x2="130" y2="190" class="arrow" stroke="var(--gray)" />
+  <line x1="130" y1="106" x2="130" y2="190" class="arrow" stroke="#6e7781" />
+  <line x1="130" y1="154" x2="130" y2="190" class="arrow" stroke="#6e7781" />
 
-  <!-- Arrows: API → Backend -->
-  <line x1="140" y1="250" x2="140" y2="270" class="arrow" stroke="var(--gray)" />
-  <line x1="360" y1="250" x2="360" y2="270" class="arrow" stroke="var(--gray)" />
+  <line x1="140" y1="250" x2="140" y2="270" class="arrow" stroke="#6e7781" />
+  <line x1="360" y1="250" x2="360" y2="270" class="arrow" stroke="#6e7781" />
 
-  <!-- Arrows: Backend → Data -->
-  <line x1="440" y1="325" x2="520" y2="325" class="arrow" stroke="var(--gray)" />
-  <line x1="440" y1="385" x2="520" y2="385" class="arrow" stroke="var(--gray)" />
+  <line x1="440" y1="325" x2="520" y2="325" class="arrow" stroke="#6e7781" />
+  <line x1="440" y1="385" x2="520" y2="385" class="arrow" stroke="#6e7781" />
 
-  <!-- Arrows: Backend ↔ External -->
-  <line x1="360" y1="410" x2="360" y2="460" class="arrow" stroke="var(--gray)" />
+  <line x1="360" y1="410" x2="360" y2="460" class="arrow" stroke="#6e7781" />
 
-  <!-- Internal arrows: Workflow → Agent -->
-  <line x1="240" y1="325" x2="260" y2="325" class="arrow" stroke="var(--gray)" />
-  <!-- Internal arrows: RAG → Agent -->
-  <line x1="140" y1="410" x2="140" y2="435" x2="360" y2="435" class="arrow" stroke="var(--gray)" />
-  <!-- Internal arrows: Agent → Chat -->
-  <line x1="360" y1="350" x2="360" y2="360" class="arrow" stroke="var(--gray)" />
+  <line x1="240" y1="325" x2="260" y2="325" class="arrow" stroke="#6e7781" />
+  <path d="M 140 410 L 140 435 L 360 435" class="arrow" stroke="#6e7781" fill="none" />
+  <line x1="360" y1="350" x2="360" y2="360" class="arrow" stroke="#6e7781" />
 
-  <!-- Legend -->
-  <rect x="520" y="70" width="170" height="90" class="box" fill="var(--bg)" stroke="var(--border)" />
+  <rect x="520" y="70" width="170" height="90" class="box" fill="#f6f8fa" stroke="#d0d7de" />
   <text x="530" y="88" class="label" style="font-size:11px;">Data Flows</text>
-  <line x1="530" y1="100" x2="570" y2="100" class="arrow" stroke="var(--blue)" />
+  <line x1="530" y1="100" x2="570" y2="100" class="arrow" stroke="#0969da" />
   <text x="578" y="104" class="subtitle">Workflow exec</text>
-  <line x1="530" y1="118" x2="570" y2="118" class="arrow" stroke="var(--green)" />
+  <line x1="530" y1="118" x2="570" y2="118" class="arrow" stroke="#1a7f37" />
   <text x="578" y="122" class="subtitle">RAG pipeline</text>
-  <line x1="530" y1="136" x2="570" y2="136" class="arrow" stroke="var(--purple)" />
+  <line x1="530" y1="136" x2="570" y2="136" class="arrow" stroke="#8250df" />
   <text x="578" y="140" class="subtitle">Chat SSE stream</text>
 </svg>

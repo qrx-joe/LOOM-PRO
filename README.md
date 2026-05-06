@@ -2,7 +2,7 @@
 
 > 可视化 AI 工作流编排引擎——支持拖拽式 DAG 画布、知识库 RAG 检索与 SSE 流式对话的完整前后端系统。
 >
-> 演进路径：基于 AgentFlow Studio 骨架进行深度重构，融合 LOOM 织机核心模块（Undo/Redo、Markdown 处理、混合检索、视觉设计系统），独立迭代 67+ commits。
+> 演进路径：基于 AgentFlow Studio 骨架进行深度重构，融合 LOOM 织机核心模块（Undo/Redo、Markdown 处理、混合检索、视觉设计系统），持续开发维护。
 
 ## 截图
 
