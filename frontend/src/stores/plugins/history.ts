@@ -20,10 +20,10 @@ export interface HistoryPluginOptions {
 declare module 'pinia' {
   /* eslint-disable @typescript-eslint/no-unused-vars */
   export interface PiniaCustomProperties<
-    _Id extends string = string,
+    Id extends string = string,
     S extends StateTree = StateTree,
-    _G = _GettersTree<S>,
-    _A = _ActionsTree,
+    G = _GettersTree<S>,
+    A = _ActionsTree,
   > {
     /** 初始化历史记录 */
     $historyInit: () => void;
